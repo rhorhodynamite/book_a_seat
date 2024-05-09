@@ -5,11 +5,10 @@ import './RegistrationForm.css';
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
         username: '',
-        password: '',
-        email: ''
+        password: ''
     });
 
-    const { username, password, email } = formData;
+    const { username, password } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -21,7 +20,7 @@ const RegistrationForm = () => {
                     'Content-Type': 'application/json'
                 }
             };
-            const body = JSON.stringify({ username, password, email });
+            const body = JSON.stringify({ username, password });
             const response = await axios.post('http://localhost:3000/register', body, config);
             console.log(response.data); // Process the response data as needed
         } catch (err) {
@@ -43,16 +42,6 @@ const RegistrationForm = () => {
                 />
             </div>
             <div>
-                <label>Email</label>
-                <input 
-                    type="email" 
-                    name="email" 
-                    value={email} 
-                    onChange={onChange} 
-                    required 
-                />
-            </div>
-            <div>
                 <label>Password</label>
                 <input 
                     type="password" 
@@ -68,3 +57,4 @@ const RegistrationForm = () => {
 };
 
 export default RegistrationForm;
+
