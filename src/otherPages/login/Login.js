@@ -1,4 +1,3 @@
-// components/Login.js
 import React, { useState, useContext, useRef } from 'react';
 import AuthContext from '../../context/AuthProvider';
 import supabase from '../../supabase';
@@ -16,7 +15,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        let { data: { session }, error } = await supabase.auth.signIn({
+        const { user, session, error } = await supabase.auth.signIn({
             email: user,  // Assuming 'user' field is used as email
             password: pwd,
         });
@@ -25,7 +24,7 @@ const Login = () => {
             setErrMsg('Login failed: ' + error.message);
             setSuccess(false);
         } else if (session) {
-            setToken(session.access_token);
+            setToken(session.access_token);  // Store the session token or manage the session as needed
             setUser('');
             setPwd('');
             setSuccess(true);
@@ -58,5 +57,7 @@ const Login = () => {
         </div>
     );
 };
+
+export default Login;
 
 export default Login;
