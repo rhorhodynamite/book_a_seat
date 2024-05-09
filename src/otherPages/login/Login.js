@@ -1,39 +1,30 @@
 import React, { useState, useContext, useRef } from 'react';
 import AuthContext from '../../context/AuthProvider';
-import supabase from '../../supabase';
+import supabase from '../../supabase';  // Ensure this path is correct
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-
-
-console.log(supabase); // Should show the Supabase client object
-console.log(supabase.auth); // Should show the auth functions available
-
 
 const Login = () => {
     const { setToken } = useContext(AuthContext);
     const userRef = useRef(null);
-    const [username, setUsername] = useState('');  // Renamed to username to avoid shadowing
+    const [username, setUsername] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Renamed the destructured `user` variable to avoid conflict with the state `user`
-        const { user: loginUser, session, error } = await supabase.auth.signIn({
-            email: username,  // Now using the state 'username'
+        console.log(supabase.auth);  // Check if auth object is correct
+        const { user, error } = await supabase.auth.signIn({
+            email: username,
             password: pwd,
         });
 
         if (error) {
             setErrMsg('Login failed: ' + error.message);
-            setSuccess(false);
-        } else if (session) {
-            setToken(session.access_token);  // Assuming you handle the session appropriately
+        } else if (user) {
+            setToken(user.access_token);  // Ensure token management logic is correct
             setUsername('');  // Clear the username state
             setPwd('');
-            setSuccess(true);
             // Navigate to dashboard or wherever next in the app
         }
     };
@@ -46,8 +37,8 @@ const Login = () => {
                     id="username"
                     ref={userRef}
                     autoComplete="off"
-                    onChange={(e) => setUsername(e.target.value)}  // Updated to setUsername
-                    value={username}  // Updated to username
+                    onChange={(e) => setUsername(e.target.value)}
+                    value={username}
                     required
                 />
                 <input
@@ -65,4 +56,5 @@ const Login = () => {
 };
 
 export default Login;
+
 
