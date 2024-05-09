@@ -7,7 +7,7 @@ import Alert from 'react-bootstrap/Alert';
 const Login = () => {
     const { setToken } = useContext(AuthContext);
     const userRef = useRef(null);
-    const [user, setUser] = useState('');
+    const [username, setUsername] = useState('');  // Renamed to username to avoid shadowing
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
@@ -15,8 +15,9 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { user, session, error } = await supabase.auth.signIn({
-            email: user,  // Assuming 'user' field is used as email
+        // Renamed the destructured `user` variable to avoid conflict with the state `user`
+        const { user: loginUser, session, error } = await supabase.auth.signIn({
+            email: username,  // Now using the state 'username'
             password: pwd,
         });
 
@@ -24,8 +25,8 @@ const Login = () => {
             setErrMsg('Login failed: ' + error.message);
             setSuccess(false);
         } else if (session) {
-            setToken(session.access_token);  // Store the session token or manage the session as needed
-            setUser('');
+            setToken(session.access_token);  // Assuming you handle the session appropriately
+            setUsername('');  // Clear the username state
             setPwd('');
             setSuccess(true);
             // Navigate to dashboard or wherever next in the app
@@ -40,8 +41,8 @@ const Login = () => {
                     id="username"
                     ref={userRef}
                     autoComplete="off"
-                    onChange={(e) => setUser(e.target.value)}
-                    value={user}
+                    onChange={(e) => setUsername(e.target.value)}  // Updated to setUsername
+                    value={username}  // Updated to username
                     required
                 />
                 <input
