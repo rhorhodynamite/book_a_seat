@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './RegistrationForm.css';
-
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
         username: '',
@@ -21,10 +17,11 @@ const RegistrationForm = () => {
                 }
             };
             const body = JSON.stringify({ username, password });
-            const response = await axios.post('http://localhost:3000/register', body, config);
+            const serverUrl = process.env.REACT_APP_SERVER_URL;  // Ensure this is set correctly
+            const response = await axios.post(`${serverUrl}/register`, body, config);
             console.log(response.data); // Process the response data as needed
         } catch (err) {
-            console.error(err.response.data); // Handle errors
+            console.error(err.response ? err.response.data : err.message); // Improved error handling
         }
     };
 
