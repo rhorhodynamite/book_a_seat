@@ -1,7 +1,7 @@
 // components/Login.js
 import React, { useState, useContext, useRef } from 'react';
 import AuthContext from '../../context/AuthProvider';
-import supabase from '../../src/supabase';
+import supabase from '../src/supabase';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
