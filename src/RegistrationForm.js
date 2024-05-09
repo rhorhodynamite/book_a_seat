@@ -21,8 +21,9 @@ const RegistrationForm = () => {
                 }
             };
             const body = JSON.stringify({ username, password });
-            const serverUrl = process.env.REACT_APP_SERVER_URL;  // Ensure this is set correctly
+            const serverUrl = process.env.REACT_APP_SERVER_URL;
             const response = await axios.post(`${serverUrl}/register`, body, config);
+
             console.log(response.data); // Process the response data as needed
         } catch (err) {
             console.error(err.response ? err.response.data : err.message); // Improved error handling
