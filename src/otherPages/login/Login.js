@@ -4,6 +4,11 @@ import supabase from '../../supabase';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
+
+console.log(supabase); // Should show the Supabase client object
+console.log(supabase.auth); // Should show the auth functions available
+
+
 const Login = () => {
     const { setToken } = useContext(AuthContext);
     const userRef = useRef(null);
