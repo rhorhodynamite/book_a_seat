@@ -14,7 +14,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(supabase.auth);  // Check if auth object is correct
-        const { user, error } = await supabase.auth.SignInWithPassword({
+        const { user, error } = await supabase.auth.signIn({
             email: username,
             password: pwd,
         });
