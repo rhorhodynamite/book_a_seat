@@ -22,7 +22,7 @@ const RegistrationForm = () => {
             };
             const body = JSON.stringify({ username, password });
             const serverUrl = process.env.REACT_APP_SERVER_URL;
-            const response = await axios.post(`${serverUrl}pages/api/register`, body, config);
+            const response = await axios.post(`${serverUrl}api/register`, body, config);
 
             console.log(response.data); // Process the response data as needed
         } catch (err) {
