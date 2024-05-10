@@ -10,6 +10,10 @@ function SVGPlan(props) {
           {/* Pillar 2 in Room 1 (significantly moved to the right) */}
           <rect x="120" y="90" width="10" height="10" fill="#000" />
 
+          {/* Room 2 Outline */}
+          <rect x="180" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" />
+          {/* Large Rectangle in Room 2 (positioned in the bottom right half) */}
+          <rect x="260" y="90" width="80" height="40" fill="#000" />
         </g>
       </g>
     </svg>
@@ -17,3 +21,4 @@ function SVGPlan(props) {
 }
 
 export default SVGPlan;
+
