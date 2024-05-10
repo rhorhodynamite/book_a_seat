@@ -96,14 +96,14 @@ const ElementStyle = styled.div`
     }
   }
 `;
-const [todaysBookings, setTodaysBookings] = useState([]);
-const [futureBookings, setFutureBookings] = useState([]);
+
 
 const currentDate = moment(new Date()).startOf('day').toDate();
 
 export default function MyBooking(props) {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
-
+  const [todaysBookings, setTodaysBookings] = useState([]);
+  const [futureBookings, setFutureBookings] = useState([]);
   const [reservationList, setReservationList] = useState([])
   const [reservationData, setReservation] = useState([])
   const [idToDel, setIdToDel] = useState(null);
