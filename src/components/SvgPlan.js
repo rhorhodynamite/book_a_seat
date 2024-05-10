@@ -10,7 +10,7 @@ function SVGPlan(props) {
           {/* Pillar 2 in Room 1 (significantly moved to the right) */}
           <rect x="150" y="100" width="10" height="10" fill="#000" />
           {/* Door at the bottom of Room 1 */}
-          <rect x="125" y="130" width="20" height="5" fill="#000" />
+          <rect x="125" y="134" width="20" height="5" fill="#000" />
           {/* Door at the bottom of Room 1 */}
           <rect x="179" y="60" width="5" height="20" fill="#000" />
           
