@@ -96,6 +96,8 @@ const ElementStyle = styled.div`
     }
   }
 `;
+const [todaysBookings, setTodaysBookings] = useState([]);
+const [futureBookings, setFutureBookings] = useState([]);
 
 const currentDate = moment(new Date()).startOf('day').toDate();
 
@@ -109,6 +111,29 @@ export default function MyBooking(props) {
 
   function loadData(){
     console.log('load booking');
+    const loadData = async () => {
+  try {
+    const response = await axios.get(GET_URL, { params: { id: props.username }, withCredentials: true });
+    const reservations = response.data?.rslt.map((val) => {
+      return {
+        ...val,
+        startDate: new Date(val.startdate),
+        endDate: new Date(val.enddate),
+        startMoment: moment(new Date(val.startdate)),
+        endMoment: moment(new Date(val.enddate)),
+        isToday: moment(new Date(val.startdate)).isSame(moment(), 'day')
+      };
+    });
+
+    const todays = reservations.filter(res => res.isToday);
+    const future = reservations.filter(res => !res.isToday);
+
+    setTodaysBookings(todays);
+    setFutureBookings(future);
+  } catch (err) {
+    console.error("ERROR loadData", err);
+  }
+}
 
     const params = {
       id: props.username
@@ -312,17 +337,55 @@ export default function MyBooking(props) {
     setTimeout(()=>{setShowAlert(null);}, 2500);
   }
   
-  return(
-    <ElementStyle >
-      <BModal show={showAlert?true:false} size= 'sm' centered='true' backdrop="static">
-        <BModal.Body>{showAlert}</BModal.Body>
-        <BModal.Footer>
-          <Button variant="secondary" onClick={()=>setShowAlert(null)}>Close</Button>
-        </BModal.Footer>
-      </BModal>
+  return (
+  <ElementStyle>
+    <BModal show={showAlert} size="sm" centered backdrop="static">
+      <BModal.Body>{showAlert}</BModal.Body>
+      <BModal.Footer>
+        <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
+      </BModal.Footer>
+    </BModal>
+    <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
+    
+    <div className="today-bookings">
+      <h2>Today's Bookings</h2>
+      {todaysBookings.length > 0 ? (
+        <Table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Desk ID</th>
+              <th>User</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {todaysBookings.map(booking => (
+              <tr key={booking.id}>
+                <td>{booking.startMoment.format('HH:mm')} - {booking.endMoment.format('HH:mm')}</td>
+                <td>{booking.seatId}</td>
+                <td>{booking.username}</td>
+                <td>
+                  <button className="btn" title="Delete Booking" onClick={() => setIdToDel(booking.id)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : <p>No bookings for today.</p>}
+    </div>
 
-      <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
-      {reservationData.length > 0 ? tableContent : <h2>No reservations until now!"</h2>}
-    </ElementStyle>
-  )
+    <div className="future-bookings">
+      <h2>Future Bookings</h2>
+      {renderBookingsByMonth(futureBookings)}
+    </div>
+  </ElementStyle>
+);
+
+function renderBookingsByMonth(bookings) {
+  // Logic to group and render bookings by month, similar to your existing `tableContent`
+}
+
 }
