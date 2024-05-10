@@ -3,7 +3,7 @@ import AuthContext from '../../context/AuthProvider';
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import Postit from '../../components/Postit'
+
 
 import axios from '../../api/axios';
 const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
@@ -146,7 +146,7 @@ const Login = () => {
           </span>
         </p>
       </section>
-      <Postit/>
+     
 
       <img className="wrapper_gif"  src={require('./img2_readme.gif')} alt="Prototype video" />
 		</ElementStyle>
