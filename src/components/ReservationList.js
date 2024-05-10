@@ -214,45 +214,35 @@ function RersevationList(props) {
     return <div>{htmlData}</div>;
   }
 
-  const tableContent = reservationData.map((val, key) => {
-    const mStartDate = moment(val.startDate);
-    const mEndDate = moment(val.endDate);
-    const isDisabled = checkIfDisabled(val);
-    return (
-      <tr key={key} title="show reservation" onClick={() => onClickRow(val.id)} {...((selRow?.id===val.id) ? {className: 'sel-tr'} : {})} >
-        <td>{val.name}</td>
-        <td>{val.username}</td>
-        <td><span>from</span>
-        <span>
-          &nbsp;{mStartDate.format('DD.MM.yyyy')}&nbsp;
-          ({mStartDate.format('HH:mm')})
-        </span>
-        <span>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;</span>
-        <span>
-          &nbsp;{mEndDate.format('DD.MM.yyyy')}&nbsp;
-          ({mEndDate.format('HH:mm')})
-        </span></td>
-        {isDisabled ? 
-          <td title="Edit booking not possible" ><FontAwesomeIcon className="fa-disabled" icon={faPen} /></td>
-        :
-          <td onClick={(evt) => { editRow(evt, val.id);}}>
-            <button className="btn" title="Edit booking" >
-              <FontAwesomeIcon icon={faPen} />
-            </button>
-          </td>
-        }
-        {isDisabled ? 
-          <td><FontAwesomeIcon className="fa-disabled" icon={faTrash} /></td>
-        :
-          <td onClick={(evt) => {delRow(evt, val.id, val.startDate)}}>
-            <button className="btn" title="Delete booking"  >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-          </td>
-        }
-      </tr>
-    )
-  })
+ const tableContent = reservationData.map((val, key) => {
+  const mStartDate = moment(val.startDate);
+  const mEndDate = moment(val.endDate);
+  const isDisabled = checkIfDisabled(val);
+  return (
+    <tr key={key} title="show reservation" onClick={() => onClickRow(val.id)} {...((selRow?.id===val.id) ? {className: 'sel-tr'} : {})} >
+      <td>{val.name}</td>
+      <td>{val.username}</td>
+      <td>{val.reservationName || 'No Name'}</td>
+      <td>
+        <span>from</span>
+        <span>&nbsp;{mStartDate.format('DD.MM.yyyy')} ({mStartDate.format('HH:mm')})</span>
+        <span>&nbsp;&nbsp;to&nbsp;&nbsp;</span>
+        <span>&nbsp;{mEndDate.format('DD.MM.yyyy')} ({mEndDate.format('HH:mm')})</span>
+      </td>
+      <td onClick={(evt) => isDisabled ? null : editRow(evt, val.id)}>
+        <button className="btn" title="Edit booking" disabled={isDisabled}>
+          <FontAwesomeIcon icon={faPen} />
+        </button>
+      </td>
+      <td onClick={(evt) => isDisabled ? null : delRow(evt, val.id, val.startDate)}>
+        <button className="btn" title="Delete booking" disabled={isDisabled}>
+          <FontAwesomeIcon icon={faTrash} />
+        </button>
+      </td>
+    </tr>
+  )
+});
+
   return (
     <ElementStyle>
       <Alert show={showAlert?true:false} msg={showAlert} variant="success" setShow={setShowAlert}/>
