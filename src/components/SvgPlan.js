@@ -5,10 +5,10 @@ function SVGPlan(props) {
         <g fill="none" stroke="#000">
           {/* Room Outline */}
           <rect x="-68.8" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" />
-          {/* Pillar 1 */}
-          <rect x="-18.8" y="100" width="10" height="10" fill="#000" />
-          {/* Pillar 2 */}
-          <rect x="18.8" y="100" width="10" height="10" fill="#000" />
+          {/* Pillar 1 (Moved slightly to the right) */}
+          <rect x="-8.8" y="100" width="10" height="10" fill="#000" />
+          {/* Pillar 2 (Moved significantly to the right) */}
+          <rect x="38.8" y="100" width="10" height="10" fill="#000" />
         </g>
       </g>
     </svg>
