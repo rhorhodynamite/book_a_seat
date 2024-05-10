@@ -11,9 +11,13 @@ function SVGPlan(props) {
           <rect x="50" y="100" width="10" height="10" fill="brown" />
           {/* Pillar 2 in Room 1 (significantly moved to the right) */}
           <rect x="150" y="100" width="10" height="10" fill="brown" />
+          {/* Plants below Pillar 2 */}
+          <circle cx="153" cy="115" r="4" fill="green" />
+          <circle cx="155" cy="125" r="5" fill="green" />
+          <circle cx="154" cy="135" r="3" fill="green" />
           {/* Door at the bottom of Room 1 */}
           <rect x="125" y="134" width="20" height="5" fill="brown" />
-          {/* Door at the bottom of Room 1 */}
+          {/* Side door at Room 1 */}
           <rect x="179" y="60" width="5" height="20" fill="brown" />
         </g>
       </g>
