@@ -242,6 +242,24 @@ function RersevationList(props) {
     </tr>
   )
 });
+const [filter, setFilter] = useState('');
+
+useEffect(() => {
+  // Load data normally
+  loadData(props.selSeat);
+}, [props.selSeat, filter]);  // Add filter as a dependency to reload when it changes
+
+function handleFilterChange(e) {
+  setFilter(e.target.value.toLowerCase());
+}
+
+const filteredData = reservationData.filter(item => item.name.toLowerCase().includes(filter));
+
+<div className='filter-input'>
+  <input type="text" value={filter} onChange={handleFilterChange} placeholder="Search reservations..." />
+</div>
+
+// Use filteredData for rendering the table
 
   return (
     <ElementStyle>
