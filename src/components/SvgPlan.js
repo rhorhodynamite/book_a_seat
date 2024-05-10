@@ -6,9 +6,9 @@ function SVGPlan(props) {
           {/* Room 1 Outline */}
           <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" />
           {/* Pillar 1 in Room 1 (slightly moved to the right) */}
-          <rect x="30" y="90" width="10" height="10" fill="#000" />
+          <rect x="45" y="80" width="10" height="10" fill="#000" />
           {/* Pillar 2 in Room 1 (significantly moved to the right) */}
-          <rect x="120" y="90" width="10" height="10" fill="#000" />
+          <rect x="140" y="80" width="10" height="10" fill="#000" />
 
           {/* Room 2 Outline */}
           <rect x="180" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" />
