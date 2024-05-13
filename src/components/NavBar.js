@@ -13,7 +13,7 @@ import Diagram from './Diagram';
 import ReservationList from './ReservationList';
 import MyBooking from './MyBooking';
 import RoomList from './RoomList'; // Assuming RoomList is a separate component
-import SVGPlan from './SVGPlan'; // Ensure SVGPlan is imported if used
+import SVGPlan from './SvgPlan'; // Ensure SVGPlan is imported if used
 
 const ElementStyle = styled.div`
   > div {
