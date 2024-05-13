@@ -86,9 +86,9 @@ function NavBar() {
             {keyDiagram > 0 && (
               <div className='wrapper-dashboard' key={'diagram_' + keyDiagram}>
                 <Diagram 
-                    apiUrl={SERVER_URL + 'api/seats'} // Main area API
+                    apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
                     setSelSeat={setSelSeatHandler} 
-                    svgComponent={SVGPlan} // Use the main floor SVG
+                    svgType="main" // Prop to control SVG display
                 />
                 <ReservationList selSeat={selSeat}/>
               </div>
@@ -101,16 +101,15 @@ function NavBar() {
             {keyUpstairsDiagram > 0 && (
               <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
                 <Diagram 
-                    apiUrl={SERVER_URL + 'api/seats_upstairs'} // Upstairs area API
+                    apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
                     setSelSeat={setSelSeatHandler} 
-                    svgComponent={SVGPlanUpstairs} // Use the upstairs SVG
+                    svgType="upstairs" // Prop to control SVG display
                 />
                 <ReservationList selSeat={selSeat}/>
               </div>
             )}
           </div>
         </Tab>
-
       </Tabs>
             
     </ElementStyle>
