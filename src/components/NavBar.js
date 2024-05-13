@@ -105,12 +105,17 @@ function NavBar() {
             <h2>{token.role === 'admin' ? "ADMIN - Manage Upstairs Area" : "Upstairs Office Plan"}</h2>
             {keyUpstairsDiagram > 0 && (
               <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
-                <SVGPlanUpstairs setRoomSelection={setRoomSelectionHandler} />
+                {/* Use Diagram component for upstairs with specific props */}
+                <Diagram 
+                  apiUrl={SERVER_URL + 'api/upstairs_seats'}  // Different endpoint for upstairs
+                  setSelSeat={setRoomSelectionHandler}  // Use the same or a different handler if needed
+                />
                 <RoomList selectedRoom={selectedRoom} />
               </div>
             )}
           </div>
         </Tab>
+
       </Tabs>
             
     </ElementStyle>
