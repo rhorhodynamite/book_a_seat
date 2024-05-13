@@ -17,7 +17,9 @@ function SVGPlanUpstairs(props) {
         <rect x="290" y="60" width="5" height="20" fill="brown" />
 
         {/* New line from half way across x from the right side and a quarter way down y */}
-        <line x1="160" y1="37.5" x2="0" y2="37.5" stroke="red" strokeWidth="2" />
+        <line x1="150" y1="37.5" x2="50" y2="37.5" stroke="black" strokeWidth="2" />
+  {/* New line from half way across x from the right side and a quarter way down y */}
+        <line x1="150" y1="0" x2="150" y2="150" stroke="black" strokeWidth="2" />
       </g>
     </svg>
   );
