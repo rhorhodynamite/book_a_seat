@@ -65,6 +65,10 @@ const ElementStyle = styled.div`
 function Diagram(props) {
   const { token } = useContext(AuthContext);
   const [showAlert, setShowAlert] = useState(null);
+  const divStyle = {
+    width: SVG_WIDTH,
+    height: SVG_HEIGHT,
+  };
   const ref = useD3((svg) => {
     loadData(svg);
   }, []);
