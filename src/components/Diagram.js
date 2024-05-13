@@ -14,7 +14,8 @@ import BModal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 
 const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
-const DIAGRAM_URL =  SERVER_URL + 'api/seats';
+const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
+
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
 
