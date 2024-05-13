@@ -12,7 +12,7 @@ function SVGPlanUpstairs(props) {
         <rect x="0" y="0." width="320" height="150" stroke="#000" strokeWidth="2" />
         
         {/* Door at the bottom of Room 1 */}
-        <rect x="125" y="134" width="15" height="3" fill="brown" />
+        <rect x="60" y="150" width="15" height="3" fill="brown" />
         {/* Side door at Room 1 */}
         <rect x="250" y="90" width="3" height="15" fill="brown" />
         {/* Side door at Room 1 */}
