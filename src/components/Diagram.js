@@ -83,25 +83,19 @@ function Diagram(props) {
     height: SVG_HEIGHT,
   };
 
-  const loadData = function(svg){
-    console.log('load diagram!', svg);
-    const loadRequest = async () => {
+  const loadData = async (svg) => {
+      console.log('load diagram!', svg);
       try {
-        const response = await axios.get(
-          DIAGRAM_URL,
-          // params,
-          {
-              withCredentials: true,
-          }
-        );
+        const response = await axios.get(DIAGRAM_URL, { withCredentials: true });
         console.log('=====> resp', response.data);
-        if (chairsMng == null){
+        if (!chairsMng) {
           chairsMng = new SeatsAndTablesClass(svg, response.data, token.role, props.setSelSeat);
         }
       } catch (err) {
-        console.log("ERROR loadData", err);
+        console.error("ERROR loadData", err);
       }
     }
+
     loadRequest();
   }
   const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
