@@ -1,6 +1,6 @@
 import React from 'react';
 
-function RoomList({ rooms, onSelectRoom }) {
+function RoomList({ rooms = [], onSelectRoom }) {
     return (
         <div className="room-list">
             {rooms.map(room => (
