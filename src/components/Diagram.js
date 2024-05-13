@@ -65,7 +65,7 @@ const ElementStyle = styled.div`
     }
   }
 `;
-function Diagram({ apiUrl, setSelSeat, svgType }) {
+function Diagram({props, apiUrl, setSelSeat, svgType }) {
   const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
   const { token } = useContext(AuthContext);
   const [showAlert, setShowAlert] = useState(null);
