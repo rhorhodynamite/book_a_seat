@@ -46,7 +46,7 @@ function NavBar() {
   const [keyDiagram, setKeyDiagram] = useState((token.role === 'admin'?1:0))
   const [selSeat, setSelSeat] = useState(null)
 
-  import RoomList from './RoomList';  // Assuming RoomList is a separate component
+
 
   const [keyUpstairsDiagram, setKeyUpstairsDiagram] = useState(1);
   const [selectedRoom, setSelectedRoom] = useState(null);
