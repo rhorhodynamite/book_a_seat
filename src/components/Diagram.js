@@ -63,7 +63,7 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram(props) {
+function Diagram({ apiUrl, setSelSeat, svgComponent: SvgComponent }) {
   let chairsMng = null;
   // const [svg, setSvg] = useState({});
   const { token } = useContext(AuthContext);
