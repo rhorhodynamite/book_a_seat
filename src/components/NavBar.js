@@ -12,7 +12,7 @@ import Diagram from './Diagram';
 import ReservationList from './ReservationList';
 import MyBooking from './MyBooking';
 import React, { useContext, useState, useEffect}  from 'react';
-
+import RoomList from './RoomList';  // Assuming RoomList is a separate component
 
 const ElementStyle = styled.div`
 
