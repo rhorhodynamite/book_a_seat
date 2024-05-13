@@ -14,6 +14,7 @@ import ReservationList from './ReservationList';
 import MyBooking from './MyBooking';
 import RoomList from './RoomList'; // Assuming RoomList is a separate component
 import SVGPlan from './SvgPlan'; // Ensure SVGPlan is imported if used
+import SVGPlanUpstairs from './SvgPlanUpstairs';
 
 const ElementStyle = styled.div`
   > div {
@@ -104,7 +105,7 @@ function NavBar() {
             <h2>Upstairs Office Plan</h2>
             {keyUpstairsDiagram > 0 && (
               <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
-                <SVGPlan setRoomSelection={setRoomSelectionHandler} />
+                <SVGPlanUpstairs setRoomSelection={setRoomSelectionHandler} />
                 <RoomList selectedRoom={selectedRoom} />
               </div>
             )}
