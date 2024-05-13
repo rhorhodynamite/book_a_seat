@@ -14,7 +14,13 @@ function SVGPlanUpstairs(props) {
         {/* Door at the bottom of Room 1 */}
         <rect x="125" y="134" width="15" height="3" fill="brown" />
         {/* Side door at Room 1 */}
-        <rect x="250" y="80" width="3" height="15" fill="brown" />
+        <rect x="250" y="90" width="3" height="15" fill="brown" />
+        {/* Side door at Room 1 */}
+        <rect x="200" y="90" width="3" height="15" fill="brown" />
+        {/* Side door at Room 1 */}
+        <rect x="150" y="90" width="3" height="15" fill="brown" />
+        {/* Side door at Room 1 */}
+        <rect x="100" y="90" width="3" height="15" fill="brown" />
 
         {/* New line from half way across x from the right side and a quarter way down y */}
         <line x1="150" y1="50" x2="150" y2="320" stroke="black" strokeWidth="2" />
