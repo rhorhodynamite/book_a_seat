@@ -101,21 +101,20 @@ function NavBar() {
             )}
           </div>
         </Tab>
-        <Tab eventKey="upstairs" title="Upstairs">
-          <div>
-            <h2>{token.role === 'admin' ? "ADMIN - Manage Upstairs Area" : "Upstairs Office Plan"}</h2>
-            {keyUpstairsDiagram > 0 && (
-              <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
-                {/* Use Diagram component for upstairs with specific props */}
-                <Diagram 
-                  apiUrl={SERVER_URL + 'api/upstairs_seats'}  // Different endpoint for upstairs
-                  setSelSeat={setSelSeatHandler}  // Use the same or a different handler if needed
-                />
-                <ReservationList selSeat={selSeat}/>
-              </div>
-            )}
-          </div>
-        </Tab>
+          <Tab eventKey="upstairs" title="Upstairs">
+            <div>
+              <h2>{token.role === 'admin' ? "ADMIN - Manage Upstairs Area" : "Upstairs Office Plan"}</h2>
+              {keyUpstairsDiagram > 0 && (
+                <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
+                  <Diagram 
+                    apiUrl={SERVER_URL + 'api/seats'}  // Use the same endpoint if the data distinction isn't necessary
+                    setSelSeat={setSelSeatHandler}  // Handler for selecting seats
+                  />
+                  <ReservationList selSeat={selSeat}/>
+                </div>
+              )}
+            </div>
+          </Tab>
 
       </Tabs>
             
