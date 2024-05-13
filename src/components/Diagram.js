@@ -86,38 +86,46 @@ function Diagram(props) {
     }
   }
 
-  return (
+   return (
     <ElementStyle>
-      {token.role === 'admin' && (
-        <div className='wrapper-mngr-diagram'>
-          <Button className='save' onClick={() => chairsMng.addSeat()}>Add a chair <FontAwesomeIcon icon={faSave}/></Button>
-          <Button className='save' onClick={() => chairsMng.addTable()}>Add a table <FontAwesomeIcon icon={faSave}/></Button>
+      {token.role === 'admin' &&<div className='wrapper-mngr-diagram'>
+        <Button className='save' type="button" onClick={()=>{chairsMng.addSeat();}} >Add a chair <FontAwesomeIcon icon={faSave}/></Button>
+        <Button className='save' type="button" onClick={()=>{chairsMng.addTable();}} >Add a table <FontAwesomeIcon icon={faSave}/></Button>
+        
+          {/* <label>x:<input type="text" id="x" /></label>
+          <label>y:<input type="text" id="y"/></label> */}
           <div className="form-group">
-            <Form.Label htmlFor="table-width">Width:</Form.Label>
-            <Form.Control type="input" id="table-width" />
-            <Form.Label htmlFor="table-height">Height:</Form.Label>
-            <Form.Control type="input" id="table-height" />
+          <Form.Label htmlFor="table-width">width:</Form.Label>
+          <Form.Control
+            type="input"
+            id="table-width"/>
           </div>
-        </div>
-      )}
-      <div className="wrapper-svg">
+          <div className="form-group">
+          <Form.Label htmlFor="table-height">height:</Form.Label>
+          <Form.Control
+            type="input"
+            id="table-height"/>
+          </div>
+      </div>}
+      <div className="wrapper-svg" style={divStyle}>
         <SvgPlan width={SVG_WIDTH} height={SVG_HEIGHT} />
-        <svg ref={ref} id="svg_draw" width={SVG_WIDTH} height={SVG_HEIGHT} xmlns="http://www.w3.org/2000/svg" />
+        <svg ref={ref} id="svg_draw" width={SVG_WIDTH} height={SVG_HEIGHT} version="1.1" xmlns="http://www.w3.org/2000/svg">
+      
+        </svg>
       </div>
-      {token.role === 'admin' && (
-        <div className='wrapper-btn-save'>
-          <BModal show={showAlert} size='sm' centered backdrop="static">
-            <BModal.Body>{showAlert}</BModal.Body>
-            <BModal.Footer>
-              <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
-            </BModal.Footer>
-          </BModal>
-          <Button className='save' onClick={save}>Save <FontAwesomeIcon icon={faSave}/></Button>
-        </div>
-      )}
-      <Popup />
+      {token.role === 'admin' && <div className='wrapper-btn-save'>
+        <BModal show={showAlert?true:false} size= 'sm' centered='true' backdrop="static">
+          <BModal.Body>{showAlert}</BModal.Body>
+          <BModal.Footer>
+            <Button variant="secondary" onClick={()=>setShowAlert(null)}>Close</Button>
+          </BModal.Footer>
+        </BModal>
+        <Button className='save' type="button" onClick={()=>{save();}} >Save <FontAwesomeIcon icon={faSave}/></Button>
+      </div>} 
+      <Popup/>
+     
     </ElementStyle>
-  );
+  )
 }
 
 export default Diagram;
