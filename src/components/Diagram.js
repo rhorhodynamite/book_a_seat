@@ -66,24 +66,36 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main" }) {
-  const { token } = useContext(AuthContext);
-  const [showAlert, setShowAlert] = useState(null);
-  const ref = useD3((svg) => loadData(svg), []);
-  const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
-  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
 
-  let chairsMng = null;
+
+  function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
+  const { token } = useContext(AuthContext);
+  const [internalData, setInternalData] = useState(null);
+  const effectiveData = data || internalData;
+  const [showAlert, setShowAlert] = useState(null);
+  const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
+  const ref = useD3((svg) => {
+    if (!effectiveData) {
+      loadData(svg);
+    } else {
+      renderData(svg, effectiveData);
+    }
+  }, [effectiveData]);
 
   async function loadData(svg) {
-    try {
-      const response = await axios.get(apiUrl, { withCredentials: true });
-      if (!chairsMng) {
-        chairsMng = new SeatsAndTablesClass(svg, response.data, token.role, setSelSeat);
+    if (!data) {  // Only fetch if external data isn't provided
+      try {
+        const response = await axios.get(apiUrl, { withCredentials: true });
+        const newData = response.data;
+        setData ? setData(newData, svgType) : setInternalData(newData);
+      } catch (err) {
+        console.error("ERROR loadData", err);
       }
-    } catch (err) {
-      console.error("ERROR loadData", err);
     }
+  }
+
+  function renderData(svg, dataToRender) {
+    new SeatsAndTablesClass(svg, dataToRender, token.role, setSelSeat);
   }
 
   async function save() {
