@@ -88,7 +88,7 @@ function NavBar() {
                 <Diagram 
                     apiUrl={SERVER_URL + 'api/seats'} // Main area API
                     setSelSeat={setSelSeatHandler} 
-                    svgComponent={SvgPlan} // Use the main floor SVG
+                    svgComponent={SVGPlan} // Use the main floor SVG
                 />
                 <ReservationList selSeat={selSeat}/>
               </div>
