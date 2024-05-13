@@ -99,29 +99,22 @@ function Diagram(props) {
     loadRequest();
   }
   const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
-  const save = function(){
-    // console.log('save seatData!!!!!', chairsMng.seatData);
-    const sendPostRequest = async () => {
-      try {
-          const params = {seats: chairsMng.seatData, tables: chairsMng.tableData};
-          const response = await axios.post(
-            DIAGRAM_URL,
-            params,
-            {
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          );
-          const resp = response.data;
-          // console.log('=====>resp', resp.successful);
-          setShowAlert('Row has been successfully saved!');
-          setTimeout(()=>{setShowAlert(null);}, 2500);
-      } catch (err) {
-        console.log("ERROR save diagram", err);
-      }
-    }
+  const save = async () => {
+  try {
+    const params = { seats: chairsMng.seatData, tables: chairsMng.tableData };
+    const response = await axios.post(DIAGRAM_URL, params, {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    });
+    console.log('Data saved successfully:', response.data);
+    setShowAlert('Row has been successfully saved!');
+    setTimeout(() => { setShowAlert(null); }, 2500);
+  } catch (err) {
+    console.error("ERROR save diagram", err);
+    // Consider setting an error message in state and displaying it to the user
+  }
+}
+
     sendPostRequest();
   }
 
