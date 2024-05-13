@@ -1,21 +1,24 @@
 import React from 'react';
 
-function SVGPlanUpstairs (props) {
+function SVGPlanUpstairs(props) {
+  // Set default width and height if not provided
+  const width = props.width || '100%';
+  const height = props.height || '100%';
+
   return (
-    <svg width={props.width} height={props.height} version="1.1" viewBox="0 0 180 125" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(0 -14.7)">
-        <g fill="none" stroke="#000">
-          {/* Room 1 Outline */}
-          <rect x="10" y="16.7" width="300" height="120" stroke="#000" strokeWidth="2" />
-          
-          {/* Door at the bottom of Room 1 */}
-          <rect x="125" y="134" width="20" height="5" fill="brown" />
-          {/* Side door at Room 1 */}
-          <rect x="177" y="60" width="5" height="20" fill="brown" />
-        </g>
+    <svg width={width} height={height} viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#000">
+        {/* Room 1 Outline */}
+        <rect x="10" y="16.7" width="300" height="120" stroke="#000" strokeWidth="2" />
+        
+        {/* Door at the bottom of Room 1 */}
+        <rect x="125" y="134" width="20" height="5" fill="brown" />
+        {/* Side door at Room 1 */}
+        <rect x="290" y="60" width="5" height="20" fill="brown" />
       </g>
     </svg>
   );
 }
 
-export default SVGPlan;
+export default SVGPlanUpstairs;
+
