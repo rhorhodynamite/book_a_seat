@@ -72,10 +72,6 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   const ref = useD3((svg) => loadData(svg), []);
   const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
   const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
-  const divStyle = {
-    width: SVG_WIDTH,
-    height: SVG_HEIGHT,
-  };
 
   let chairsMng = null;
 
