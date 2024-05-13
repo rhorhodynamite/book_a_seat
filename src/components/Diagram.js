@@ -65,26 +65,25 @@ const ElementStyle = styled.div`
     }
   }
 `;
-function Diagram({props, apiUrl, setSelSeat, svgType }) {
-  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
+
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main" }) {
   const { token } = useContext(AuthContext);
   const [showAlert, setShowAlert] = useState(null);
+  const ref = useD3((svg) => loadData(svg), []);
+  const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
+  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
   const divStyle = {
     width: SVG_WIDTH,
     height: SVG_HEIGHT,
   };
-  const ref = useD3((svg) => {
-    loadData(svg);
-  }, []);
 
   let chairsMng = null;
-  const DIAGRAM_URL = props.apiUrl || `${SERVER_URL}api/seats`;
 
   async function loadData(svg) {
     try {
-      const response = await axios.get(DIAGRAM_URL, { withCredentials: true });
+      const response = await axios.get(apiUrl, { withCredentials: true });
       if (!chairsMng) {
-        chairsMng = new SeatsAndTablesClass(svg, response.data, token.role, props.setSelSeat);
+        chairsMng = new SeatsAndTablesClass(svg, response.data, token.role, setSelSeat);
       }
     } catch (err) {
       console.error("ERROR loadData", err);
@@ -94,16 +93,17 @@ function Diagram({props, apiUrl, setSelSeat, svgType }) {
   async function save() {
     try {
       const params = { seats: chairsMng.seatData, tables: chairsMng.tableData };
-      const response = await axios.post(DIAGRAM_URL, params, {
+      const response = await axios.post(apiUrl, params, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       });
       setShowAlert('Row has been successfully saved!');
-      setTimeout(() => { setShowAlert(null); }, 2500);
+      setTimeout(() => setShowAlert(null), 2500);
     } catch (err) {
       console.error("ERROR save diagram", err);
     }
   }
+
 
    return (
     <ElementStyle>
