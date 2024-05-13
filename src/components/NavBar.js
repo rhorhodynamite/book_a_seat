@@ -16,6 +16,7 @@ import RoomList from './RoomList'; // Assuming RoomList is a separate component
 import SVGPlan from './SvgPlan'; // Ensure SVGPlan is imported if used
 import SVGPlanUpstairs from './SvgPlanUpstairs';
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL
 const ElementStyle = styled.div`
   > div {
     width: 1000px;
@@ -107,7 +108,7 @@ function NavBar() {
               <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
                 {/* Use Diagram component for upstairs with specific props */}
                 <Diagram 
-                  apiUrl={REACT_APP_SERVER_URL + 'api/upstairs_seats'}  // Different endpoint for upstairs
+                  apiUrl={SERVER_URL + 'api/upstairs_seats'}  // Different endpoint for upstairs
                   setSelSeat={setRoomSelectionHandler}  // Use the same or a different handler if needed
                 />
                 <RoomList selectedRoom={selectedRoom} />
