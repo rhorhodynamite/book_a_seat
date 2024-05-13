@@ -15,10 +15,14 @@ function SVGPlanUpstairs(props) {
         <rect x="125" y="134" width="20" height="5" fill="brown" />
         {/* Side door at Room 1 */}
         <rect x="290" y="60" width="5" height="20" fill="brown" />
+
+        {/* New line from half way across x from the right side and a quarter way down y */}
+        <line x1="160" y1="37.5" x2="0" y2="37.5" stroke="red" strokeWidth="2" />
       </g>
     </svg>
   );
 }
 
 export default SVGPlanUpstairs;
+
 
