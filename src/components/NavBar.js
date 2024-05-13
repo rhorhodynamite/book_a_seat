@@ -68,57 +68,61 @@ function NavBar() {
   //   }
   // },[keyDiagram])
 
-  return (
-    <ElementStyle>
-      <Navbar className='navbar navbar-light'>
-        <Container fluid>
-          <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
-          
-          <Navbar.Collapse id="navbarScroll">
-            <Nav>
-              <NavDropdown title={user} id="navbarScrollingDropdown" align="end" menuVariant='#e3f2fd'>
-                <NavDropdown.Item href="#" onClick={()=>{logout();}}>Logout</NavDropdown.Item>
-              </NavDropdown>
-              
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Tabs onSelect={(tabElName)=>{onSelectChange(tabElName)}}
-        defaultActiveKey={token.role === 'user'?"booking":"reservation"}
-        className="mb-3"
-      >
-        {token.role === 'user' &&<Tab eventKey="booking" title="My booking">
+return (
+  <ElementStyle>
+    <Navbar className='navbar navbar-light'>
+      <Container fluid>
+        <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
+        
+        <Navbar.Collapse id="navbarScroll">
+          <Nav>
+            <NavDropdown title={user} id="navbarScrollingDropdown" align="end" menuVariant='#e3f2fd'>
+              <NavDropdown.Item href="#" onClick={()=>{logout();}}>Logout</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+    <Tabs onSelect={(tabElName)=>{onSelectChange(tabElName)}}
+      defaultActiveKey={token.role === 'user'?"booking":"reservation"}
+      className="mb-3"
+    >
+      {token.role === 'user' && (
+        <Tab eventKey="booking" title="My booking">
           <div className='wrapper-dashboard'>  
             <MyBooking username={token.user} key={keyBooking} />
           </div>
-        </Tab>}
-        <Tab eventKey="reservation" title="New Reservation">
-          <div>  
-            <h2>
-            {token.role === 'admin'?("ADMIN - Add seats and chairs"):("")}</h2>
-            {keyDiagram > 0 && 
-              <div className='wrapper-dashboard' key={'diagram_' + keyDiagram}>
-                <Diagram setSelSeat={setSelSeatHandler}  />
-                <ReservationList selSeat={selSeat}/>
-              </div>
-            }
-               {/* New Tab for Upstairs */}
-        <Tab eventKey="upstairs" title="Upstairs">
-          <div>
-            <h2>Upstairs Office Plan</h2>
-            {keyUpstairsDiagram > 0 &&
-              <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
-                <SVGPlan setRoomSelection={setRoomSelectionHandler} />
-                <RoomList selectedRoom={selectedRoom} />
-              </div>
-            }
-          </div>
-          </div>
         </Tab>
-      </Tabs>
-    </ElementStyle>
-  );
+      )}
+      <Tab eventKey="reservation" title="New Reservation">
+        <div>  
+          <h2>
+            {token.role === 'admin' ? ("ADMIN - Add seats and chairs") : ("")}
+          </h2>
+          {keyDiagram > 0 && (
+            <div className='wrapper-dashboard' key={'diagram_' + keyDiagram}>
+              <Diagram setSelSeat={setSelSeatHandler}  />
+              <ReservationList selSeat={selSeat}/>
+            </div>
+          )}
+        </div>
+      </Tab>
+      {/* Correctly placed new Tab for Upstairs */}
+      <Tab eventKey="upstairs" title="Upstairs">
+        <div>
+          <h2>Upstairs Office Plan</h2>
+          {keyUpstairsDiagram > 0 && (
+            <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
+              <SVGPlan setRoomSelection={setRoomSelectionHandler} />
+              <RoomList selectedRoom={selectedRoom} />
+            </div>
+          )}
+        </div>
+      </Tab>
+    </Tabs>
+  </ElementStyle>
+);
+
 }
 
 export default NavBar;
