@@ -1,5 +1,3 @@
-User
-
 import { useD3 } from '../use/useD3';
 import SvgPlan from './SvgPlan';
 import SeatsAndTablesClass from './SeatsAndTablesClass';
