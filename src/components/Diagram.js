@@ -11,6 +11,9 @@ import AuthContext from '../context/AuthProvider';
 import Form from 'react-bootstrap/Form';
 import BModal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
+import SVGPlan from './SvgPlan';
+import SVGPlanUpstairs from './SvgPlanUpstairs';
+
 
 const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
 //const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
@@ -62,7 +65,8 @@ const ElementStyle = styled.div`
     }
   }
 `;
-function Diagram(props) {
+function Diagram({ apiUrl, setSelSeat, svgType }) {
+  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
   const { token } = useContext(AuthContext);
   const [showAlert, setShowAlert] = useState(null);
   const divStyle = {
@@ -122,10 +126,10 @@ function Diagram(props) {
             id="table-height"/>
           </div>
       </div>}
-      <div className="wrapper-svg" style={divStyle}>
-        <SvgPlan width={SVG_WIDTH} height={SVG_HEIGHT} />
+           <div className="wrapper-svg" style={divStyle}>
+        <SvgComponent width={SVG_WIDTH} height={SVG_HEIGHT} />
         <svg ref={ref} id="svg_draw" width={SVG_WIDTH} height={SVG_HEIGHT} version="1.1" xmlns="http://www.w3.org/2000/svg">
-      
+       
         </svg>
       </div>
       {token.role === 'admin' && <div className='wrapper-btn-save'>
