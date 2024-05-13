@@ -24,6 +24,7 @@ function SVGPlanUpstairs(props) {
         <line x1="250" y1="0" x2="250" y2="150" stroke="black" strokeWidth="2" />
         <line x1="200" y1="50" x2="200" y2="150" stroke="black" strokeWidth="2" />
         <line x1="150" y1="75" x2="100" y2="150" stroke="black" strokeWidth="2" />
+        <line x1="100" y1="0" x2="100" y2="150" stroke="black" strokeWidth="2" />
       </g>
     </svg>
   );
