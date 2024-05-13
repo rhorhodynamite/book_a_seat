@@ -103,6 +103,17 @@ function NavBar() {
                 <ReservationList selSeat={selSeat}/>
               </div>
             }
+               {/* New Tab for Upstairs */}
+        <Tab eventKey="upstairs" title="Upstairs">
+          <div>
+            <h2>Upstairs Office Plan</h2>
+            {keyUpstairsDiagram > 0 &&
+              <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
+                <SVGPlan setRoomSelection={setRoomSelectionHandler} />
+                <RoomList selectedRoom={selectedRoom} />
+              </div>
+            }
+          </div>
           </div>
         </Tab>
       </Tabs>
