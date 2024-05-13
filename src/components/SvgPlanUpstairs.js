@@ -23,7 +23,7 @@ function SVGPlanUpstairs(props) {
         {/* New line from half way across x from the right side and a quarter way down y */}
         <line x1="250" y1="0" x2="250" y2="150" stroke="black" strokeWidth="2" />
         <line x1="200" y1="50" x2="200" y2="150" stroke="black" strokeWidth="2" />
-        <line x1="150" y1="75" x2="150" y2="100" stroke="black" strokeWidth="2" />
+        <line x1="150" y1="75" x2="100" y2="150" stroke="black" strokeWidth="2" />
       </g>
     </svg>
   );
