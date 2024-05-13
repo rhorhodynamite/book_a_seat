@@ -14,7 +14,7 @@ import BModal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 
 const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
-const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
+//const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
 
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
@@ -104,7 +104,7 @@ function Diagram(props) {
     }
     loadRequest();
   }
-  
+  const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
   const save = function(){
     // console.log('save seatData!!!!!', chairsMng.seatData);
     const sendPostRequest = async () => {
