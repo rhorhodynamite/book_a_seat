@@ -102,7 +102,7 @@ function NavBar() {
         </Tab>
         <Tab eventKey="upstairs" title="Upstairs">
           <div>
-            <h2>Upstairs Office Plan</h2>
+            <h2>{token.role === 'admin' ? "ADMIN - Manage Upstairs Area" : "Upstairs Office Plan"}</h2>
             {keyUpstairsDiagram > 0 && (
               <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
                 <SVGPlanUpstairs setRoomSelection={setRoomSelectionHandler} />
@@ -112,6 +112,7 @@ function NavBar() {
           </div>
         </Tab>
       </Tabs>
+            
     </ElementStyle>
   );
 }
