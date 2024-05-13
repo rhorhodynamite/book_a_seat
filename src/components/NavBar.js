@@ -109,9 +109,9 @@ function NavBar() {
                 {/* Use Diagram component for upstairs with specific props */}
                 <Diagram 
                   apiUrl={SERVER_URL + 'api/upstairs_seats'}  // Different endpoint for upstairs
-                  setSelSeat={setRoomSelectionHandler}  // Use the same or a different handler if needed
+                  setSelSeat={setSelSeatHandler}  // Use the same or a different handler if needed
                 />
-                <RoomList selectedRoom={selectedRoom} />
+                <ReservationList selSeat={selSeat}/>
               </div>
             )}
           </div>
