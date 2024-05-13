@@ -1,46 +1,60 @@
+User
 
-import React, { useContext, useState } from 'react';
-import axios from '../api/axios';
 import { useD3 } from '../use/useD3';
-import SeatsAndTablesClass from './SeatsAndTablesClass';
 import SvgPlan from './SvgPlan';
+import SeatsAndTablesClass from './SeatsAndTablesClass';
 import Popup from './Popup';
+import axios from '../api/axios';
+import React, { useState, useContext}  from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons'
 import Button from 'react-bootstrap/Button';
+import AuthContext from '../context/AuthProvider';
 import Form from 'react-bootstrap/Form';
 import BModal from 'react-bootstrap/Modal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
-import AuthContext from '../context/AuthProvider';
 import styled from 'styled-components';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
+//const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
+
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
 
-const ElementStyle = styled.div`
-  margin: 5px 10px;
-  position: relative;
+const ElementStyle = styled.div`  
+  {
+    margin: 5px 10px;
+    // height: calc(100vh - 100px);
+    position: relative;
+  }
 
   button, label, input[type='text'] {
     font-size: 12px;
   }
 
-  .wrapper-mngr-diagram, .wrapper-btn-save {
+  .wrapper-mngr-diagram, .wrapper-btn-save{
     display: flex;
     justify-content: normal;
     gap: 5px;
     align-items: flex-start;
 
-    button {
+    button{
       margin: 4px;
+    }
+
+  }
+  
+  .wrapper-mngr-diagram{
+    text-align: left;
+    margin: 5px 0;
+  }
+
+  .wrapper-btn-save{
+    button{
+      margin-top: 15px;
     }
   }
 
-  .wrapper-btn-save button {
-    margin-top: 15px;
-  }
-
-  .wrapper-svg {
+  .wrapper-svg{
     position: relative;
 
     svg {
@@ -50,7 +64,6 @@ const ElementStyle = styled.div`
     }
   }
 `;
-
 function Diagram(props) {
   const { token } = useContext(AuthContext);
   const [showAlert, setShowAlert] = useState(null);
