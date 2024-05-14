@@ -98,10 +98,7 @@ function SVGPlanSeminar(props) {
             <rect x="160" y="125" width="20" height="10" fill="#d3d3d3" />
             <circle cx="165" cy="130" r="2" fill="#000" />
             <circle cx="175" cy="130" r="2" fill="#000" />
-            {/* Cabinets */}
-            <rect x="150" y="135" width="40" height="5" fill="#8B4513" rx="2" ry="2" />
-            <line x1="160" y1="135" x2="160" y2="140" stroke="#000" strokeWidth="1" />
-            <line x1="140" y1="137.5" x2="180" y2="137.5" stroke="#000" strokeWidth="1" />
+           
           </g>
         </g>
       </svg>
