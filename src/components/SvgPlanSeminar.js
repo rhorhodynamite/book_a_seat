@@ -74,8 +74,8 @@ function SVGPlanSeminar(props) {
 
 
             {/* Windows */}
-            <rect x="15" y="125" width="30" height="3" fill="#87CEEB" />
-            <rect x="135" y="125" width="30" height="3" fill="#87CEEB" />
+            <rect x="15" y="150" width="30" height="3" fill="#87CEEB" />
+            <rect x="135" y="150" width="30" height="3" fill="#87CEEB" />
 
             {/* Rug under the conference desk */}
             <rect x="25" y="25" width="130" height="40" fill="#D3D3D3" rx="8" ry="8" />
