@@ -93,25 +93,25 @@ function SVGPlanSeminar(props) {
 
             {/* Clock on the wall */}
             <circle cx="250" cy="25" r="5" fill="#FFF" stroke="#000" strokeWidth="1" />
-            <line x1="250" y1="25" x2="85" y2="121" stroke="#000" strokeWidth="1" />
-            <line x1="250" y1="25" x2="88" y2="125" stroke="#000" strokeWidth="1" />
+            <line x1="250" y1="25" x2="250" y2="21" stroke="#000" strokeWidth="1" />
+            <line x1="250" y1="25" x2="258" y2="25" stroke="#000" strokeWidth="1" />
 
             {/* Kitchen area */}
             {/* Fridge */}
-            <rect x="130" y="105" width="15" height="25" fill="#c0c0c0" rx="2" ry="2" />
-            <line x1="130" y1="115" x2="145" y2="115" stroke="#000" strokeWidth="1" />
+            <rect x="150" y="105" width="15" height="25" fill="#c0c0c0" rx="2" ry="2" />
+            <line x1="150" y1="115" x2="155" y2="115" stroke="#000" strokeWidth="1" />
             {/* Sink */}
-            <rect x="150" y="110" width="20" height="10" fill="#87CEEB" />
-            <line x1="150" y1="115" x2="170" y2="115" stroke="#000" strokeWidth="1" />
-            <line x1="155" y1="110" x2="155" y2="120" stroke="#000" strokeWidth="1" />
+            <rect x="160" y="110" width="20" height="10" fill="#87CEEB" />
+            <line x1="160" y1="115" x2="180" y2="115" stroke="#000" strokeWidth="1" />
+            <line x1="165" y1="110" x2="165" y2="120" stroke="#000" strokeWidth="1" />
             {/* Stove */}
-            <rect x="150" y="125" width="20" height="10" fill="#d3d3d3" />
-            <circle cx="155" cy="130" r="2" fill="#000" />
+            <rect x="160" y="125" width="20" height="10" fill="#d3d3d3" />
             <circle cx="165" cy="130" r="2" fill="#000" />
+            <circle cx="175" cy="130" r="2" fill="#000" />
             {/* Cabinets */}
-            <rect x="130" y="135" width="40" height="5" fill="#8B4513" rx="2" ry="2" />
-            <line x1="150" y1="135" x2="150" y2="140" stroke="#000" strokeWidth="1" />
-            <line x1="130" y1="137.5" x2="170" y2="137.5" stroke="#000" strokeWidth="1" />
+            <rect x="150" y="135" width="40" height="5" fill="#8B4513" rx="2" ry="2" />
+            <line x1="160" y1="135" x2="160" y2="140" stroke="#000" strokeWidth="1" />
+            <line x1="140" y1="137.5" x2="180" y2="137.5" stroke="#000" strokeWidth="1" />
           </g>
         </g>
       </svg>
