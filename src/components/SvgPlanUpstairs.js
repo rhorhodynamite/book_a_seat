@@ -6,36 +6,40 @@ function SVGPlanUpstairs(props) {
   const height = props.height || '100%';
 
   return (
-    <svg width={width} height={height} viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#000">
-        {/* Room 1 Outline */}
-        <rect x="0" y="0." width="320" height="150" stroke="#000" strokeWidth="2" />
-        
+        {/* Room 1 */}
+        <rect x="0" y="0" width="200" height="150" stroke="#000" strokeWidth="2" />
         {/* Door at the bottom of Room 1 */}
-        <rect x="60" y="150" width="15" height="3" fill="brown" />
-        {/* Side door at Room 1 */}
-        <rect x="250" y="90" width="3" height="15" fill="brown" />
-        {/* Side door at Room 1 */}
-        <rect x="200" y="90" width="3" height="15" fill="brown" />
-        {/* Side door at Room 1 */}
-        <rect x="150" y="90" width="3" height="15" fill="brown" />
-        {/* Side door at Room 1 */}
-        <rect x="100" y="90" width="3" height="15" fill="brown" />
+        <rect x="90" y="150" width="20" height="6" fill="brown" />
 
-        {/* New line from half way across x from the right side and a quarter way down y */}
-        <line x1="150" y1="50" x2="150" y2="320" stroke="black" strokeWidth="2" />
-        {/* New line from half way across x from the right side and a quarter way down y */}
-        <line x1="150" y1="50" x2="250" y2="50" stroke="black" strokeWidth="2" />
-        {/* New line from half way across x from the right side and a quarter way down y */}
-        <line x1="250" y1="0" x2="250" y2="150" stroke="black" strokeWidth="2" />
-        <line x1="200" y1="50" x2="200" y2="150" stroke="black" strokeWidth="2" />
-        <line x1="150" y1="75" x2="100" y2="150" stroke="black" strokeWidth="2" />
-        <line x1="100" y1="0" x2="100" y2="150" stroke="black" strokeWidth="2" />
+        {/* Room 2 */}
+        <rect x="200" y="0" width="200" height="150" stroke="#000" strokeWidth="2" />
+        {/* Door between Room 1 and Room 2 */}
+        <rect x="200" y="70" width="6" height="20" fill="brown" />
+        {/* Door at the bottom of Room 2 */}
+        <rect x="290" y="150" width="20" height="6" fill="brown" />
+
+        {/* Room 3 */}
+        <rect x="400" y="0" width="200" height="150" stroke="#000" strokeWidth="2" />
+        {/* Door between Room 2 and Room 3 */}
+        <rect x="400" y="70" width="6" height="20" fill="brown" />
+        {/* Door at the bottom of Room 3 */}
+        <rect x="490" y="150" width="20" height="6" fill="brown" />
+
+        {/* Corridor connecting Room 1, Room 2, and Room 3 */}
+        <rect x="0" y="150" width="600" height="50" stroke="#000" strokeWidth="2" />
+        
+        {/* Room 4 (smaller, diagonal room) */}
+        <polygon points="500,150 550,200 600,150 600,300 500,300" stroke="#000" strokeWidth="2" fill="none" />
+        {/* Door to Room 4 from Room 3 */}
+        <rect x="550" y="150" width="6" height="20" fill="brown" />
       </g>
     </svg>
   );
 }
 
 export default SVGPlanUpstairs;
+
 
 
