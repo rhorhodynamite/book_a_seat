@@ -32,8 +32,7 @@ function SVGPlanSeminar(props) {
             {/* Room 1 Outline */}
             <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" rx="8" ry="8" fill="url(#floorPattern)" />
 
-            {/* Door at the bottom of Room 1 */}
-            <rect x="125" y="134" width="20" height="5" fill="url(#pillarGradient)" rx="1" ry="1" />
+           
 
             {/* Side door at Room 1 */}
             <rect x="177" y="80" width="5" height="20" fill="url(#pillarGradient)" rx="1" ry="1" />
