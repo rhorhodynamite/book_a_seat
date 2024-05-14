@@ -13,7 +13,7 @@ import BModal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 import SVGPlan from './SvgPlan';
 import SVGPlanUpstairs from './SvgPlanUpstairs';
-
+import SVGPlanSeminar from './SvgPlanSeminar';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const SVG_WIDTH = "175mm";
