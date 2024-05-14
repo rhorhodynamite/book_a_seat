@@ -32,19 +32,16 @@ function SVGPlanSeminar(props) {
           <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="2" rx="10" ry="10" fill="lightgrey" />
           
           {/* Staircase 1 along the corridor */}
-          <line x1="192" y1="65" x2="192" y2="75" stroke="black" strokeWidth="2" />
-          <line x1="194" y1="70" x2="194" y2="80" stroke="black" strokeWidth="2" />
+          <path d="M192,75 L192,65 L194,65 L194,75 Z" fill="lightgrey" />
+          <path d="M194,75 L194,65 L196,65 L196,75 Z" fill="lightgrey" />
           
           {/* Staircase 2 along the corridor */}
-          <line x1="232" y1="65" x2="232" y2="75" stroke="black" strokeWidth="2" />
-          <line x1="234" y1="70" x2="234" y2="80" stroke="black" strokeWidth="2" />
+          <path d="M232,75 L232,65 L234,65 L234,75 Z" fill="lightgrey" />
+          <path d="M234,75 L234,65 L236,65 L236,75 Z" fill="lightgrey" />
         </g>
       </g>
-      <g fontFamily="Arial" fontSize="12" fill="#000">
-        <text x="85" y="75" textAnchor="middle">Room 1</text>
-        <text x="270" y="60" textAnchor="middle">Passage</text>
-        <text x="150" y="90" textAnchor="middle">Pillar</text>
-        <text x="195" y="95" textAnchor="middle">Corridor</text>
+      <g fontFamily="Arial" fontSize="14" fill="#000">
+        <text x="150" y="30" textAnchor="middle">Seminar Room</text>
       </g>
     </svg>
   );
