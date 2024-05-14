@@ -40,13 +40,21 @@ function SVGPlanSeminar(props) {
 
             {/* Corridor coming out of the right door */}
             <rect x="182" y="80" width="60" height="20" stroke="#000" strokeWidth="2" rx="4" ry="4" fill="url(#corridorGradient)" />
-
-            {/* Connecting passage space (turns up) */}
+            {/* Corridor turns up */}
             <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="2" rx="8" ry="8" fill="url(#corridorGradient)" />
 
             {/* Office phone box at the top of the rightmost corridor */}
             <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
             <circle cx="282.5" cy="37" r="5" fill="#000" />
+
+            {/* Detailed corridor elements */}
+            <line x1="182" y1="90" x2="242" y2="90" stroke="#000" strokeWidth="2" />
+            <line x1="242" y1="30" x2="302" y2="30" stroke="#000" strokeWidth="2" />
+
+            {/* Detailed phone box elements */}
+            <line x1="272" y1="22" x2="272" y2="52" stroke="#000" strokeWidth="1" />
+            <line x1="270" y1="24" x2="295" y2="24" stroke="#000" strokeWidth="1" />
+            <circle cx="282.5" cy="27" r="2" fill="#000" />
 
             {/* Large conference desk */}
             <rect x="30" y="30" width="120" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
@@ -64,27 +72,29 @@ function SVGPlanSeminar(props) {
 
             {/* Plants in the room */}
             <circle cx="25" cy="130" r="6" fill="green" />
-            <circle cx="165" cy="30" r="6" fill="green" />
+            <circle cx="165" cy="100" r="6" fill="green" />
 
             {/* Wall Art */}
-            <rect x="15" y="20" width="20" height="15" fill="#ffcccb" />
-            <rect x="140" y="20" width="20" height="15" fill="#ffcccb" />
+            <rect x="15" y="100" width="20" height="15" fill="#ffcccb" />
+            <rect x="140" y="100" width="20" height="15" fill="#ffcccb" />
 
             {/* Windows */}
-            <rect x="15" y="17" width="30" height="3" fill="#87CEEB" />
-            <rect x="135" y="17" width="30" height="3" fill="#87CEEB" />
+            <rect x="15" y="105" width="30" height="3" fill="#87CEEB" />
+            <rect x="135" y="105" width="30" height="3" fill="#87CEEB" />
 
             {/* Rug under the conference desk */}
             <rect x="25" y="25" width="130" height="40" fill="#D3D3D3" rx="8" ry="8" />
 
             {/* Ceiling lights */}
-            <circle cx="55" cy="20" r="2" fill="#FFFFE0" />
-            <circle cx="145" cy="20" r="2" fill="#FFFFE0" />
+            <circle cx="40" cy="120" r="2" fill="#FFFFE0" />
+            <circle cx="60" cy="120" r="2" fill="#FFFFE0" />
+            <circle cx="140" cy="120" r="2" fill="#FFFFE0" />
+            <circle cx="160" cy="120" r="2" fill="#FFFFE0" />
 
             {/* Clock on the wall */}
-            <circle cx="100" cy="20" r="5" fill="#FFF" stroke="#000" strokeWidth="1" />
-            <line x1="100" y1="20" x2="100" y2="16" stroke="#000" strokeWidth="1" />
-            <line x1="100" y1="20" x2="103" y2="20" stroke="#000" strokeWidth="1" />
+            <circle cx="85" cy="125" r="5" fill="#FFF" stroke="#000" strokeWidth="1" />
+            <line x1="85" y1="125" x2="85" y2="121" stroke="#000" strokeWidth="1" />
+            <line x1="85" y1="125" x2="88" y2="125" stroke="#000" strokeWidth="1" />
           </g>
         </g>
       </svg>
@@ -93,4 +103,5 @@ function SVGPlanSeminar(props) {
 }
 
 export default SVGPlanSeminar;
+
 
