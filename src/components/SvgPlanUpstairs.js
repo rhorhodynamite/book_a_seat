@@ -6,7 +6,7 @@ function SVGPlanUpstairs(props) {
   const height = props.height || '100%';
 
   return (
-    <svg width={width} height={height} viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#000">
         {/* Room 4 (smaller, diagonal room on the very left) */}
         <polygon points="0,50 50,100 100,50 100,200 0,200" stroke="#000" strokeWidth="2" fill="none" />
@@ -29,7 +29,7 @@ function SVGPlanUpstairs(props) {
         <rect x="590" y="50" width="20" height="6" fill="brown" />
 
         {/* Corridor starting from the taller room */}
-        <rect x="518" y="0" width="20" height="50" stroke="#000" strokeWidth="2" />
+        <rect x="512" y="0" width="20" height="50" stroke="#000" strokeWidth="2" />
         <rect x="0" y="0" width="610" height="50" stroke="#000" strokeWidth="2" />
       </g>
     </svg>
