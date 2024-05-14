@@ -17,6 +17,8 @@ import SVGPlanUpstairs from './SvgPlanUpstairs';
 
 const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
 //const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
+const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
+let chairsMng = useRef(null);
 
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
