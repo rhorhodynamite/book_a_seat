@@ -11,9 +11,11 @@ import AuthContext from '../context/AuthProvider';
 import Form from 'react-bootstrap/Form';
 import BModal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
+import SVGPlan from './SvgPlan';
+import SVGPlanUpstairs from './SvgPlanUpstairs';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-const DIAGRAM_URL = SERVER_URL + 'api/seats';
+
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
 
@@ -60,102 +62,100 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram(props) {
-  const chairsMng = useRef(null);
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
   const { token } = useContext(AuthContext);
+  const [internalData, setInternalData] = useState(null);
+  const effectiveData = data || internalData;
   const [showAlert, setShowAlert] = useState(null);
-  const ref = useD3(
-    (svg) => {
+  const chairsMng = useRef(null);
+  const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
+  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
+
+  const ref = useD3((svg) => {
+    if (!effectiveData) {
       loadData(svg);
-    },
-    []
-  );
-
-  const divStyle = {
-    width: SVG_WIDTH,
-    height: SVG_HEIGHT,
-  };
-
-  const loadData = function(svg){
-    const loadRequest = async () => {
-      try {
-        const response = await axios.get(
-          DIAGRAM_URL,
-          {
-            withCredentials: true,
-          }
-        );
-        if (chairsMng.current == null){
-          chairsMng.current = new SeatsAndTablesClass(svg, response.data, token.role, props.setSelSeat);
-        }
-      } catch (err) {
-        console.log("ERROR loadData", err);
-      }
+    } else {
+      renderData(svg, effectiveData);
     }
-    loadRequest();
+  }, [effectiveData]);
+
+  useEffect(() => {
+    if (chairsMng.current) {
+      chairsMng.current.tableWidth = document.getElementById("table-width");
+      chairsMng.current.tableHeight = document.getElementById("table-height");
+    }
+  }, [chairsMng]);
+
+  async function loadData(svg) {
+  if (!data) {  // Only fetch if external data isn't provided
+    try {
+      const response = await axios.get(apiUrl, {
+        params: { svgType },
+        withCredentials: true,
+      });
+      const newData = response.data;
+      setData ? setData(newData, svgType) : setInternalData(newData);
+    } catch (err) {
+      console.error("ERROR loadData", err);
+    }
+  }
+}
+
+
+  function renderData(svg, dataToRender) {
+    chairsMng.current = new SeatsAndTablesClass(svg, dataToRender, token.role, setSelSeat);
   }
 
-  const save = function(){
-    const sendPostRequest = async () => {
-      try {
-        const params = {seats: chairsMng.current.seatData, tables: chairsMng.current.tableData};
-        const response = await axios.post(
-          DIAGRAM_URL,
-          params,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          }
-        );
-        const resp = response.data;
-        setShowAlert('Row has been successfully saved!');
-        setTimeout(()=>{setShowAlert(null);}, 2500);
-      } catch (err) {
-        console.log("ERROR save diagram", err);
-      }
-    }
-    sendPostRequest();
+  async function save() {
+  try {
+    const params = { seats: chairsMng.current.seatData, tables: chairsMng.current.tableData };
+    const response = await axios.post(apiUrl, params, {
+      params: { svgType },
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    });
+    setShowAlert('Row has been successfully saved!');
+    setTimeout(() => setShowAlert(null), 2500);
+  } catch (err) {
+    console.error("ERROR save diagram", err);
   }
+}
+
 
   return (
     <ElementStyle>
-      {token.role === 'admin' && <div className='wrapper-mngr-diagram'>
-        <Button className='save' type="button" onClick={()=>{chairsMng.current.addSeat();}} >Add a chair <FontAwesomeIcon icon={faSave}/></Button>
-        <Button className='save' type="button" onClick={()=>{chairsMng.current.addTable();}} >Add a table <FontAwesomeIcon icon={faSave}/></Button>
-        
-        <div className="form-group">
-          <Form.Label htmlFor="table-width">width:</Form.Label>
-          <Form.Control
-            type="input"
-            id="table-width"/>
+      {token.role === 'admin' && (
+        <div className='wrapper-mngr-diagram'>
+          <Button className='save' onClick={() => chairsMng.current.addSeat()}>Add a chair <FontAwesomeIcon icon={faSave} /></Button>
+          <Button className='save' onClick={() => chairsMng.current.addTable()}>Add a table <FontAwesomeIcon icon={faSave} /></Button>
+          <div className="form-group">
+            <Form.Label htmlFor="table-width">width:</Form.Label>
+            <Form.Control type="input" id="table-width"/>
+          </div>
+          <div className="form-group">
+            <Form.Label htmlFor="table-height">height:</Form.Label>
+            <Form.Control type="input" id="table-height"/>
+          </div>
         </div>
-        <div className="form-group">
-          <Form.Label htmlFor="table-height">height:</Form.Label>
-          <Form.Control
-            type="input"
-            id="table-height"/>
-        </div>
-      </div>}
+      )}
       <div className="wrapper-svg" style={divStyle}>
-        <SvgPlan width={SVG_WIDTH} height={SVG_HEIGHT} />
-        <svg ref={ref} id="svg_draw" width={SVG_WIDTH} height={SVG_HEIGHT} version="1.1" xmlns="http://www.w3.org/2000/svg">
-        </svg>
+        <SvgComponent width={SVG_WIDTH} height={SVG_HEIGHT} />
+        <svg ref={ref} id="svg_draw" width={SVG_WIDTH} height={SVG_HEIGHT} version="1.1" xmlns="http://www.w3.org/2000/svg" />
       </div>
-      {token.role === 'admin' && <div className='wrapper-btn-save'>
-        <BModal show={showAlert?true:false} size='sm' centered backdrop="static">
-          <BModal.Body>{showAlert}</BModal.Body>
-          <BModal.Footer>
-            <Button variant="secondary" onClick={()=>setShowAlert(null)}>Close</Button>
-          </BModal.Footer>
-        </BModal>
-        <Button className='save' type="button" onClick={()=>{save();}} >Save <FontAwesomeIcon icon={faSave}/></Button>
-      </div>} 
-      <Popup/>
+      {token.role === 'admin' && (
+        <div className='wrapper-btn-save'>
+          <BModal show={!!showAlert} size='sm' centered backdrop="static">
+            <BModal.Body>{showAlert}</BModal.Body>
+            <BModal.Footer>
+              <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
+            </BModal.Footer>
+          </BModal>
+          <Button className='save' onClick={save}>Save <FontAwesomeIcon icon={faSave} /></Button>
+        </div>
+      )}
+      <Popup />
     </ElementStyle>
-  )
+  );
 }
 
 export default Diagram;
-
