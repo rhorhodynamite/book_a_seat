@@ -44,7 +44,7 @@ function SVGPlanSeminar(props) {
 
             {/* Office phone box at the top of the rightmost corridor */}
             <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
-            <circle cx="282.5" cy="37" r="5" fill="#000" />
+         
 
         
 
@@ -88,7 +88,7 @@ function SVGPlanSeminar(props) {
 
             {/* Kitchen area */}
             {/* Fridge */}
-            <rect x="150" y="105" width="15" height="25" fill="#c0c0c0" rx="2" ry="2" />
+            <rect x="130" y="95" width="15" height="25" fill="#c0c0c0" rx="2" ry="2" />
             <line x1="150" y1="115" x2="155" y2="115" stroke="#000" strokeWidth="1" />
             {/* Sink */}
             <rect x="160" y="110" width="20" height="10" fill="#87CEEB" />
