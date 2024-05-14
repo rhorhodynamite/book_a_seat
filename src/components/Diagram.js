@@ -69,7 +69,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   const [showAlert, setShowAlert] = useState(null);
   const chairsMng = useRef(null);
   const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
-  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
+  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SVGPlan;
 
   const ref = useD3((svg) => {
     if (!effectiveData) {
@@ -100,6 +100,8 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }
 }
+
+
 
 
   function renderData(svg, dataToRender) {
