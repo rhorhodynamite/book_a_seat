@@ -34,12 +34,14 @@ const ElementStyle = styled.div`
 
 function NavBar() {
   const { token, setToken } = useContext(AuthContext);
-  const user = <span>{token.user}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser} transform="grow-5" /></span>;
+  // console.log('token===>', token);
+  const user = <span>{token.user}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser} transform="grow-5" /></span>
 
   const logout = function(){
     console.log('logout');
     setToken(null);
-  };
+  }
+
 
   const [keyBooking, setKeyBooking] = useState(0);
   const [keyDiagram, setKeyDiagram] = useState((token.role === 'admin' ? 1 : 0));
@@ -68,8 +70,20 @@ function NavBar() {
   return (
     <ElementStyle>
       <Navbar className='navbar navbar-light'>
-        // Navbar code remains unchanged...
+        <Container fluid>
+          <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
+          
+          <Navbar.Collapse id="navbarScroll">
+            <Nav>
+              <NavDropdown title={user} id="navbarScrollingDropdown" align="end" menuVariant='#e3f2fd'>
+                <NavDropdown.Item href="#" onClick={()=>{logout();}}>Logout</NavDropdown.Item>
+              </NavDropdown>
+              
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
+      
       <Tabs onSelect={(tabElName) => onSelectChange(tabElName)}
             defaultActiveKey={token.role === 'user' ? "booking" : "reservation"}
             className="mb-3">
