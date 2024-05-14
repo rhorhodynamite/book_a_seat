@@ -15,21 +15,21 @@ function SVGPlanSeminar(props) {
           <rect x="125" y="134" width="20" height="5" fill="brown" />
           
           {/* Side door at Room 1 */}
-          <rect x="177" y="60" width="5" height="20" fill="brown" />
+          <rect x="177" y="70" width="5" height="20" fill="brown" /> {/* Adjusted y position */}
           
           {/* Corridor coming out of the right door */}
-          <rect x="182" y="60" width="60" height="20" stroke="#000" strokeWidth="2" />
+          <rect x="182" y="70" width="60" height="20" stroke="#000" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Connecting passage space (turns up) */}
-          <rect x="242" y="30" width="40" height="60" stroke="#000" strokeWidth="2" />
+          <rect x="242" y="40" width="40" height="60" stroke="#000" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Staircase 1 along the corridor */}
-          <line x1="192" y1="65" x2="202" y2="65" stroke="black" strokeWidth="2" />
-          <line x1="194" y1="70" x2="204" y2="70" stroke="black" strokeWidth="2" />
+          <line x1="192" y1="75" x2="202" y2="75" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
+          <line x1="194" y1="80" x2="204" y2="80" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Staircase 2 along the corridor */}
-          <line x1="192" y1="75" x2="202" y2="75" stroke="black" strokeWidth="2" />
-          <line x1="194" y1="80" x2="204" y2="80" stroke="black" strokeWidth="2" />
+          <line x1="192" y1="85" x2="202" y2="85" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
+          <line x1="194" y1="90" x2="204" y2="90" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
         </g>
       </g>
     </svg>
@@ -37,5 +37,6 @@ function SVGPlanSeminar(props) {
 }
 
 export default SVGPlanSeminar;
+
 
 
