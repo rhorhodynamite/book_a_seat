@@ -2,7 +2,7 @@ import React from 'react';
 
 function SVGPlanSeminar(props) {
   return (
-    <svg width={props.width} height={props.height} version="1.1" viewBox="0 0 240 125" xmlns="http://www.w3.org/2000/svg">
+    <svg width={props.width} height={props.height} version="1.1" viewBox="0 0 300 125" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(0 -14.7)">
         <g fill="none" stroke="#000">
           {/* Room 1 Outline */}
@@ -18,10 +18,10 @@ function SVGPlanSeminar(props) {
           <rect x="177" y="60" width="5" height="20" fill="brown" />
           
           {/* Corridor coming out of the right door */}
-          <rect x="182" y="60" width="30" height="20" stroke="#000" strokeWidth="2" />
+          <rect x="182" y="60" width="60" height="20" stroke="#000" strokeWidth="2" />
           
           {/* Connecting passage space (turns up) */}
-          <rect x="212" y="30" width="20" height="50" stroke="#000" strokeWidth="2" />
+          <rect x="242" y="30" width="40" height="60" stroke="#000" strokeWidth="2" />
           
           {/* Staircase 1 along the corridor */}
           <line x1="192" y1="65" x2="202" y2="65" stroke="black" strokeWidth="2" />
