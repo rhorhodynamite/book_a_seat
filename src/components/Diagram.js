@@ -3,7 +3,7 @@ import SvgPlan from './SvgPlan';
 import SeatsAndTablesClass from './SeatsAndTablesClass';
 import Popup from './Popup';
 import axios from '../api/axios';
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
@@ -15,14 +15,13 @@ import SVGPlan from './SvgPlan';
 import SVGPlanUpstairs from './SvgPlanUpstairs';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-//const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
+
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
 
 const ElementStyle = styled.div`
   {
     margin: 5px 10px;
-    // height: calc(100vh - 100px);
     position: relative;
   }
 
@@ -80,6 +79,13 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }, [effectiveData]);
 
+  useEffect(() => {
+    if (chairsMng.current) {
+      chairsMng.current.tableWidth = document.getElementById("table-width");
+      chairsMng.current.tableHeight = document.getElementById("table-height");
+    }
+  }, [chairsMng]);
+
   async function loadData(svg) {
     if (!data) {  // Only fetch if external data isn't provided
       try {
@@ -93,7 +99,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   }
 
   function renderData(svg, dataToRender) {
-    new SeatsAndTablesClass(svg, dataToRender, token.role, setSelSeat);
+    chairsMng.current = new SeatsAndTablesClass(svg, dataToRender, token.role, setSelSeat);
   }
 
   async function save() {
