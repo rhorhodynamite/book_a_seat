@@ -47,13 +47,11 @@ function SVGPlanSeminar(props) {
             <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
             <circle cx="282.5" cy="37" r="5" fill="#000" />
 
-            {/* Detailed corridor elements */}
-            <line x1="182" y1="90" x2="242" y2="90" stroke="#000" strokeWidth="2" />
-            <line x1="242" y1="30" x2="302" y2="30" stroke="#000" strokeWidth="2" />
+        
 
             {/* Detailed phone box elements */}
             <line x1="272" y1="22" x2="272" y2="52" stroke="#000" strokeWidth="1" />
-            <line x1="270" y1="24" x2="295" y2="24" stroke="#000" strokeWidth="1" />
+          
             
 
             {/* Large conference desk */}
@@ -82,11 +80,7 @@ function SVGPlanSeminar(props) {
             {/* Rug under the conference desk */}
             <rect x="25" y="25" width="130" height="40" fill="#D3D3D3" rx="8" ry="8" />
 
-            {/* Ceiling lights */}
-            <circle cx="40" cy="120" r="2" fill="#FFFFE0" />
-            <circle cx="60" cy="120" r="2" fill="#FFFFE0" />
-            <circle cx="140" cy="120" r="2" fill="#FFFFE0" />
-            <circle cx="160" cy="120" r="2" fill="#FFFFE0" />
+
 
             {/* Clock on the wall */}
             <circle cx="250" cy="25" r="5" fill="#FFF" stroke="#000" strokeWidth="1" />
