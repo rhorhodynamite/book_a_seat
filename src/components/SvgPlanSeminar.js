@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-function SvgPlanSeminar(props) {
+function SVGPlanSeminar(props) {
   return (
     <svg width={props.width} height={props.height} version="1.1" viewBox="0 0 180 125" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(0 -14.7)">
@@ -25,4 +25,4 @@ function SvgPlanSeminar(props) {
   );
 }
 
-export default SvgPlanSeminar;
+export default SVGPlanSeminar;
