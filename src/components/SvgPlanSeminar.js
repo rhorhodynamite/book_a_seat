@@ -50,8 +50,7 @@ function SVGPlanSeminar(props) {
             {/* Smaller desks in a square formation */}
             <rect x="20" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
             <rect x="50" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
-            <rect x="20" y="110" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
-            <rect x="50" y="110" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
+     
           </g>
         </g>
       </svg>
