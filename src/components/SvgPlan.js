@@ -62,8 +62,8 @@ function SVGPlan(props) {
         </g>
         {/* Adding sunlight effect */}
         <g fill="url(#sunbeamGradient)">
-          <path d="M20,105 L70,55 L100,85 L50,135 Z" />
-          <path d="M140,105 L170,75 L150,55 L120,85 Z" />
+          <path d="M160,155 L110,105 L80,135 L130,185 Z" />
+          <path d="M40,155 L10,125 L30,105 L60,135 Z" />
         </g>
       </svg>
     </div>
