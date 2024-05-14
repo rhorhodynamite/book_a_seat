@@ -6,10 +6,10 @@ function SVGPlanUpstairs(props) {
   const height = props.height || '100%';
 
   return (
-    <svg width={width} height={height} viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#000">
         {/* Room 4 (smaller, diagonal room on the very left) */}
-        <polygon points="0,50 50,100 100,50 100,200 0,200" stroke="#000" strokeWidth="2" fill="none" />
+        <polygon points="0,50 50,100 100,50 100,200" stroke="#000" strokeWidth="2" fill="none" />
         {/* Door to Room 4 from the corridor */}
         <rect x="50" y="50" width="20" height="6" fill="brown" />
 
