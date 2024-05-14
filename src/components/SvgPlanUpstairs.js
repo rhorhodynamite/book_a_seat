@@ -9,7 +9,7 @@ function SVGPlanUpstairs(props) {
     <svg width={width} height={height} viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#000">
         {/* Room 4 (smaller, diagonal room on the very left) */}
-        <polygon points="0,0 0,100 100,50 100,200" stroke="#000" strokeWidth="2" fill="none" />
+        <polygon points="0,200 0,100 100,50 100,200" stroke="#000" strokeWidth="2" fill="none" />
         {/* Door to Room 4 from the corridor */}
         <rect x="100" y="100" width="6" height="20" fill="brown" />
 
