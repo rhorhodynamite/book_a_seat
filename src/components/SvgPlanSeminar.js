@@ -53,8 +53,7 @@ function SVGPlanSeminar(props) {
 
             {/* Smaller desks in a square formation */}
             <rect x="25" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
-            <rect x="45" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
-            
+            <rect x="55" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
 
             {/* Chairs around large conference desk */}
             <circle cx="40" cy="45" r="4" fill="#8B4513" />
@@ -74,6 +73,18 @@ function SVGPlanSeminar(props) {
             {/* Windows */}
             <rect x="15" y="17" width="30" height="3" fill="#87CEEB" />
             <rect x="135" y="17" width="30" height="3" fill="#87CEEB" />
+
+            {/* Rug under the conference desk */}
+            <rect x="25" y="25" width="130" height="40" fill="#D3D3D3" rx="8" ry="8" />
+
+            {/* Ceiling lights */}
+            <circle cx="55" cy="20" r="2" fill="#FFFFE0" />
+            <circle cx="145" cy="20" r="2" fill="#FFFFE0" />
+
+            {/* Clock on the wall */}
+            <circle cx="100" cy="20" r="5" fill="#FFF" stroke="#000" strokeWidth="1" />
+            <line x1="100" y1="20" x2="100" y2="16" stroke="#000" strokeWidth="1" />
+            <line x1="100" y1="20" x2="103" y2="20" stroke="#000" strokeWidth="1" />
           </g>
         </g>
       </svg>
