@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 const MIN_RECT_WIDTH = 15;
 const MIN_RECT_HEIGHT = 8;
 
-const SeatsAndTablesClass = class  {
-  constructor(svg, data, role, setSelSeat){
+const SeatsAndTablesClass = class {
+  constructor(svg, data, role, setSelSeat, tableWidth = null, tableHeight = null) {
     this.svg = svg;
     this.role = role;
     this.seatData = data.seats;
@@ -12,6 +12,8 @@ const SeatsAndTablesClass = class  {
 
     this.selChair = null;
     this.setSelSeat = setSelSeat;
+    this.tableWidth = tableWidth;
+    this.tableHeight = tableHeight;
 
     // finds max id
     this.maxSeatId = this.seatData.length === 0 ? 0 : Math.max(...this.seatData.map(o => o.id));
@@ -31,7 +33,7 @@ const SeatsAndTablesClass = class  {
       .classed("chair", true)
       .attr("name", function(d){return d.name})
       .attr("cx", function(d){ return d.x; })
-      .attr("cy", function(d){ return d.y; })
+      .attr("cy", function(d){ return d.y || 0; }) // Ensure y has a default value of 0
       .attr("r", 10);
 
     if(this.role === 'admin'){
@@ -79,12 +81,18 @@ const SeatsAndTablesClass = class  {
       });
 
     gTable.append("rect")
-          .attr("width", function (d) {return d.width})
-          .attr("height", function (d) {return d.height});
+          .attr("width", function (d) { return d.width })
+          .attr("height", function (d) { return d.height });
 
     if(this.role === 'admin'){
       gTable.call(d3.drag() 
-        .on("drag", function(event, d){self.tableWidth.value = ""; self.tableHeight.value = "";self.draggedTable.call(this, event, d)}));
+        .on("drag", function(event, d){ 
+          if (self.tableWidth && self.tableHeight) {
+            self.tableWidth.value = ""; 
+            self.tableHeight.value = "";
+          }
+          self.draggedTable.call(this, event, d)
+        }));
     }
 
     if(this.role === 'admin'){
@@ -103,7 +111,8 @@ const SeatsAndTablesClass = class  {
         .call(d3.drag()
           .on("start", this.rectResizeStart)
           .on("drag", function(event, d){self.rectResizing.apply(this, [event, d, 
-            (val)=>{self.tableWidth.value = val;}, (val)=>{self.tableHeight.value = val;}])}));
+            (val)=>{if(self.tableWidth) self.tableWidth.value = val;}, 
+            (val)=>{if(self.tableHeight) self.tableHeight.value = val;}])}));
     }
   }
 
@@ -147,3 +156,4 @@ const SeatsAndTablesClass = class  {
 }
 
 export default SeatsAndTablesClass;
+
