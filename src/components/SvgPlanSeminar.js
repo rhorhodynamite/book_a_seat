@@ -21,7 +21,7 @@ function SVGPlanSeminar(props) {
           <rect x="182" y="80" width="60" height="20" stroke="#000" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Connecting passage space (turns up) */}
-          <rect x="242" y="40" width="60" height="80" stroke="#000" strokeWidth="2" /> {/* Adjusted y position */}
+          <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Staircase 1 along the corridor */}
           <line x1="192" y1="75" x2="202" y2="75" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
