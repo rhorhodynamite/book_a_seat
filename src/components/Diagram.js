@@ -3,9 +3,9 @@ import SvgPlan from './SvgPlan';
 import SeatsAndTablesClass from './SeatsAndTablesClass';
 import Popup from './Popup';
 import axios from '../api/axios';
-import React, { useState, useContext}  from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons'
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import AuthContext from '../context/AuthProvider';
 import Form from 'react-bootstrap/Form';
@@ -14,16 +14,12 @@ import styled from 'styled-components';
 import SVGPlan from './SvgPlan';
 import SVGPlanUpstairs from './SvgPlanUpstairs';
 
-
-const SERVER_URL =  process.env.REACT_APP_SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 //const DIAGRAM_URL = props.apiUrl || SERVER_URL + 'api/seats';  // Default to existing URL if not provided
-const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
-let chairsMng = useRef(null);
-
 const SVG_WIDTH = "175mm";
 const SVG_HEIGHT = "125mm";
 
-const ElementStyle = styled.div`  
+const ElementStyle = styled.div`
   {
     margin: 5px 10px;
     // height: calc(100vh - 100px);
@@ -43,9 +39,8 @@ const ElementStyle = styled.div`
     button{
       margin: 4px;
     }
-
   }
-  
+
   .wrapper-mngr-diagram{
     text-align: left;
     margin: 5px 0;
@@ -68,14 +63,15 @@ const ElementStyle = styled.div`
   }
 `;
 
-
-
-  function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
   const { token } = useContext(AuthContext);
   const [internalData, setInternalData] = useState(null);
   const effectiveData = data || internalData;
   const [showAlert, setShowAlert] = useState(null);
+  const chairsMng = useRef(null);
   const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
+  const SvgComponent = svgType === "upstairs" ? SVGPlanUpstairs : SvgPlan;
+
   const ref = useD3((svg) => {
     if (!effectiveData) {
       loadData(svg);
@@ -102,7 +98,7 @@ const ElementStyle = styled.div`
 
   async function save() {
     try {
-      const params = { seats: chairsMng.seatData, tables: chairsMng.tableData };
+      const params = { seats: chairsMng.current.seatData, tables: chairsMng.current.tableData };
       const response = await axios.post(apiUrl, params, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
@@ -114,13 +110,12 @@ const ElementStyle = styled.div`
     }
   }
 
-
-   return (
+  return (
     <ElementStyle>
       {token.role === 'admin' && (
         <div className='wrapper-mngr-diagram'>
-          <Button className='save' onClick={() => chairsMng.addSeat()}>Add a chair <FontAwesomeIcon icon={faSave} /></Button>
-          <Button className='save' onClick={() => chairsMng.addTable()}>Add a table <FontAwesomeIcon icon={faSave} /></Button>
+          <Button className='save' onClick={() => chairsMng.current.addSeat()}>Add a chair <FontAwesomeIcon icon={faSave} /></Button>
+          <Button className='save' onClick={() => chairsMng.current.addTable()}>Add a table <FontAwesomeIcon icon={faSave} /></Button>
           <div className="form-group">
             <Form.Label htmlFor="table-width">width:</Form.Label>
             <Form.Control type="input" id="table-width"/>
@@ -150,6 +145,5 @@ const ElementStyle = styled.div`
     </ElementStyle>
   );
 }
-
 
 export default Diagram;
