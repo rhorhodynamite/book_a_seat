@@ -69,6 +69,8 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   const [showAlert, setShowAlert] = useState(null);
   const chairsMng = useRef(null);
   const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
+  const tableWidthRef = useRef(null);  // Define ref
+  const tableHeightRef = useRef(null);  // Define ref
   const SvgComponent = svgType === "upstairs" 
     ? SVGPlanUpstairs 
     : svgType === "seminar" 
@@ -85,8 +87,8 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 
   useEffect(() => {
     if (chairsMng.current) {
-      chairsMng.current.tableWidth = document.getElementById("table-width");
-      chairsMng.current.tableHeight = document.getElementById("table-height");
+      chairsMng.current.tableWidth = tableWidthRef.current;  // Assign ref
+      chairsMng.current.tableHeight = tableHeightRef.current;  // Assign ref
     }
   }, [chairsMng]);
 
@@ -107,8 +109,16 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 
 
   function renderData(svg, dataToRender) {
-    chairsMng.current = new SeatsAndTablesClass(svg, dataToRender, token.role, setSelSeat);
-  }
+  chairsMng.current = new SeatsAndTablesClass(
+    svg, 
+    dataToRender, 
+    token.role, 
+    setSelSeat, 
+    tableWidthRef.current, 
+    tableHeightRef.current
+  );
+}
+
 
   async function save() {
   try {
@@ -134,11 +144,11 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
           <Button className='save' onClick={() => chairsMng.current.addTable()}>Add a table <FontAwesomeIcon icon={faSave} /></Button>
           <div className="form-group">
             <Form.Label htmlFor="table-width">width:</Form.Label>
-            <Form.Control type="input" id="table-width"/>
+            <Form.Control type="input" id="table-width" ref={tableWidthRef}/>  // Use ref
           </div>
           <div className="form-group">
             <Form.Label htmlFor="table-height">height:</Form.Label>
-            <Form.Control type="input" id="table-height"/>
+            <Form.Control type="input" id="table-height" ref={tableHeightRef}/>
           </div>
         </div>
       )}
