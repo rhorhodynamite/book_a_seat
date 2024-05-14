@@ -46,23 +46,19 @@ function SVGPlan(props) {
           <rect x="177" y="60" width="5" height="20" fill="url(#doorGradient)" rx="1" ry="1" />
         </g>
       </g>
-      <g fontFamily="Arial" fontSize="12" fill="#000">
-        <text x="95" y="30" textAnchor="middle">Room 1</text>
-        <text x="55" y="115" textAnchor="middle">Pillar</text>
-        <text x="155" y="115" textAnchor="middle">Pillar</text>
-        <text x="165" y="140" textAnchor="middle">Plants</text>
-        <text x="135" y="137" textAnchor="middle">Door</text>
-        <text x="180" y="75" textAnchor="middle">Side Door</text>
-      </g>
       {/* Adding plant illustration */}
       <g fill="none" stroke="#228B22" strokeWidth="1">
         <path d="M154,122 Q155,117 153,115" /> {/* Plant leaf 1 */}
         <path d="M156,123 Q157,118 155,116" /> {/* Plant leaf 2 */}
         <path d="M153,128 Q154,123 152,121" /> {/* Plant leaf 3 */}
       </g>
+      <g fontFamily="Arial" fontSize="14" fill="#000">
+        <text x="90" y="20" textAnchor="middle">Research Office</text>
+      </g>
     </svg>
   );
 }
 
 export default SVGPlan;
+
 
