@@ -15,8 +15,10 @@ import MyBooking from './MyBooking';
 import RoomList from './RoomList'; // Assuming RoomList is a separate component
 import SVGPlan from './SvgPlan'; // Ensure SVGPlan is imported if used
 import SVGPlanUpstairs from './SvgPlanUpstairs';
+import SVGPlanSeminar from './SvgPlanSeminar'; // Import the new SVG component
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 const ElementStyle = styled.div`
   > div {
     width: 1000px;
@@ -34,19 +36,18 @@ const ElementStyle = styled.div`
 
 function NavBar() {
   const { token, setToken } = useContext(AuthContext);
-  // console.log('token===>', token);
-  const user = <span>{token.user}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser} transform="grow-5" /></span>
+  const user = <span>{token.user}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser} transform="grow-5" /></span>;
 
   const logout = function(){
     console.log('logout');
     setToken(null);
-  }
-
+  };
 
   const [keyBooking, setKeyBooking] = useState(0);
   const [keyDiagram, setKeyDiagram] = useState((token.role === 'admin' ? 1 : 0));
   const [selSeat, setSelSeat] = useState(null);
   const [keyUpstairsDiagram, setKeyUpstairsDiagram] = useState(1);
+  const [keySeminarDiagram, setKeySeminarDiagram] = useState(1);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
   function setRoomSelectionHandler(room) {
@@ -57,6 +58,12 @@ function NavBar() {
     if(tabElName === 'reservation') {
       setSelSeat(null);
       setKeyDiagram(keyDiagram + 1);
+    } else if(tabElName === 'upstairs') {
+      setSelSeat(null);
+      setKeyUpstairsDiagram(keyUpstairsDiagram + 1);
+    } else if(tabElName === 'seminar') {
+      setSelSeat(null);
+      setKeySeminarDiagram(keySeminarDiagram + 1);
     } else {
       setKeyBooking(keyBooking + 1);
     }
@@ -65,7 +72,6 @@ function NavBar() {
   function setSelSeatHandler(id) {
     setSelSeat(id); 
   }
-
 
   return (
     <ElementStyle>
@@ -124,11 +130,24 @@ function NavBar() {
             )}
           </div>
         </Tab>
+      <Tab eventKey="seminar" title="Seminarraum/Telefonbox">
+          <div>
+            <h2>{token.role === 'admin' ? "ADMIN - Manage Seminar Room/Phone Booth" : "Seminar Room/Phone Booth Plan"}</h2>
+            {keySeminarDiagram > 0 && (
+              <div className='wrapper-dashboard' key={'seminarDiagram_' + keySeminarDiagram}>
+                <Diagram 
+                    apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
+                    setSelSeat={setSelSeatHandler} 
+                    svgType="seminar" // Prop to control SVG display
+                />
+                <ReservationList selSeat={selSeat}/>
+              </div>
+            )}
+          </div>
+        </Tab>
       </Tabs>
-            
     </ElementStyle>
   );
 }
-
 
 export default NavBar;
