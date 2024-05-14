@@ -24,8 +24,7 @@ function SVGPlanSeminar(props) {
           {/* Room 1 Outline */}
           <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" rx="8" ry="8" />
           
-          {/* Pillar 1 in Room 1 */}
-          <rect x="120" y="80" width="20" height="30" fill="url(#pillarGradient)" rx="2" ry="2" />
+        
           
           {/* Door at the bottom of Room 1 */}
           <rect x="125" y="134" width="20" height="5" fill="url(#pillarGradient)" rx="1" ry="1" />
@@ -39,30 +38,20 @@ function SVGPlanSeminar(props) {
           {/* Connecting passage space (turns up) */}
           <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="2" rx="8" ry="8" fill="url(#corridorGradient)" />
           
-          {/* Staircase 1 along the corridor */}
-          <path d="M192,85 L192,65 L194,65 L194,85 Z" fill="url(#corridorGradient)" />
-          <path d="M194,85 L194,65 L196,65 L196,85 Z" fill="url(#corridorGradient)" />
-          <path d="M196,85 L196,65 L198,65 L198,85 Z" fill="url(#corridorGradient)" />
-          
-          {/* Staircase 2 along the corridor */}
-          <path d="M232,85 L232,65 L234,65 L234,85 Z" fill="url(#corridorGradient)" />
-          <path d="M234,85 L234,65 L236,65 L236,85 Z" fill="url(#corridorGradient)" />
-          <path d="M236,85 L236,65 L238,65 L238,85 Z" fill="url(#corridorGradient)" />
+
           
           {/* Office phone box at the top of the rightmost corridor */}
           <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
-          <circle cx="282.5" cy="37" r="5" fill="#000" />
+          
           
           {/* Large conference desk */}
           <rect x="30" y="30" width="120" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
           
           {/* Smaller desks in a square formation */}
-          <rect x="20" y="90" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
-          <rect x="50" y="90" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
-          <rect x="20" y="110" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
-          <rect x="50" y="110" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
-        </g>
-      </g>
+          <rect x="20" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
+          <rect x="50" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
+         
+      
       
     </svg>
   );
