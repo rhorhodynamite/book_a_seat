@@ -52,14 +52,22 @@ function SVGPlanSeminar(props) {
           {/* Office phone box at the top of the rightmost corridor */}
           <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
           <circle cx="282.5" cy="37" r="5" fill="#000" />
+          
+          {/* Large conference desk */}
+          <rect x="30" y="30" width="120" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
+          
+          {/* Smaller desks in a square formation */}
+          <rect x="20" y="90" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
+          <rect x="50" y="90" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
+          <rect x="20" y="110" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
+          <rect x="50" y="110" width="25" height="15" fill="url(#corridorGradient)" rx="4" ry="4" />
         </g>
       </g>
-      <g fontFamily="Arial" fontSize="14" fill="#000">
-        <text x="150" y="14" textAnchor="middle">Seminar Room</text>
-      </g>
+      
     </svg>
   );
 }
 
 export default SVGPlanSeminar;
+
 
