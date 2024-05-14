@@ -24,12 +24,12 @@ function SVGPlanSeminar(props) {
           <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Staircase 1 along the corridor */}
-          <line x1="192" y1="75" x2="202" y2="75" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
-          <line x1="194" y1="80" x2="204" y2="80" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
+          <line x1="192" y1="65" x2="192" y2="75" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
+          <line x1="194" y1="70" x2="194" y2="80" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
           
           {/* Staircase 2 along the corridor */}
-          <line x1="232" y1="75" x2="202" y2="85" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
-          <line x1="234" y1="80" x2="204" y2="90" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
+          <line x1="232" y1="65" x2="232" y2="75" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
+          <line x1="234" y1="70" x2="234" y2="80" stroke="black" strokeWidth="2" /> {/* Adjusted y position */}
         </g>
       </g>
     </svg>
