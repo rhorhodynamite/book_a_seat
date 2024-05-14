@@ -24,12 +24,12 @@ function SVGPlanUpstairs(props) {
         <rect x="512" y="120" width="6" height="20" fill="brown" />
 
         {/* Room 3 (taller) */}
-        <rect x="518" y="50" width="200" height="200" stroke="#000" strokeWidth="2" />
+        <rect x="518" y="0" width="200" height="200" stroke="#000" strokeWidth="2" />
         {/* Door to Corridor */}
         <rect x="590" y="50" width="20" height="6" fill="brown" />
 
         {/* Corridor starting from the taller room */}
-        <rect x="590" y="0" width="20" height="50" stroke="#000" strokeWidth="2" />
+        <rect x="518" y="0" width="20" height="50" stroke="#000" strokeWidth="2" />
         <rect x="0" y="0" width="610" height="50" stroke="#000" strokeWidth="2" />
       </g>
     </svg>
