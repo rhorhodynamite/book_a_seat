@@ -74,13 +74,10 @@ function SVGPlanSeminar(props) {
             <circle cx="25" cy="130" r="6" fill="green" />
             <circle cx="165" cy="100" r="6" fill="green" />
 
-            {/* Wall Art */}
-            <rect x="15" y="100" width="20" height="15" fill="#ffcccb" />
-            <rect x="140" y="100" width="20" height="15" fill="#ffcccb" />
 
             {/* Windows */}
-            <rect x="15" y="105" width="30" height="3" fill="#87CEEB" />
-            <rect x="135" y="105" width="30" height="3" fill="#87CEEB" />
+            <rect x="15" y="125" width="30" height="3" fill="#87CEEB" />
+            <rect x="135" y="125" width="30" height="3" fill="#87CEEB" />
 
             {/* Rug under the conference desk */}
             <rect x="25" y="25" width="130" height="40" fill="#D3D3D3" rx="8" ry="8" />
