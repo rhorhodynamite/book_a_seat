@@ -26,6 +26,10 @@ function SVGPlan(props) {
             <stop offset="0%" style={{ stopColor: '#228B22', stopOpacity: 1 }} />
             <stop offset="100%" style={{ stopColor: '#006400', stopOpacity: 1 }} />
           </linearGradient>
+          <radialGradient id="sunbeamGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" style={{ stopColor: 'rgba(255, 223, 0, 0.6)', stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: 'rgba(255, 223, 0, 0)', stopOpacity: 0 }} />
+          </radialGradient>
         </defs>
         <g transform="translate(0 -14.7)" filter="url(#shadow)">
           <g fill="none" stroke="#000">
@@ -56,14 +60,14 @@ function SVGPlan(props) {
           <path d="M156,123 Q157,118 155,116" /> {/* Plant leaf 2 */}
           <path d="M153,128 Q154,123 152,121" /> {/* Plant leaf 3 */}
         </g>
+        {/* Adding sunlight effect */}
+        <g fill="url(#sunbeamGradient)">
+          <path d="M20,105 L70,55 L100,85 L50,135 Z" />
+          <path d="M140,105 L170,75 L150,55 L120,85 Z" />
+        </g>
       </svg>
     </div>
   );
 }
 
-
-
-
 export default SVGPlan;
-
-
