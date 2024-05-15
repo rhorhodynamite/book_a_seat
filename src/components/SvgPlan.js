@@ -61,9 +61,9 @@ function SVGPlan(props) {
           <path d="M153,128 Q154,123 152,121" /> {/* Plant leaf 3 */}
         </g>
         {/* Adding sunlight effect */}
-        <g fill="url(#sunbeamGradient)">
-          <path d="M200,155 L130,105 L100,135 L150,165 Z" />
-          <path d="M60,155 L30,125 L50,105 L80,135 Z" />
+      //  <g fill="url(#sunbeamGradient)">
+      //    <path d="M200,155 L130,105 L100,135 L150,165 Z" />
+      //    <path d="M60,155 L30,125 L50,105 L80,135 Z" />
         </g>
       </svg>
     </div>
