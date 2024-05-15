@@ -260,7 +260,7 @@ export default function MyBooking(props) {
     setTimeout(() => { setShowAlert(null); }, 2500);
   }
 
-  return (
+    return (
     <Container maxWidth="md">
       <BModal show={showAlert ? true : false} size='sm' centered='true' backdrop="static">
         <BModal.Body>{showAlert}</BModal.Body>
@@ -286,8 +286,6 @@ export default function MyBooking(props) {
         </DialogActions>
       </Dialog>
 
-      {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
-
       <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -311,6 +309,9 @@ export default function MyBooking(props) {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Typography variant="h4" gutterBottom>My Bookings</Typography>
+      {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
     </Container>
   )
 }
