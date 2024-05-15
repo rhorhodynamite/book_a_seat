@@ -176,13 +176,14 @@ function loadData() {
       setReservation(finalMap);
       setReservationList(rslt);
 
-     // Get today's bookings
-    const today = moment().startOf('day');
-    const todayBookings = rslt.filter(val => 
-      (moment(val.startDate).isSameOrBefore(today, 'day') && moment(val.endDate).isSameOrAfter(today, 'day'))
-    );
-    setTodayBookings(todayBookings);
-
+      // Get today's bookings
+      const today = moment().startOf('day');
+      const todayBookings = rslt.filter(val =>
+        moment(val.startDate).isSame(today, 'day') ||
+        moment(val.endDate).isSame(today, 'day') ||
+        (moment(val.startDate).isBefore(today, 'day') && moment(val.endDate).isAfter(today, 'day'))
+      );
+      setTodayBookings(todayBookings);
 
     } catch (err) {
       console.log("ERROR loadData", err);
@@ -190,6 +191,7 @@ function loadData() {
   }
   loadRequest();
 }
+
 
 
   function addMultiDays(item, finalMap){
