@@ -106,8 +106,9 @@ export default function MyBooking(props) {
   const [reservationData, setReservation] = useState([])
   const [idToDel, setIdToDel] = useState(null);
   const [showAlert, setShowAlert] = useState(null);
+  const [todayBookings, setTodayBookings] = useState([]);
 
-  function loadData(){
+  function loadData() {
     console.log('load booking');
 
     const params = {
@@ -117,69 +118,80 @@ export default function MyBooking(props) {
       try {
         const response = await axios.get(
           GET_URL,
-          { params: params},
+          { params: params },
           {
-              withCredentials: true,
+            withCredentials: true,
           }
         );
         const rslt = response.data?.rslt.map((val, key) => {
-          if(typeof val.startdate === 'string'){
-            val.startDate = new Date(val.startdate)
+          if (typeof val.startdate === 'string') {
+            val.startDate = new Date(val.startdate);
           }
-          if(typeof val.enddate === 'string'){
-            val.endDate = new Date(val.enddate)
+          if (typeof val.enddate === 'string') {
+            val.endDate = new Date(val.enddate);
           }
-          val.mmtS = moment(val.startDate)
-          val.startHour  = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm')/60)
-          val.startDay = parseInt(val.mmtS.format('D'))
-          val.startMonth = parseInt(val.mmtS.format('M'))
-          val.startYear  = parseInt(val.mmtS.format('YYYY'))
-          val.weekday = val.mmtS.format('ddd')
-          
-          val.mmtE = moment(val.endDate)
-          val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm')/60)
-          val.endDay = parseInt(val.mmtE.format('D'))
-          val.endMonth = parseInt(val.mmtE.format('M'))
-          val.endYear  = parseInt(val.mmtE.format('YYYY'))
-          val.weekday = val.mmtS.format('ddd')
+          val.mmtS = moment(val.startDate);
+          val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
+          val.startDay = parseInt(val.mmtS.format('D'));
+          val.startMonth = parseInt(val.mmtS.format('M'));
+          val.startYear = parseInt(val.mmtS.format('YYYY'));
+          val.weekday = val.mmtS.format('ddd');
+
+          val.mmtE = moment(val.endDate);
+          val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
+          val.endDay = parseInt(val.mmtE.format('D'));
+          val.endMonth = parseInt(val.mmtE.format('M'));
+          val.endYear = parseInt(val.mmtE.format('YYYY'));
+          val.weekday = val.mmtS.format('ddd');
           return val;
         });
 
-        const finalMap = []
+        const finalMap = [];
         rslt.forEach(item => {
-          let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth)
-          if (!monthYearItem){
-            if (item.startDay === item.endDay){  
-              monthYearItem = {year: item.startYear, month: item.startMonth, days: [{day: item.startDay,
-                dayBook: [{id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour}]}]}
-              finalMap.push(monthYearItem)
-            }else{
-              addMultiDays(item, finalMap)
+          let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
+          if (!monthYearItem) {
+            if (item.startDay === item.endDay) {
+              monthYearItem = {
+                year: item.startYear, month: item.startMonth, days: [{
+                  day: item.startDay,
+                  dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }]
+                }]
+              };
+              finalMap.push(monthYearItem);
+            } else {
+              addMultiDays(item, finalMap);
             }
 
-          }else{
-            const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay)
-            if(!dayItem){
-              if (item.startDay === item.endDay){  
-                monthYearItem.days.push({day: item.startDay, dayBook: [{id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour}]}) 
-              }else{
-                addMultiDays(item, finalMap)
+          } else {
+            const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
+            if (!dayItem) {
+              if (item.startDay === item.endDay) {
+                monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }] });
+              } else {
+                addMultiDays(item, finalMap);
               }
-            }else{
-              dayItem.dayBook.push({id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour})
-            } 
+            } else {
+              dayItem.dayBook.push({ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour });
+            }
           }
         });
         console.log('modify rslt', rslt);
-        console.log('finalMap', finalMap)
-        setReservation(finalMap)
-        setReservationList(rslt)
+        console.log('finalMap', finalMap);
+        setReservation(finalMap);
+        setReservationList(rslt);
+
+        // Get today's bookings
+        const today = moment().startOf('day');
+        const todayBookings = rslt.filter(val => moment(val.startDate).isSame(today, 'day'));
+        setTodayBookings(todayBookings);
+
       } catch (err) {
         console.log("ERROR loadData", err);
       }
     }
     loadRequest();
   }
+
 
   function addMultiDays(item, finalMap){
     const currDate = item.mmtS.startOf('day')
@@ -312,17 +324,37 @@ export default function MyBooking(props) {
     setTimeout(()=>{setShowAlert(null);}, 2500);
   }
   
-  return(
+  return (
     <ElementStyle >
-      <BModal show={showAlert?true:false} size= 'sm' centered='true' backdrop="static">
+      <BModal show={showAlert ? true : false} size='sm' centered='true' backdrop="static">
         <BModal.Body>{showAlert}</BModal.Body>
         <BModal.Footer>
-          <Button variant="secondary" onClick={()=>setShowAlert(null)}>Close</Button>
+          <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
         </BModal.Footer>
       </BModal>
 
       <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
-      {reservationData.length > 0 ? tableContent : <h2>No reservations until now!"</h2>}
+      {reservationData.length > 0 ? tableContent : <h2>No reservations until now!</h2>}
+
+      <h2>Today's Bookings</h2>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {todayBookings.map((booking, index) => (
+            <tr key={index}>
+              <td>{booking.username}</td>
+              <td>{moment(booking.startDate).format('HH:mm')}</td>
+              <td>{moment(booking.endDate).format('HH:mm')}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </ElementStyle>
   )
 }
