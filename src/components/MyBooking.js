@@ -113,18 +113,15 @@ function loadData() {
 
   const loadRequest = async () => {
     try {
-      const response = await axios.get(
-        GET_URL,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(GET_URL, {
+        withCredentials: true,
+      });
       const rslt = response.data?.rslt.map((val, key) => {
-        if (typeof val.startdate === 'string') {
-          val.startDate = new Date(val.startdate);
+        if (typeof val.startDate === 'string') {
+          val.startDate = new Date(val.startDate);
         }
-        if (typeof val.enddate === 'string') {
-          val.endDate = new Date(val.enddate);
+        if (typeof val.endDate === 'string') {
+          val.endDate = new Date(val.endDate);
         }
         val.mmtS = moment(val.startDate);
         val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
@@ -142,7 +139,7 @@ function loadData() {
         return val;
       });
 
-      console.log('client result:', rslt);  // Add this line to log client result
+      console.log('Client result:', rslt); // Add this line to log client result
 
       const finalMap = [];
       rslt.forEach(item => {
@@ -152,29 +149,28 @@ function loadData() {
             monthYearItem = {
               year: item.startYear, month: item.startMonth, days: [{
                 day: item.startDay,
-                dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }]
+                dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }]
               }]
             };
             finalMap.push(monthYearItem);
           } else {
             addMultiDays(item, finalMap);
           }
-
         } else {
           const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
           if (!dayItem) {
             if (item.startDay === item.endDay) {
-              monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }] });
+              monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }] });
             } else {
               addMultiDays(item, finalMap);
             }
           } else {
-            dayItem.dayBook.push({ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour });
+            dayItem.dayBook.push({ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour });
           }
         }
       });
-      console.log('modify rslt', rslt);
-      console.log('finalMap', finalMap);
+      console.log('Modify rslt:', rslt);
+      console.log('Final map:', finalMap);
       setReservation(finalMap);
       setReservationList(rslt);
 
@@ -193,6 +189,7 @@ function loadData() {
   }
   loadRequest();
 }
+
 
 
 
