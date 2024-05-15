@@ -325,38 +325,39 @@ function loadData() {
   }
   
   return (
-  <ElementStyle >
-    <BModal show={showAlert ? true : false} size='sm' centered='true' backdrop="static">
-      <BModal.Body>{showAlert}</BModal.Body>
-      <BModal.Footer>
-        <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
-      </BModal.Footer>
-    </BModal>
-
-    <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
-    {reservationData.length > 0 ? tableContent : <h2>No reservations until now!</h2>}
-
-    <h2>Today's Bookings</h2>
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Username</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Seat Name</th> {/* Add a header for the seat name */}
-        </tr>
-      </thead>
-      <tbody>
-        {todayBookings.map((booking, index) => (
-          <tr key={index}>
-            <td>{booking.username}</td>
-            <td>{moment(booking.startDate).format('HH:mm')}</td>
-            <td>{moment(booking.endDate).format('HH:mm')}</td>
-            <td>{booking.seatName}</td> {/* Display the seat name */}
+    <ElementStyle >
+      <BModal show={showAlert ? true : false} size='sm' centered='true' backdrop="static">
+        <BModal.Body>{showAlert}</BModal.Body>
+        <BModal.Footer>
+          <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
+        </BModal.Footer>
+      </BModal>
+  
+      <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
+      {reservationData.length > 0 ? tableContent : <h2>No reservations until now!</h2>}
+  
+      <h2>Today's Bookings</h2>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Seat Name</th> {/* Add a header for the seat name */}
           </tr>
-        ))}
-      </tbody>
-    </Table>
-  </ElementStyle>
-)
+        </thead>
+        <tbody>
+          {todayBookings.map((booking, index) => (
+            <tr key={index}>
+              <td>{booking.username}</td>
+              <td>{moment(booking.startDate).format('HH:mm')}</td>
+              <td>{moment(booking.endDate).format('HH:mm')}</td>
+              <td>{booking.seatName}</td> {/* Display the seat name */}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </ElementStyle>
+  )
+}
 
