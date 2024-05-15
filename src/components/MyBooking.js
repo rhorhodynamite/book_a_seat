@@ -142,8 +142,11 @@ function loadData() {
         return val;
       });
 
+      // Filter the reservations for the current user
+      const userReservations = rslt.filter(val => val.username === props.username);
+
       const finalMap = [];
-      rslt.forEach(item => {
+      userReservations.forEach(item => {
         let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
         if (!monthYearItem) {
           if (item.startDay === item.endDay) {
@@ -157,7 +160,6 @@ function loadData() {
           } else {
             addMultiDays(item, finalMap);
           }
-
         } else {
           const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
           if (!dayItem) {
@@ -174,9 +176,9 @@ function loadData() {
       console.log('modify rslt', rslt);
       console.log('finalMap', finalMap);
       setReservation(finalMap);
-      setReservationList(rslt);
+      setReservationList(userReservations);
 
-      // Get today's bookings
+      // Get today's bookings for all users
       const today = moment().startOf('day');
       const todayBookings = rslt.filter(val =>
         moment(val.startDate).isSame(today, 'day') ||
@@ -191,6 +193,7 @@ function loadData() {
   }
   loadRequest();
 }
+
 
 
 
@@ -260,30 +263,35 @@ function loadData() {
     })
   }
 
-  const days4Month = (item) => {
-    return item.days.map((val, key) => {
-      // console.log(val, item)
-      const selDay = new Date(item.year, item.month - 1, val.day, 0, 0, 0)
-      const startDate = reservationList.find(item2 => val.dayBook.at(-1).id === item2.id).startDate
-      const isDisabled = (startDate <= currentDate)?true:false
-      const isToday = (selDay.getTime() === currentDate.getTime())?true:false
-      const titleText = 'Delete booking' + (isDisabled?' not possible. In the past':'')
+ const days4Month = (item) => {
+  return item.days
+    .filter(val => {
+      const selDay = new Date(item.year, item.month - 1, val.day, 0, 0, 0);
+      return selDay >= currentDate;
+    })
+    .map((val, key) => {
+      const selDay = new Date(item.year, item.month - 1, val.day, 0, 0, 0);
+      const startDate = reservationList.find(item2 => val.dayBook.at(-1).id === item2.id).startDate;
+      const isDisabled = (startDate <= currentDate) ? true : false;
+      const isToday = (selDay.getTime() === currentDate.getTime()) ? true : false;
+      const titleText = 'Delete booking' + (isDisabled ? ' not possible. In the past' : '');
       return (
-        <tr key={item.month+ '_' + key } {...(isToday ? {className: 'today'} : {})} >
+        <tr key={item.month + '_' + key} {...(isToday ? { className: 'today' } : {})}>
           <td>{val.day} {val.weekday}</td>
           <td>
             {barEl(val.dayBook, val.day + '_' + item.month)}
             {isToday && <div className='today'>Today</div>}
           </td>
           <td>
-            <button className="btn" title={titleText} onClick={(evt) => {delRow(evt, isDisabled, val)}} >
-              <FontAwesomeIcon {...(isDisabled ? {className: 'fa-disabled'} : {})} icon={faTrash}  />
+            <button className="btn" title={titleText} onClick={(evt) => { delRow(evt, isDisabled, val) }}>
+              <FontAwesomeIcon {...(isDisabled ? { className: 'fa-disabled' } : {})} icon={faTrash} />
             </button>
           </td>
         </tr>
       )
-    })
-  }
+    });
+}
+
 
   const tableContent = reservationData.map((val, key) => {
     // const mStartDate = moment(val.startDate);
