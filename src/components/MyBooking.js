@@ -108,7 +108,7 @@ export default function MyBooking(props) {
   const [showAlert, setShowAlert] = useState(null);
   const [todayBookings, setTodayBookings] = useState([]);
 
-  function loadData() {
+ function loadData() {
     console.log('load booking');
 
     const params = {
