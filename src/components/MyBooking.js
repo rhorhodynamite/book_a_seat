@@ -108,89 +108,85 @@ export default function MyBooking(props) {
   const [showAlert, setShowAlert] = useState(null);
   const [todayBookings, setTodayBookings] = useState([]);
 
- function loadData() {
-    console.log('load booking');
+function loadData() {
+  console.log('load booking');
 
-    const params = {
-      id: props.username
-    };
-    const loadRequest = async () => {
-      try {
-        const response = await axios.get(
-          GET_URL,
-          { params: params },
-          {
-            withCredentials: true,
-          }
-        );
-        const rslt = response.data?.rslt.map((val, key) => {
-          if (typeof val.startdate === 'string') {
-            val.startDate = new Date(val.startdate);
-          }
-          if (typeof val.enddate === 'string') {
-            val.endDate = new Date(val.enddate);
-          }
-          val.mmtS = moment(val.startDate);
-          val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
-          val.startDay = parseInt(val.mmtS.format('D'));
-          val.startMonth = parseInt(val.mmtS.format('M'));
-          val.startYear = parseInt(val.mmtS.format('YYYY'));
-          val.weekday = val.mmtS.format('ddd');
+  const loadRequest = async () => {
+    try {
+      const response = await axios.get(
+        GET_URL,
+        {
+          withCredentials: true,
+        }
+      );
+      const rslt = response.data?.rslt.map((val, key) => {
+        if (typeof val.startdate === 'string') {
+          val.startDate = new Date(val.startdate);
+        }
+        if (typeof val.enddate === 'string') {
+          val.endDate = new Date(val.enddate);
+        }
+        val.mmtS = moment(val.startDate);
+        val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
+        val.startDay = parseInt(val.mmtS.format('D'));
+        val.startMonth = parseInt(val.mmtS.format('M'));
+        val.startYear = parseInt(val.mmtS.format('YYYY'));
+        val.weekday = val.mmtS.format('ddd');
 
-          val.mmtE = moment(val.endDate);
-          val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
-          val.endDay = parseInt(val.mmtE.format('D'));
-          val.endMonth = parseInt(val.mmtE.format('M'));
-          val.endYear = parseInt(val.mmtE.format('YYYY'));
-          val.weekday = val.mmtS.format('ddd');
-          return val;
-        });
+        val.mmtE = moment(val.endDate);
+        val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
+        val.endDay = parseInt(val.mmtE.format('D'));
+        val.endMonth = parseInt(val.mmtE.format('M'));
+        val.endYear = parseInt(val.mmtE.format('YYYY'));
+        val.weekday = val.mmtS.format('ddd');
+        return val;
+      });
 
-        const finalMap = [];
-        rslt.forEach(item => {
-          let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
-          if (!monthYearItem) {
+      const finalMap = [];
+      rslt.forEach(item => {
+        let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
+        if (!monthYearItem) {
+          if (item.startDay === item.endDay) {
+            monthYearItem = {
+              year: item.startYear, month: item.startMonth, days: [{
+                day: item.startDay,
+                dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }]
+              }]
+            };
+            finalMap.push(monthYearItem);
+          } else {
+            addMultiDays(item, finalMap);
+          }
+
+        } else {
+          const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
+          if (!dayItem) {
             if (item.startDay === item.endDay) {
-              monthYearItem = {
-                year: item.startYear, month: item.startMonth, days: [{
-                  day: item.startDay,
-                  dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }]
-                }]
-              };
-              finalMap.push(monthYearItem);
+              monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }] });
             } else {
               addMultiDays(item, finalMap);
             }
-
           } else {
-            const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
-            if (!dayItem) {
-              if (item.startDay === item.endDay) {
-                monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }] });
-              } else {
-                addMultiDays(item, finalMap);
-              }
-            } else {
-              dayItem.dayBook.push({ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour });
-            }
+            dayItem.dayBook.push({ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour });
           }
-        });
-        console.log('modify rslt', rslt);
-        console.log('finalMap', finalMap);
-        setReservation(finalMap);
-        setReservationList(rslt);
+        }
+      });
+      console.log('modify rslt', rslt);
+      console.log('finalMap', finalMap);
+      setReservation(finalMap);
+      setReservationList(rslt);
 
-        // Get today's bookings
-        const today = moment().startOf('day');
-        const todayBookings = rslt.filter(val => moment(val.startDate).isSame(today, 'day'));
-        setTodayBookings(todayBookings);
+      // Get today's bookings
+      const today = moment().startOf('day');
+      const todayBookings = rslt.filter(val => moment(val.startDate).isSame(today, 'day'));
+      setTodayBookings(todayBookings);
 
-      } catch (err) {
-        console.log("ERROR loadData", err);
-      }
+    } catch (err) {
+      console.log("ERROR loadData", err);
     }
-    loadRequest();
   }
+  loadRequest();
+}
 
 
   function addMultiDays(item, finalMap){
