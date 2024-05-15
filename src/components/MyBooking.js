@@ -193,6 +193,7 @@ function loadData() {
 
 
 
+
   function addMultiDays(item, finalMap){
     const currDate = item.mmtS.startOf('day')
     const lastDate = item.mmtE.startOf('day')
