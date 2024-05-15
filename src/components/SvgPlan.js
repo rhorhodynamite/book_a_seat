@@ -54,11 +54,6 @@ function SVGPlan(props) {
             <rect x="177" y="60" width="5" height="20" fill="url(#doorGradient)" rx="1" ry="1" />
           </g>
         </g>
-        {/* Adding plant illustration */}
-        <g fill="none" stroke="#228B22" strokeWidth="1">
-          <path d="M154,122 Q155,117 153,115" /> {/* Plant leaf 1 */}
-          <path d="M156,123 Q157,118 155,116" /> {/* Plant leaf 2 */}
-          <path d="M153,128 Q154,123 152,121" /> {/* Plant leaf 3 */}
         </g>
         {/* Adding sunlight effect */}
       //  <g fill="url(#sunbeamGradient)">
