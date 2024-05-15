@@ -142,6 +142,8 @@ function loadData() {
         return val;
       });
 
+      console.log('client result:', rslt);  // Add this line to log client result
+
       const finalMap = [];
       rslt.forEach(item => {
         let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
