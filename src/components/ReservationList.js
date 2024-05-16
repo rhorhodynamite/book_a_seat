@@ -1,24 +1,21 @@
-import React from 'react';
-import CalendarContainer from './CalendarContainer.js'
-import Modal from './Modal.js'
-import Alert from './Alert.js'
-import { useState, useEffect, useContext } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons'
-import Button from 'react-bootstrap/Button'
-import Table from 'react-bootstrap/Table'
-import styled from 'styled-components'
-import moment from 'moment'
-import utils from '../api/utils.ts'
-import AuthContext from '../context/AuthProvider'
+import React, { useState, useEffect, useContext } from 'react';
+import Table from 'react-bootstrap/Table';
+import Modal from './Modal.js';
+import BModal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import styled from 'styled-components';
+import moment from 'moment';
+import axios from '../api/axios';
+import utils from '../api/utils.ts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
+import AuthContext from '../context/AuthProvider';
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const GET_URL = SERVER_URL + 'api/my_reservations';
+const CONTENT_WIDTH = 650;
 
 const ElementStyle = styled.div`
-
-  {
-    // padding: 1em;
-    margin: 5px 0;
-  }
-
   .alert{
     position: absolute;
     top: 10px;
@@ -26,72 +23,98 @@ const ElementStyle = styled.div`
   }
 
   .div_date_list{
-    display:flex;
+    display: flex;
     flex-direction: column;
-    width: 800px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f8f9fa;
 
     p{
-      background-color: lightgray;
-      margin:0;
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-      border-bottom: 1px solid white;
+      background-color: #007bff;
+      color: white;
+      margin: 0;
+      padding: 12px;
       font-weight: bold;
+      text-align: center;
     }
 
     .wrapper-scroll {
-      background-color: lightgray;
+      background-color: #ffffff;
       overflow-y: auto;
       max-height: 300px;
+      padding: 16px;
     }
   }
 
-  tr {
-    font-size: 14px;
-    background: lightgray;
-    padding: 3px 2px;
-    border-bottom-width: 2px;
-  }
+  .table {
+    margin: 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
 
-  tr:hover {
-    background-color: gainsboro;
-    cursor: pointer;
-  }
+    th, td {
+      padding: 12px;
+      background: #ffffff;
+      border: none;
+    }
 
-  tr.sel-tr{
-    background-color: gainsboro;
-    border-bottom: 2px solid gray;
-    border-right: 2px solid gray;
-    border-top: 2px solid white;
-  }
+    th {
+      background: #f1f3f5;
+      font-weight: 600;
+    }
 
-  td {
-    padding: 4px 0.5rem;
-    vertical-align: middle;
+    td {
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    tr:hover td {
+      background: #f1f3f5;
+      cursor: pointer;
+    }
+
+    .sel-tr {
+      background-color: #e9ecef;
+    }
   }
 
   .btn {
-    padding: 0px;
+    padding: 4px 8px;
+    margin: 0 2px;
+    border-radius: 4px;
+    transition: background 0.3s;
+    &:hover {
+      background-color: #e2e6ea;
+    }
   }
 
   .wrapper-plus {
-    background-color: lightgray;
+    background-color: #007bff;
     text-align: right;
-    padding: 3px;
+    padding: 8px;
+    border-top: 1px solid #dee2e6;
 
     button {
-      width: 2.5rem;
-      height: 2.3rem;
-      line-height: 1rem;
-      margin: 0.5rem;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      margin: 8px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      &:hover {
+        background-color: #218838;
+      }
     }
   }
 `;
 
-function RersevationList(props) {
-  // console.log('props.selSeat', props.selSeat);  
+function ReservationList(props) {
   const [isCalendarActive, setCalendarActive] = useState(false);
-  // const [id, setId] = useState(null);
   const [selRow, setSelRow] = useState(null);
   const [childKey, setChildKey] = useState(0);
   const [idToDel, setIdToDel] = useState(null);
@@ -104,41 +127,30 @@ function RersevationList(props) {
   const currentDate = moment(new Date()).startOf('hour').add(1, 'hours').toDate();
 
   useEffect(() => {
-    if(props.selSeat)
-      loadData(props.selSeat);
+    if (props.selSeat) loadData(props.selSeat);
   }, [props.selSeat]);
 
-  function loadData(selSeat){
-    console.log('loadData reservation list', selSeat);
-    const params = {
-      selSeat: selSeat,
-    };
-    const callback = function(r){
-      const rslt = r.map((val, key) => {
-        if(typeof val.startdate === 'string'){
-          val.startDate = new Date(val.startdate)
-        }
-        if(typeof val.enddate === 'string'){
-          val.endDate = new Date(val.enddate)
-        }
+  function loadData(selSeat) {
+    const params = { selSeat: selSeat };
+    const callback = function (r) {
+      const rslt = r.map((val) => {
+        val.startDate = new Date(val.startDate);
+        val.endDate = new Date(val.endDate);
         val.name = `Id${val.id}`;
         return val;
       });
-      // console.log('rslt', rslt);
       setReservation(rslt);
-    }
-    utils.getReservationDb(params, callback)
+    };
+    utils.getReservationDb(params, callback);
   }
 
   function onClickRow(_id) {
-    // console.log('onClickRow', _id);
     setChildKey(_id);
     setCalendarActive(false);
     setSelRow(reservationData.find(item => item.id === _id));
   }
 
   function editRow(evt, _id) {
-    // console.log('editRow', _id);
     evt.stopPropagation();
     setChildKey(_id);
     setCalendarActive(true);
@@ -146,72 +158,65 @@ function RersevationList(props) {
   }
 
   function delRow(evt, _id, _startDate) {
-    // console.log('delRow', _id);
     evt.stopPropagation();
-    if(_startDate < currentDate){
-      setShowAlert2('Not possibile to delete a book, which has been already started');
-    }else{
+    if (_startDate < currentDate) {
+      setShowAlert2('Not possible to delete a booking that has already started');
+    } else {
       setIdToDel(_id);
     }
   }
-  
+
   function addRow() {
-    // console.log('addRow');
     const tomorrowAfternoon = moment(new Date()).startOf('date').add(42, 'hours').toDate();
-    const newRow = { id: null, seatId: props.selSeat, user: token.user, 
-      startDate: currentDate, endDate: tomorrowAfternoon};
+    const newRow = { id: null, seatId: props.selSeat, user: token.user, startDate: currentDate, endDate: tomorrowAfternoon };
     setChildKey(null);
     setCalendarActive(true);
     setSelRow(newRow);
   }
 
-  function checkIfDisabled(item){
-    let isDisabled = false;
-    if(item.username!==token.user || item.endDate < currentDate) {
-      isDisabled = true; 
-    }
-    return isDisabled
+  function checkIfDisabled(item) {
+    return item.username !== token.user || item.endDate < currentDate;
   }
 
   const handleClose = () => setIdToDel(false);
   const handleDel = () => {
-
     const callback = () => {
       refresh(utils.MSG.del);
       setIdToDel(null);
-    }
+    };
 
     setChildKey(null);
     setReservation(reservationData.filter(item => item.id !== idToDel));
-    utils.delReservationDb(idToDel, callback)
-  }
+    utils.delReservationDb(idToDel, callback);
+  };
 
   function refresh(msg) {
     loadData(props.selSeat);
     setCalendarActive(false);
     setSelRow(null);
     setShowAlert(msg);
-    setTimeout(()=>{setShowAlert(null);}, 2500);
+    setTimeout(() => { setShowAlert(null); }, 2500);
   }
 
-  function check(dateInterval, id){
-    // console.log('check in ReservationList', dateInterval, id);
-    const errorData = reservationData
-      .filter(
-        function(item){
-        return (item.id !== id && ((dateInterval[0] > item.startDate && dateInterval[0] < item.endDate)  // start inside existing dates
-          || (dateInterval[1] > item.startDate && dateInterval[1] < item.endDate) // end inside existing dates
-          || (dateInterval[0] <= item.startDate && dateInterval[1] >= item.endDate))) 
-        })
-    if(errorData.length===0)
-      return null;
-    const htmlData = errorData.map((item, key)=>{
-      const id = item.id?"(id " + item.id + ")":"";
-      const errorMsg1 = `ERROR: not possible to save selected reservation (${dateInterval[0].toLocaleDateString()} - ${dateInterval[1].toLocaleDateString()})`;
-      const errorMsg2 = `overlaps the existing one with ${id} (${item.startDate.toLocaleDateString()} - ${item.endDate.toLocaleDateString()})`;
-      return (<p key={key}>{errorMsg1}<br/>{errorMsg2}</p>)
+  function check(dateInterval, id) {
+    const errorData = reservationData.filter(item => {
+      return (item.id !== id && (
+        (dateInterval[0] > item.startDate && dateInterval[0] < item.endDate) ||
+        (dateInterval[1] > item.startDate && dateInterval[1] < item.endDate) ||
+        (dateInterval[0] <= item.startDate && dateInterval[1] >= item.endDate)
+      ));
     });
-    return <div>{htmlData}</div>;
+    if (errorData.length === 0) return null;
+    return (
+      <div>
+        {errorData.map((item, key) => (
+          <p key={key}>
+            ERROR: not possible to save selected reservation ({dateInterval[0].toLocaleDateString()} - {dateInterval[1].toLocaleDateString()})
+            overlaps the existing one with {item.id ? `(id ${item.id})` : ""} ({item.startDate.toLocaleDateString()} - {item.endDate.toLocaleDateString()})
+          </p>
+        ))}
+      </div>
+    );
   }
 
   const tableContent = reservationData.map((val, key) => {
@@ -219,63 +224,84 @@ function RersevationList(props) {
     const mEndDate = moment(val.endDate);
     const isDisabled = checkIfDisabled(val);
     return (
-      <tr key={key} title="show reservation" onClick={() => onClickRow(val.id)} {...((selRow?.id===val.id) ? {className: 'sel-tr'} : {})} >
+      <tr key={key} title="Show reservation" onClick={() => onClickRow(val.id)} className={selRow?.id === val.id ? 'sel-tr' : ''}>
         <td>{val.name}</td>
         <td>{val.username}</td>
-        <td><span>from</span>
-        <span>
-          &nbsp;{mStartDate.format('DD.MM.yyyy')}&nbsp;
-          ({mStartDate.format('HH:mm')})
-        </span>
-        <span>&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;</span>
-        <span>
-          &nbsp;{mEndDate.format('DD.MM.yyyy')}&nbsp;
-          ({mEndDate.format('HH:mm')})
-        </span></td>
-        {isDisabled ? 
-          <td title="Edit booking not possible" ><FontAwesomeIcon className="fa-disabled" icon={faPen} /></td>
-        :
-          <td onClick={(evt) => { editRow(evt, val.id);}}>
-            <button className="btn" title="Edit booking" >
+        <td>
+          <span>from {mStartDate.format('DD.MM.yyyy (HH:mm)')}</span>
+          <span> to {mEndDate.format('DD.MM.yyyy (HH:mm)')}</span>
+        </td>
+        <td>
+          {isDisabled ? (
+            <FontAwesomeIcon className="fa-disabled" icon={faPen} />
+          ) : (
+            <button className="btn" title="Edit booking" onClick={(evt) => editRow(evt, val.id)}>
               <FontAwesomeIcon icon={faPen} />
             </button>
-          </td>
-        }
-        {isDisabled ? 
-          <td><FontAwesomeIcon className="fa-disabled" icon={faTrash} /></td>
-        :
-          <td onClick={(evt) => {delRow(evt, val.id, val.startDate)}}>
-            <button className="btn" title="Delete booking"  >
+          )}
+        </td>
+        <td>
+          {isDisabled ? (
+            <FontAwesomeIcon className="fa-disabled" icon={faTrash} />
+          ) : (
+            <button className="btn" title="Delete booking" onClick={(evt) => delRow(evt, val.id, val.startDate)}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
-          </td>
-        }
+          )}
+        </td>
       </tr>
-    )
-  })
+    );
+  });
+
   return (
     <ElementStyle>
-      <Alert show={showAlert?true:false} msg={showAlert} variant="success" setShow={setShowAlert}/>
-      <Alert show={showAlert2?true:false} msg={showAlert2} variant="danger" setShow={setShowAlert2}/>
+      <Alert show={showAlert ? true : false} msg={showAlert} variant="success" setShow={setShowAlert} />
+      <Alert show={showAlert2 ? true : false} msg={showAlert2} variant="danger" setShow={setShowAlert2} />
       <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
-      <div className='div_date_list'>
+      <div className="div_date_list">
         <p>Reservation for desk {props.selSeat}</p>
-        <div className='wrapper-scroll'>
-          {reservationData.length > 0 ?
-          <Table>
-            <tbody> 
-                {tableContent}
-            </tbody>
-          </Table>:<>No booking</>}
+        <div className="wrapper-scroll">
+          {reservationData.length > 0 ? (
+            <Table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Time Period</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>{tableContent}</tbody>
+            </Table>
+          ) : (
+            <h2>No bookings yet!</h2>
+          )}
         </div>
-        {props.selSeat && token.role === 'user' && <div className='wrapper-plus'>
-            <Button className='plus' type="button" onClick={() => { addRow()}}>Add <FontAwesomeIcon icon={faPlus} /></Button>
-        </div>}
+        {props.selSeat && token.role === 'user' && (
+          <div className="wrapper-plus">
+            <Button className="plus" type="button" onClick={addRow}>
+              Add <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </div>
+        )}
       </div>
-      {selRow && <CalendarContainer isCalendarActive={isCalendarActive} setSelRow={setSelRow} selSeat={selRow} 
-        user={token.user} key={childKey} refreshFn={refresh} msg={utils.MSG} check={check} currentDate={currentDate}/>}
+      {selRow && (
+        <CalendarContainer
+          isCalendarActive={isCalendarActive}
+          setSelRow={setSelRow}
+          selSeat={selRow}
+          user={token.user}
+          key={childKey}
+          refreshFn={refresh}
+          msg={utils.MSG}
+          check={check}
+          currentDate={currentDate}
+        />
+      )}
     </ElementStyle>
   );
 }
-    
-export default RersevationList;
+
+export default ReservationList;
+
