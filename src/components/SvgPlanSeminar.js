@@ -36,15 +36,13 @@ function SVGPlanSeminar(props) {
           <rect x="177" y="80" width="5" height="20" fill="url(#pillarGradient)" rx="1" ry="1" />
 
           {/* Corridor coming out of the right door */}
-          <rect x="182" y="80" width="60" height="20" stroke="#000" strokeWidth="2" rx="4" ry="4" fill="url(#corridorGradient)" />
+          <rect x="182" y="80" width="60" height="20" stroke="#000" strokeWidth="1" rx="4" ry="4" fill="url(#corridorGradient)" />
           {/* Corridor turns up */}
-          <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="2" rx="10" ry="10" fill="url(#corridorGradient)" />
+          <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="1" rx="10" ry="10" fill="url(#corridorGradient)" />
 
           {/* Office phone box at the top of the rightmost corridor */}
           <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
 
-          {/* Detailed phone box elements */}
-          <line x1="272" y1="22" x2="272" y2="52" stroke="#000" strokeWidth="1" />
 
           {/* Large conference desk */}
           <rect x="30" y="30" width="120" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
@@ -53,12 +51,6 @@ function SVGPlanSeminar(props) {
           <rect x="25" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
           <rect x="45" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
 
-          {/* Chairs around large conference desk */}
-          <circle cx="40" cy="45" r="4" fill="#8B4513" />
-          <circle cx="70" cy="45" r="4" fill="#8B4513" />
-          <circle cx="100" cy="45" r="4" fill="#8B4513" />
-          <circle cx="130" cy="45" r="4" fill="#8B4513" />
-          <circle cx="160" cy="45" r="4" fill="#8B4513" />
 
           {/* Plants in the room */}
           <circle cx="25" cy="130" r="6" fill="green" />
@@ -68,13 +60,7 @@ function SVGPlanSeminar(props) {
           <rect x="15" y="135" width="30" height="3" fill="#87CEEB" />
           <rect x="135" y="135" width="30" height="3" fill="#87CEEB" />
 
-          {/* Rug under the conference desk */}
-          <rect x="25" y="25" width="130" height="40" fill="#D3D3D3" rx="8" ry="8" />
-
-          {/* Clock on the wall */}
-          <circle cx="250" cy="25" r="5" fill="#FFF" stroke="#000" strokeWidth="1" />
-          <line x1="250" y1="25" x2="250" y2="21" stroke="#000" strokeWidth="1" />
-          <line x1="250" y1="25" x2="258" y2="25" stroke="#000" strokeWidth="1" />
+      
 
           {/* Kitchen area */}
           {/* Fridge */}
