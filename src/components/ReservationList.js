@@ -10,6 +10,8 @@ import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import AuthContext from '../context/AuthProvider';
+import CalendarContainer from './CalendarContainer'; // Make sure this is correctly imported
+import Alert from './Alert'; // Make sure this is correctly imported
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
