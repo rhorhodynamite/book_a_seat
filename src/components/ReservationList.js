@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Table from 'react-bootstrap/Table';
-import Modal from './Modal.js';
+import Modal from './Modal';
 import BModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
@@ -18,292 +18,233 @@ const GET_URL = SERVER_URL + 'api/my_reservations';
 const CONTENT_WIDTH = 650;
 
 const ElementStyle = styled.div`
-  .alert{
-    position: absolute;
-    top: 10px;
-    right: 20px;
-  }
-
-  .div_date_list{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #f8f9fa;
-
-    p{
-      background-color: #007bff;
-      color: white;
-      margin: 0;
-      padding: 12px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .wrapper-scroll {
-      background-color: #ffffff;
-      overflow-y: auto;
-      max-height: 300px;
-      padding: 16px;
-    }
-  }
-
-  .table {
-    margin: 0;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
-
-    th, td {
-      padding: 12px;
-      background: #ffffff;
-      border: none;
-    }
-
-    th {
-      background: #f1f3f5;
-      font-weight: 600;
-    }
-
-    td {
-      border-radius: 4px;
-      transition: background 0.3s;
-    }
-
-    tr:hover td {
-      background: #f1f3f5;
-      cursor: pointer;
-    }
-
-    .sel-tr {
-      background-color: #e9ecef;
-    }
-  }
-
-  .btn {
-    padding: 4px 8px;
-    margin: 0 2px;
-    border-radius: 4px;
-    transition: background 0.3s;
-    &:hover {
-      background-color: #e2e6ea;
-    }
-  }
-
-  .wrapper-plus {
-    background-color: #007bff;
-    text-align: right;
-    padding: 8px;
-    border-top: 1px solid #dee2e6;
-
-    button {
-      background-color: #28a745;
-      border: none;
-      color: white;
-      padding: 8px 16px;
-      margin: 8px;
-      border-radius: 4px;
-      transition: background 0.3s;
-      &:hover {
-        background-color: #218838;
-      }
-    }
-  }
+  // your styles here
 `;
 
-function ReservationList(props) {
-  const [isCalendarActive, setCalendarActive] = useState(false);
-  const [selRow, setSelRow] = useState(null);
-  const [childKey, setChildKey] = useState(0);
+const currentDate = moment(new Date()).startOf('day').toDate();
+
+export default function MyBooking(props) {
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const [reservationList, setReservationList] = useState([]);
+  const [reservationData, setReservation] = useState([]);
   const [idToDel, setIdToDel] = useState(null);
   const [showAlert, setShowAlert] = useState(null);
-  const [showAlert2, setShowAlert2] = useState(null);
-  const { token } = useContext(AuthContext);
 
-  const [reservationData, setReservation] = useState([]);
+  function loadData() {
+    console.log('load booking');
 
-  const currentDate = moment(new Date()).startOf('hour').add(1, 'hours').toDate();
-
-  useEffect(() => {
-    if (props.selSeat) loadData(props.selSeat);
-  }, [props.selSeat]);
-
-  function loadData(selSeat) {
-    const params = { selSeat: selSeat };
-    const callback = function (r) {
-      const rslt = r.map((val) => {
-        val.startDate = new Date(val.startDate);
-        val.endDate = new Date(val.endDate);
-        val.name = `Id${val.id}`;
-        return val;
-      });
-      setReservation(rslt);
+    const params = {
+      id: props.username,
     };
-    utils.getReservationDb(params, callback);
+    const loadRequest = async () => {
+      try {
+        const response = await axios.get(
+          GET_URL,
+          { params: params },
+          {
+            withCredentials: true,
+          }
+        );
+        const rslt = response.data?.rslt.map((val, key) => {
+          val.startDate = moment(val.startDate, 'YYYY-MM-DD HH:mm:ss').toDate();
+          val.endDate = moment(val.endDate, 'YYYY-MM-DD HH:mm:ss').toDate();
+          
+          val.mmtS = moment(val.startDate);
+          val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
+          val.startDay = parseInt(val.mmtS.format('D'));
+          val.startMonth = parseInt(val.mmtS.format('M'));
+          val.startYear = parseInt(val.mmtS.format('YYYY'));
+          val.weekday = val.mmtS.format('ddd');
+          
+          val.mmtE = moment(val.endDate);
+          val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
+          val.endDay = parseInt(val.mmtE.format('D'));
+          val.endMonth = parseInt(val.mmtE.format('M'));
+          val.endYear = parseInt(val.mmtE.format('YYYY'));
+          val.weekday = val.mmtS.format('ddd');
+          return val;
+        });
+
+        const finalMap = [];
+        rslt.forEach((item) => {
+          let monthYearItem = finalMap.find(
+            (item2) => item2.year === item.startYear && item2.month === item.startMonth
+          );
+          if (!monthYearItem) {
+            if (item.startDay === item.endDay) {
+              monthYearItem = {
+                year: item.startYear,
+                month: item.startMonth,
+                days: [
+                  {
+                    day: item.startDay,
+                    dayBook: [{ id: item.id, seatId: item.seatId, from: item.startHour, to: item.endHour }],
+                  },
+                ],
+              };
+              finalMap.push(monthYearItem);
+            } else {
+              addMultiDays(item, finalMap);
+            }
+          } else {
+            const dayItem = monthYearItem.days.find((item3) => item3.day === item.startDay);
+            if (!dayItem) {
+              if (item.startDay === item.endDay) {
+                monthYearItem.days.push({
+                  day: item.startDay,
+                  dayBook: [{ id: item.id, seatId: item.seatId, from: item.startHour, to: item.endHour }],
+                });
+              } else {
+                addMultiDays(item, finalMap);
+              }
+            } else {
+              dayItem.dayBook.push({ id: item.id, seatId: item.seatId, from: item.startHour, to: item.endHour });
+            }
+          }
+        });
+        console.log('modify rslt', rslt);
+        console.log('finalMap', finalMap);
+        setReservation(finalMap);
+        setReservationList(rslt);
+      } catch (err) {
+        console.log('ERROR loadData', err);
+      }
+    };
+    loadRequest();
   }
 
-  function onClickRow(_id) {
-    setChildKey(_id);
-    setCalendarActive(false);
-    setSelRow(reservationData.find(item => item.id === _id));
-  }
+  function addMultiDays(item, finalMap) {
+    const currDate = item.mmtS.startOf('day');
+    const lastDate = item.mmtE.startOf('day');
+    let startHour = null;
+    while (currDate.diff(lastDate) <= 0) {
+      const day = parseInt(currDate.format('D'));
+      const weekday = currDate.format('ddd');
+      const month = parseInt(currDate.format('M'));
+      const year = parseInt(currDate.format('YYYY'));
+      startHour = startHour === null ? item.startHour : 0;
+      const endHour = currDate.isSame(lastDate) ? item.endHour : 24;
 
-  function editRow(evt, _id) {
-    evt.stopPropagation();
-    setChildKey(_id);
-    setCalendarActive(true);
-    setSelRow(reservationData.find(item => item.id === _id));
-  }
-
-  function delRow(evt, _id, _startDate) {
-    evt.stopPropagation();
-    if (_startDate < currentDate) {
-      setShowAlert2('Not possible to delete a booking that has already started');
-    } else {
-      setIdToDel(_id);
+      let monthYearItem = finalMap.find((item2) => item2.year === year && item2.month === month);
+      if (!monthYearItem) {
+        monthYearItem = {
+          year: year,
+          month: month,
+          days: [
+            {
+              day,
+              weekday,
+              dayBook: [{ id: item.id, seatId: item.seatId, from: startHour, to: endHour }],
+            },
+          ],
+        };
+        finalMap.push(monthYearItem);
+      } else {
+        const dayItem = monthYearItem.days.find((item3) => item3.day === day);
+        if (!dayItem) {
+          monthYearItem.days.push({ day, weekday, dayBook: [{ id: item.id, seatId: item.seatId, from: startHour, to: endHour }] });
+        } else {
+          dayItem.dayBook.push({ id: item.id, seatId: item.seatId, from: startHour, to: endHour });
+        }
+      }
+      currDate.add(1, 'days');
     }
   }
 
-  function addRow() {
-    const tomorrowAfternoon = moment(new Date()).startOf('date').add(42, 'hours').toDate();
-    const newRow = { id: null, seatId: props.selSeat, user: token.user, startDate: currentDate, endDate: tomorrowAfternoon };
-    setChildKey(null);
-    setCalendarActive(true);
-    setSelRow(newRow);
-  }
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  function checkIfDisabled(item) {
-    return item.username !== token.user || item.endDate < currentDate;
+  const barEl = (dayBook, dayMonthKey) => {
+    return dayBook.map((val, key) => {
+      const colorId4SeatId = val.seatId % 4;
+      const widthBar = (val.to - val.from) / 24 * CONTENT_WIDTH;
+      const left = val.from / 24 * CONTENT_WIDTH;
+      const style = { width: widthBar + 'px', left: left + 'px', backgroundColor: COLORS[colorId4SeatId] };
+      const fTDayMonthKey = val.from + '_' + val.to + '_' + dayMonthKey;
+      const r = reservationList.find((item2) => val.id === item2.id);
+      const fTime = r.mmtE.format('HH:mm');
+      const txtContent = `from  ${r.mmtS.format('HH:mm')} to ${fTime === '00:00' ? '24:00' : fTime}, desk id: ${val.seatId}`;
+      const titleContent = `from ${r.mmtS.format('DD.MM.yyyy HH:mm')} to ${r.mmtE.add(-1, 'ss').format('DD.MM.yyyy HH:mm')}, desk id: ${val.seatId}`;
+      return (
+        <div key={fTDayMonthKey} className="div_bar" style={style} title={titleContent}>
+          {widthBar > 250 ? txtContent : ''}
+        </div>
+      );
+    });
+  };
+
+  const days4Month = (item) => {
+    return item.days.map((val, key) => {
+      const selDay = new Date(item.year, item.month - 1, val.day, 0, 0, 0);
+      const startDate = reservationList.find((item2) => val.dayBook.at(-1).id === item2.id).startDate;
+      const isDisabled = startDate <= currentDate;
+      const isToday = selDay.getTime() === currentDate.getTime();
+      const titleText = 'Delete booking' + (isDisabled ? ' not possible. In the past' : '');
+      return (
+        <tr key={item.month + '_' + key} {...(isToday ? { className: 'today' } : {})}>
+          <td>{val.day} {val.weekday}</td>
+          <td>
+            {barEl(val.dayBook, val.day + '_' + item.month)}
+            {isToday && <div className="today">Today</div>}
+          </td>
+          <td>
+            <button className="btn" title={titleText} onClick={(evt) => { delRow(evt, isDisabled, val); }}>
+              <FontAwesomeIcon {...(isDisabled ? { className: 'fa-disabled' } : {})} icon={faTrash} />
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  const tableContent = reservationData.map((val, key) => {
+    return (
+      <div key={'div_' + key} className="wrapper_table">
+        <div className="wrapper_month">{moment(val.month, 'M').format('MMMM')} {val.year}</div>
+        <Table>
+          <tbody>
+            {days4Month(val)}
+          </tbody>
+        </Table>
+      </div>
+    );
+  });
+
+  function delRow(evt, isDisabled, item) {
+    evt.stopPropagation();
+    if (isDisabled) return;
+
+    setIdToDel(item.dayBook.at(-1).id);
   }
 
   const handleClose = () => setIdToDel(false);
   const handleDel = () => {
     const callback = () => {
-      refresh(utils.MSG.del);
+      refresh();
       setIdToDel(null);
     };
-
-    setChildKey(null);
-    setReservation(reservationData.filter(item => item.id !== idToDel));
     utils.delReservationDb(idToDel, callback);
   };
 
-  function refresh(msg) {
-    loadData(props.selSeat);
-    setCalendarActive(false);
-    setSelRow(null);
-    setShowAlert(msg);
+  function refresh() {
+    loadData();
+    setShowAlert(utils.MSG.del);
     setTimeout(() => { setShowAlert(null); }, 2500);
   }
 
-  function check(dateInterval, id) {
-    const errorData = reservationData.filter(item => {
-      return (item.id !== id && (
-        (dateInterval[0] > item.startDate && dateInterval[0] < item.endDate) ||
-        (dateInterval[1] > item.startDate && dateInterval[1] < item.endDate) ||
-        (dateInterval[0] <= item.startDate && dateInterval[1] >= item.endDate)
-      ));
-    });
-    if (errorData.length === 0) return null;
-    return (
-      <div>
-        {errorData.map((item, key) => (
-          <p key={key}>
-            ERROR: not possible to save selected reservation ({dateInterval[0].toLocaleDateString()} - {dateInterval[1].toLocaleDateString()})
-            overlaps the existing one with {item.id ? `(id ${item.id})` : ""} ({item.startDate.toLocaleDateString()} - {item.endDate.toLocaleDateString()})
-          </p>
-        ))}
-      </div>
-    );
-  }
-
-  const tableContent = reservationData.map((val, key) => {
-    const mStartDate = moment(val.startDate);
-    const mEndDate = moment(val.endDate);
-    const isDisabled = checkIfDisabled(val);
-    return (
-      <tr key={key} title="Show reservation" onClick={() => onClickRow(val.id)} className={selRow?.id === val.id ? 'sel-tr' : ''}>
-        <td>{val.name}</td>
-        <td>{val.username}</td>
-        <td>
-          <span>from {mStartDate.format('DD.MM.yyyy (HH:mm)')}</span>
-          <span> to {mEndDate.format('DD.MM.yyyy (HH:mm)')}</span>
-        </td>
-        <td>
-          {isDisabled ? (
-            <FontAwesomeIcon className="fa-disabled" icon={faPen} />
-          ) : (
-            <button className="btn" title="Edit booking" onClick={(evt) => editRow(evt, val.id)}>
-              <FontAwesomeIcon icon={faPen} />
-            </button>
-          )}
-        </td>
-        <td>
-          {isDisabled ? (
-            <FontAwesomeIcon className="fa-disabled" icon={faTrash} />
-          ) : (
-            <button className="btn" title="Delete booking" onClick={(evt) => delRow(evt, val.id, val.startDate)}>
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-          )}
-        </td>
-      </tr>
-    );
-  });
-
   return (
     <ElementStyle>
-      <Alert show={showAlert ? true : false} msg={showAlert} variant="success" setShow={setShowAlert} />
-      <Alert show={showAlert2 ? true : false} msg={showAlert2} variant="danger" setShow={setShowAlert2} />
+      <BModal show={!!showAlert} size="sm" centered backdrop="static">
+        <BModal.Body>{showAlert}</BModal.Body>
+        <BModal.Footer>
+          <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
+        </BModal.Footer>
+      </BModal>
+
       <Modal idToDel={idToDel} handleClose={handleClose} handleDel={handleDel} />
-      <div className="div_date_list">
-        <p>Reservation for desk {props.selSeat}</p>
-        <div className="wrapper-scroll">
-          {reservationData.length > 0 ? (
-            <Table className="table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Username</th>
-                  <th>Time Period</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>{tableContent}</tbody>
-            </Table>
-          ) : (
-            <h2>No bookings yet!</h2>
-          )}
-        </div>
-        {props.selSeat && token.role === 'user' && (
-          <div className="wrapper-plus">
-            <Button className="plus" type="button" onClick={addRow}>
-              Add <FontAwesomeIcon icon={faPlus} />
-            </Button>
-          </div>
-        )}
-      </div>
-      {selRow && (
-        <CalendarContainer
-          isCalendarActive={isCalendarActive}
-          setSelRow={setSelRow}
-          selSeat={selRow}
-          user={token.user}
-          key={childKey}
-          refreshFn={refresh}
-          msg={utils.MSG}
-          check={check}
-          currentDate={currentDate}
-        />
-      )}
+      {reservationData.length > 0 ? tableContent : <h2>No reservations until now!</h2>}
     </ElementStyle>
   );
 }
-
-export default ReservationList;
 
