@@ -23,12 +23,6 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Alert from '@mui/material/Alert';
 
-
-import Modal from './Modal.js'
-import BModal from 'react-bootstrap/Modal';
-
-
-
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
 const CONTENT_WIDTH = 650;
@@ -262,12 +256,15 @@ export default function MyBooking(props) {
 
     return (
     <Container maxWidth="md">
-      <BModal show={showAlert ? true : false} size='sm' centered='true' backdrop="static">
-        <BModal.Body>{showAlert}</BModal.Body>
-        <BModal.Footer>
-          <Button variant="secondary" onClick={() => setShowAlert(null)}>Close</Button>
-        </BModal.Footer>
-      </BModal>
+      <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{showAlert}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowAlert(null)} color="primary">Close</Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={!!idToDel} onClose={handleClose}>
         <DialogTitle>Delete Reservation</DialogTitle>
@@ -315,5 +312,3 @@ export default function MyBooking(props) {
     </Container>
   )
 }
-
-
