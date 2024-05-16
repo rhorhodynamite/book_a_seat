@@ -306,9 +306,9 @@ export default function MyBooking(props) {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Typography variant="h4" gutterBottom>My Bookings</Typography>
-      {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
+      <Box mt={4}>
+        <Typography variant="h4" gutterBottom>My Bookings</Typography>
+      //{reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
     </Container>
   )
 }
