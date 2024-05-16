@@ -3,7 +3,6 @@ import AuthContext from '../../context/AuthProvider';
 import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import Form from 'react-bootstrap/Form';
 import axios from '../../api/axios';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -11,39 +10,32 @@ const LOGIN_URL = SERVER_URL + 'api/login';
 
 const ElementStyle = styled.div`
   {
-    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f7f9fc;
     text-align: center;
   }
 
   section {
     width: 100%;
     max-width: 400px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     padding: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background: white;
   }
 
   h1 {
-    margin-bottom: 1rem;
-    font-size: 2rem;
+    margin-bottom: 1.5rem;
     color: #333;
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
+    align-items: stretch;
   }
 
   label {
@@ -53,33 +45,37 @@ const ElementStyle = styled.div`
   }
 
   input {
-    padding: 0.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-  }
-
-  .form-control {
+    padding: 0.75rem;
     margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
   }
 
   .btn {
     padding: 0.75rem;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: #fff;
     font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    border-radius: 5px;
+    background-color: #007bff;
+    border: none;
   }
 
   .btn:hover {
     background-color: #0056b3;
   }
 
-  .line {
-    display: inline-block;
+  .alert {
+    margin-bottom: 1rem;
+  }
+
+  p {
     margin-top: 1rem;
+    color: #555;
+  }
+
+  .line {
+    display: block;
+    margin-top: 0.5rem;
   }
 
   .line a {
@@ -89,14 +85,6 @@ const ElementStyle = styled.div`
 
   .line a:hover {
     text-decoration: underline;
-  }
-
-  .wrapper_gif {
-    margin-top: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
   }
 `;
 
@@ -138,13 +126,11 @@ const Login = () => {
         setSuccess(false);
       } else {
         const role = response?.data?.role;
-        // console.log({ user, role, accessToken });
         setToken({ user, role, accessToken });
         setUser('');
         setPwd('');
         setSuccess(true);
       }
-
     } catch (err) {
       if (!err?.response) {
         setErrMsg('No Server Response');
@@ -163,48 +149,42 @@ const Login = () => {
     <ElementStyle>
       <section>
         {errMsg && (
-          <Alert key="danger" variant="danger"
-            ref={errRef}
-            className={errMsg ? 'errmsg' : 'offscreen'}
-          >
+          <Alert key="danger" variant="danger" ref={errRef} className={errMsg ? 'alert' : 'offscreen'}>
             {errMsg}
           </Alert>
         )}
         <h1>Sign In</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username:</label>
-            <input
-              type="text"
-              id="username"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              required
-              className="form-control"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="form-group">
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setUser(e.target.value)}
+            value={user}
+            required
+            className="form-control"
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
-              required
-              className="form-control"
-            />
-          </div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            onChange={(e) => setPwd(e.target.value)}
+            value={pwd}
+            className="form-control"
+          />
           <Button type="submit" className="btn">Sign In</Button>
         </form>
-        <p className="line">
-          Need an Account? <a href="/register">Sign Up</a>
+        <p>
+          Need an Account?
+          <br />
+          <span className="line">
+            <a href="/register">Sign Up</a>
+          </span>
         </p>
       </section>
-
-      <img className="wrapper_gif" src={require('./img2_readme.gif')} alt="Prototype video" />
     </ElementStyle>
   );
 };
