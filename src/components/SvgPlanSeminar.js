@@ -52,9 +52,7 @@ function SVGPlanSeminar(props) {
           <rect x="45" y="90" width="20" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
 
 
-          {/* Plants in the room */}
-          <circle cx="25" cy="130" r="6" fill="green" />
-          <circle cx="165" cy="100" r="6" fill="green" />
+       
 
           {/* Windows */}
           <rect x="15" y="135" width="30" height="3" fill="#87CEEB" />
