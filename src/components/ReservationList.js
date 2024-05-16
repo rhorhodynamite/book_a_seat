@@ -19,35 +19,6 @@ const CONTENT_WIDTH = 650;
 
 const ElementStyle = styled.div`
   // your styles here
-  .div_date_list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px; // Add more spacing at the bottom
-  }
-
-  .wrapper-scroll {
-    background-color: lightgray;
-    overflow-y: auto;
-    max-height: 300px;
-    width: 100%;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Add a subtle box shadow for a sleek look
-  }
-
-  .wrapper-plus {
-    background-color: lightgray;
-    text-align: right;
-    padding: 3px;
-
-    button {
-      width: 2.5rem;
-      height: 2.3rem;
-      line-height: 1rem;
-      margin: 0.5rem;
-    }
-  }
 `;
 
 const currentDate = moment(new Date()).startOf('day').toDate();
