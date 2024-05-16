@@ -1,101 +1,97 @@
-import React from 'react';
-import Calendar from 'react-calendar'; 
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { useState } from 'react';
 import moment from 'moment';
 import Times from './Times';
-import Button from 'react-bootstrap/Button';
+import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import utils from '../api/utils.ts'
-import Alert from './Alert.js'
+import utils from '../api/utils.ts';
+import Alert from './Alert.js';
 import CloseButton from 'react-bootstrap/CloseButton';
 
 const ElementStyle = styled.div`
   .wrapper-date-edit {
-    box-shadow: 2px 2px 1px gray;
-    border: 1px solid lightgray;
-    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 8px;
     margin-top: 20px;
     width: 368px;
-    padding: 5px;
-    background-color: white;
+    padding: 20px;
+    background-color: #fff;
     position: absolute;
     top: 150px;
-    right: 0px;
+    right: 20px;
   }
 
-  .disabled-all .react-calendar button{
+  .disabled-all .react-calendar button {
     pointer-events: none;
   }
 
   .react-calendar {
     width: 100%;
-    // border: none;
+    border: none;
+    font-family: 'Roboto', sans-serif;
   }
 
-  p{
-    margin-bottom: 0;
+  p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #333;
   }
 
-  .btn-close{
+  .btn-close {
     float: right;
+    cursor: pointer;
   }
 
-  button.btn	{
-    margin: 3px;
+  button.btn {
+    margin: 3px 0;
     width: 100%;
   }
 `;
 
-function CalendarContainer(props) {
-  // console.log('props.selSeat in TimeContainer', props.selSeat);
+const CalendarContainer = (props) => {
   const selSeat = props.selSeat;
-  const wrappeClassName = `wrapper-date-edit ${!props.isCalendarActive?'disabled-all':''}`;
-  const [dateInterval, setDateInterval]  = useState([selSeat.startDate, selSeat.endDate]);
-  const [timeInterval, setTimeInterval]  = useState([utils.timeToDecimal(moment(selSeat.startDate).format('HH:mm')), 
-    utils.timeToDecimal(moment(selSeat.endDate).format('HH:mm'))]);
-  // console.log('dateInterval', dateInterval);
-  // console.log('timeInterval', timeInterval);
+  const wrappeClassName = `wrapper-date-edit ${!props.isCalendarActive ? 'disabled-all' : ''}`;
+  const [dateInterval, setDateInterval] = useState([selSeat.startDate, selSeat.endDate]);
+  const [timeInterval, setTimeInterval] = useState([
+    utils.timeToDecimal(moment(selSeat.startDate).format('HH:mm')),
+    utils.timeToDecimal(moment(selSeat.endDate).format('HH:mm'))
+  ]);
   const [showAlert2, setShowAlert2] = useState(false);
   const [msgAlert2, setMsgAlert2] = useState({});
 
-  function setDateOnChange(evt){
-    // console.log('=========> setDateOnChange', evt);
-    setDateInterval(evt)
-  }
+  const setDateOnChange = (evt) => {
+    setDateInterval(evt);
+  };
 
-  function setTimeOnChange(evt){
-    // console.log('=========> setTimeOnChange', evt);
-    setTimeInterval(evt)
-  }
+  const setTimeOnChange = (evt) => {
+    setTimeInterval(evt);
+  };
 
-  function check(mode, dt){
-    // console.log('check');
+  const check = (mode, dt) => {
     let errorData = null;
-    if(mode == 'edit' && (dt[1] < props.currentDate )){
-      errorData = 'Not possibile to modify values in the past';
-    }
-    else if(mode == 'add' && dt[0] < props.currentDate){
-      errorData = 'Not possibile to start a new reservation in the past';
+    if (mode === 'edit' && dt[1] < props.currentDate) {
+      errorData = 'Not possible to modify values in the past';
+    } else if (mode === 'add' && dt[0] < props.currentDate) {
+      errorData = 'Not possible to start a new reservation in the past';
     } else {
       errorData = props.check(dt, selSeat.id);
     }
-    // console.log('errorData);
-    if(errorData){
+    if (errorData) {
       setShowAlert2(true);
       setMsgAlert2(errorData);
       return false;
     }
     return true;
-  }
+  };
 
-  const save = function(){
-    // console.log('save');
+  const save = () => {
     const dt0 = utils.mergeDateAndtime(dateInterval[0], timeInterval[0]);
     const dt1 = utils.mergeDateAndtime(dateInterval[1], timeInterval[1]);
-    if(check(selSeat.id?'edit':'add', [dt0, dt1])){
+    if (check(selSeat.id ? 'edit' : 'add', [dt0, dt1])) {
       const params = {
         id: selSeat.id,
         seatId: selSeat.seatId,
@@ -103,51 +99,53 @@ function CalendarContainer(props) {
         interval: [dt0.toString().slice(0, 24), dt1.toString().slice(0, 24)]
       };
 
-      const callback = function(resp) {
-        // console.log('=====> insReservationDb resp', resp);
-        if(resp && !resp.successfull){
+      const callback = (resp) => {
+        if (resp && !resp.successfull) {
           setShowAlert2(true);
           setMsgAlert2(`In the same time ${params.interval.join(' - ')} the user has other reservations (desk ids: ${resp.rows.join(', ')})`);
         } else {
-          props.refreshFn(selSeat.id?props.msg.edit:props.msg.add);
+          props.refreshFn(selSeat.id ? props.msg.edit : props.msg.add);
         }
-      }
-      utils.insReservationDb(params, selSeat, callback)
+      };
+      utils.insReservationDb(params, selSeat, callback);
     }
-  }
+  };
 
   return (
     <ElementStyle>
-      <Alert show={showAlert2} msg={msgAlert2} variant="danger" setShow={setShowAlert2}/>
+      <Alert show={showAlert2} msg={msgAlert2} variant="danger" setShow={setShowAlert2} />
       <div className={wrappeClassName}>
-        <CloseButton onClick={()=>props.setSelRow(null)} />
+        <CloseButton onClick={() => props.setSelRow(null)} />
         <div className="calendar-container">
-          <Calendar onChange={(evt1)=>{setDateOnChange(evt1)}}
-            showWeekNumbers={false} showNeighboringMonth={true} 
-            value={dateInterval} selectRange={true} 
-            /> 
+          <Calendar
+            onChange={setDateOnChange}
+            showWeekNumbers={false}
+            showNeighboringMonth={true}
+            value={dateInterval}
+            selectRange={true}
+          />
         </div>
         <p>
-          <span>from</span>{' '}{moment(dateInterval[0]).format('DD.MM.yyyy')}{' '}{utils.decimealToTime(timeInterval[0])}
-          <span>{' '}to{' '}</span> {moment(dateInterval[1]).format('DD.MM.yyyy')}{' '}{utils.decimealToTime(timeInterval[1])}
+          <span>from</span> {moment(dateInterval[0]).format('DD.MM.yyyy')} {utils.decimealToTime(timeInterval[0])}
+          <span> to </span> {moment(dateInterval[1]).format('DD.MM.yyyy')} {utils.decimealToTime(timeInterval[1])}
         </p>
         {props.isCalendarActive && (
-        <>
-          <div> 
-            {dateInterval[0] && 
-              <Times timeInterval={timeInterval} setTimeOnChange={setTimeOnChange}/>
-            }
-          </div>
-          <Button type="button" onClick={()=>props.setSelRow(null)} variant="secondary" >Close</Button>
-          <Button type="button" onClick={save} >
-            Save <FontAwesomeIcon icon={faSave}/>
-          </Button>
-        </>
+          <>
+            <div>
+              {dateInterval[0] && <Times timeInterval={timeInterval} setTimeOnChange={setTimeOnChange} />}
+            </div>
+            <Button type="button" onClick={() => props.setSelRow(null)} variant="secondary">
+              Close
+            </Button>
+            <Button type="button" onClick={save} variant="primary">
+              Save <FontAwesomeIcon icon={faSave} />
+            </Button>
+          </>
         )}
       </div>
     </ElementStyle>
   );
-}
+};
 
 export default CalendarContainer;
 
