@@ -42,6 +42,14 @@ export default function MyBooking(props) {
   const [showAlert, setShowAlert] = useState(null);
   const [todayBookings, setTodayBookings] = useState([]);
 
+  const getSeatName = (seatId) => {
+    if (seatId === 16) return 'Telefonbox';
+    if (seatId === 17) return 'Conference Table';
+    if (seatId >= 1 && seatId <= 12) return 'Research Office';
+    if ((seatId >= 13 && seatId <= 15) || (seatId >= 18 && seatId <= 28)) return 'Upstairs';
+    return 'Unknown Seat';
+  };
+
   function loadData() {
     console.log('load booking');
 
@@ -70,6 +78,7 @@ export default function MyBooking(props) {
           val.endMonth = parseInt(val.mmtE.format('M'));
           val.endYear = parseInt(val.mmtE.format('YYYY'));
           val.weekday = val.mmtS.format('ddd');
+          val.seatName = getSeatName(val.seatid);
           return val;
         });
 
