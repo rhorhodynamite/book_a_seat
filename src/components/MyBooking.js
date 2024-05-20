@@ -344,6 +344,8 @@ export default function MyBooking(props) {
 
                 <TableCell>{moment(booking.endDate).format('HH:mm')}</TableCell>
 
+                <TableCell>{booking.seatId}</TableCell>
+
                 <TableCell>{booking.seatName}</TableCell>
 
               </TableRow>
