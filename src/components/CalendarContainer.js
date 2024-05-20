@@ -96,7 +96,7 @@ const CalendarContainer = (props) => {
         id: selSeat.id,
         seatId: selSeat.seatId,
         user: props.user,
-        interval: [dt0.toString().slice(0, 24), dt1.toString().slice(0, 24)]
+        interval: [dt0.toISOString(), dt1.toISOString()]
       };
 
       const callback = (resp) => {
@@ -148,6 +148,5 @@ const CalendarContainer = (props) => {
 };
 
 export default CalendarContainer;
-
 
 
