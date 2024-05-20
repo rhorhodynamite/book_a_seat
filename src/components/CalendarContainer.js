@@ -1,193 +1,153 @@
-import { useRef, useState, useEffect, useContext } from 'react';
-import AuthContext from '../../context/AuthProvider';
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import moment from 'moment';
+import Times from './Times';
+import { Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import axios from '../../api/axios';
-
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-const LOGIN_URL = SERVER_URL + 'api/login';
+import utils from '../api/utils.ts';
+import Alert from './Alert.js';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 const ElementStyle = styled.div`
-  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f7f9fc;
-    text-align: center;
-  }
-
-  section {
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background: white;
-  }
-
-  h1 {
-    margin-bottom: 1.5rem;
-    color: #333;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  label {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #555;
-  }
-
-  input {
-    padding: 0.75rem;
-    margin-bottom: 1rem;
+  .wrapper-date-edit {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 8px;
+    margin-top: 20px;
+    width: 368px;
+    padding: 20px;
+    background-color: #fff;
+    position: absolute;
+    top: 150px;
+    right: 20px;
   }
 
-  .btn {
-    padding: 0.75rem;
-    font-size: 1rem;
-    border-radius: 5px;
-    background-color: #007bff;
+  .disabled-all .react-calendar button {
+    pointer-events: none;
+  }
+
+  .react-calendar {
+    width: 100%;
     border: none;
-  }
-
-  .btn:hover {
-    background-color: #0056b3;
-  }
-
-  .alert {
-    margin-bottom: 1rem;
+    font-family: 'Roboto', sans-serif;
   }
 
   p {
-    margin-top: 1rem;
-    color: #555;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #333;
   }
 
-  .line {
-    display: block;
-    margin-top: 0.5rem;
+  .btn-close {
+    float: right;
+    cursor: pointer;
   }
 
-  .line a {
-    color: #007bff;
-    text-decoration: none;
-  }
-
-  .line a:hover {
-    text-decoration: underline;
+  button.btn {
+    margin: 3px 0;
+    width: 100%;
   }
 `;
 
-const Login = () => {
-  const { setToken } = useContext(AuthContext);
-  const userRef = useRef();
-  const errRef = useRef();
+const CalendarContainer = (props) => {
+  const selSeat = props.selSeat;
+  const wrappeClassName = `wrapper-date-edit ${!props.isCalendarActive ? 'disabled-all' : ''}`;
+  const [dateInterval, setDateInterval] = useState([selSeat.startDate, selSeat.endDate]);
+  const [timeInterval, setTimeInterval] = useState([
+    utils.timeToDecimal(moment(selSeat.startDate).format('HH:mm')),
+    utils.timeToDecimal(moment(selSeat.endDate).format('HH:mm'))
+  ]);
+  const [showAlert2, setShowAlert2] = useState(false);
+  const [msgAlert2, setMsgAlert2] = useState({});
 
-  const [user, setUser] = useState('user1');
-  const [pwd, setPwd] = useState('');
-  const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
+  const setDateOnChange = (evt) => {
+    setDateInterval(evt);
+  };
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
+  const setTimeOnChange = (evt) => {
+    setTimeInterval(evt);
+  };
 
-  useEffect(() => {
-    setErrMsg('');
-  }, [user, pwd]);
+  const check = (mode, dt) => {
+    let errorData = null;
+    if (mode === 'edit' && dt[1] < props.currentDate) {
+      errorData = 'Not possible to modify values in the past';
+    } else if (mode === 'add' && dt[0] < props.currentDate) {
+      errorData = 'Not possible to start a new reservation in the past';
+    } else {
+      errorData = props.check(dt, selSeat.id);
+    }
+    if (errorData) {
+      setShowAlert2(true);
+      setMsgAlert2(errorData);
+      return false;
+    }
+    return true;
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const save = () => {
+    const dt0 = utils.mergeDateAndtime(dateInterval[0], timeInterval[0]);
+    const dt1 = utils.mergeDateAndtime(dateInterval[1], timeInterval[1]);
+    if (check(selSeat.id ? 'edit' : 'add', [dt0, dt1])) {
+      const params = {
+        id: selSeat.id,
+        seatId: selSeat.seatId,
+        user: props.user,
+        interval: [dt0.toString().slice(0, 24), dt1.toString().slice(0, 24)]
+      };
 
-    try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
+      const callback = (resp) => {
+        if (resp && !resp.successfull) {
+          setShowAlert2(true);
+          setMsgAlert2(`In the same time ${params.interval.join(' - ')} the user has other reservations (desk ids: ${resp.rows.join(', ')})`);
+        } else {
+          props.refreshFn(selSeat.id ? props.msg.edit : props.msg.add);
         }
-      );
-      const accessToken = response?.data?.token;
-      if (!accessToken) {
-        setErrMsg('Login or password wrong...');
-        setSuccess(false);
-      } else {
-        const role = response?.data?.role;
-        setToken({ user, role, accessToken });
-        setUser('');
-        setPwd('');
-        setSuccess(true);
-      }
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg('No Server Response');
-      } else if (err.response?.status === 400) {
-        setErrMsg('Missing Username or Password');
-      } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized');
-      } else {
-        setErrMsg('Login Failed');
-      }
-      errRef.current.focus();
+      };
+      utils.insReservationDb(params, selSeat, callback);
     }
   };
 
   return (
     <ElementStyle>
-      <section>
-        {errMsg && (
-          <Alert key="danger" variant="danger" ref={errRef} className={errMsg ? 'alert' : 'offscreen'}>
-            {errMsg}
-          </Alert>
-        )}
-        <h1>Sign In</h1>
-        <form onSubmit={handleSubmit} className="form-group">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
-            required
-            className="form-control"
+      <Alert show={showAlert2} msg={msgAlert2} variant="danger" setShow={setShowAlert2} />
+      <div className={wrappeClassName}>
+        <CloseButton onClick={() => props.setSelRow(null)} />
+        <div className="calendar-container">
+          <Calendar
+            onChange={setDateOnChange}
+            showWeekNumbers={false}
+            showNeighboringMonth={true}
+            value={dateInterval}
+            selectRange={true}
           />
-
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
-            className="form-control"
-          />
-          <Button type="submit" className="btn">Sign In</Button>
-        </form>
+        </div>
         <p>
-          Need an Account?
-          <br />
-          <span className="line">
-            <a href="/register">Sign Up</a>
-          </span>
+          <span>from</span> {moment(dateInterval[0]).format('DD.MM.yyyy')} {utils.decimealToTime(timeInterval[0])}
+          <span> to </span> {moment(dateInterval[1]).format('DD.MM.yyyy')} {utils.decimealToTime(timeInterval[1])}
         </p>
-      </section>
+        {props.isCalendarActive && (
+          <>
+            <div>
+              {dateInterval[0] && <Times timeInterval={timeInterval} setTimeOnChange={setTimeOnChange} />}
+            </div>
+            <Button type="button" onClick={() => props.setSelRow(null)} variant="secondary">
+              Close
+            </Button>
+            <Button type="button" onClick={save} variant="primary">
+              Save <FontAwesomeIcon icon={faSave} />
+            </Button>
+          </>
+        )}
+      </div>
     </ElementStyle>
   );
 };
 
-export default Login;
+export default CalendarContainer;
+
+
 
