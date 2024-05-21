@@ -5,7 +5,7 @@ function SVGPlan(props) {
   const height = props.height || '100%';
 
   return (
-    <svg width={width} height={height} version="1.1" viewBox="0 0 180 125" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} version="1.1" viewBox="0 0 180 250" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
           <feDropShadow dx="2" dy="2" stdDeviation="2" floodColor="#000" floodOpacity="0.5" />
@@ -44,6 +44,17 @@ function SVGPlan(props) {
           
           {/* Side door at Room 1 */}
           <rect x="177" y="60" width="5" height="20" fill="url(#doorGradient)" rx="1" ry="1" />
+
+          {/* Corridor extending downwards */}
+          <rect x="125" y="139" width="20" height="50" stroke="#000" strokeWidth="2" rx="5" ry="5" />
+          
+          {/* Room 2 to the left of the corridor */}
+          <rect x="85" y="189" width="40" height="60" stroke="#000" strokeWidth="2" rx="10" ry="10" />
+          <rect x="103" y="245" width="4" height="4" fill="url(#doorGradient)" rx="1" ry="1" />
+
+          {/* Room 3 to the right of the corridor */}
+          <rect x="145" y="189" width="40" height="60" stroke="#000" strokeWidth="2" rx="10" ry="10" />
+          <rect x="163" y="245" width="4" height="4" fill="url(#doorGradient)" rx="1" ry="1" />
         </g>
       </g>
     </svg>
