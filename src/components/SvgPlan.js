@@ -32,7 +32,7 @@ function SVGPlan(props) {
            {/* Room 2 Outline */}
           <rect x="180" y="80" width="60" height="55" stroke="#000" strokeWidth="2" rx="3" ry="2" />
            {/* Room 3 Outline */}
-          <rect x="240" y="80" width="60" height=55" stroke="#000" strokeWidth="2" rx="3" ry="2" />
+          <rect x="240" y="80" width="60" height="55" stroke="#000" strokeWidth="2" rx="3" ry="2" />
           
           {/* Pillar 1 in Room 1 */}
           <rect x="50" y="100" width="10" height="10" fill="url(#pillarGradient)" rx="2" ry="2" />
