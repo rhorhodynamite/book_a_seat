@@ -40,6 +40,9 @@ function SVGPlanSeminar(props) {
           {/* Corridor turns up */}
           <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="1" rx="3" ry="3" fill="url(#corridorGradient)" />
 
+          {/* Nische */}
+          <rect x="242" y="100" width="60" height="30" stroke="#000" strokeWidth="1" rx="3" ry="3" fill="url(#corridorGradient)" />
+
           {/* Office phone box at the top of the rightmost corridor */}
           <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
 
