@@ -26,13 +26,13 @@ function SVGPlan(props) {
       <g transform="translate(0 -14.7)" filter="url(#shadow)">
         <g fill="none" stroke="#000">
           {/* Room 1 Outline */}
-          <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" rx="10" ry="10" />
-           {/* Room 1 Outline */}
-          <rect x="180" y="60" width="120" height="20" stroke="#000" strokeWidth="2" rx="10" ry="10" />
-           {/* Room 1 Outline */}
-          <rect x="180" y="80" width="60" height="40" stroke="#000" strokeWidth="2" rx="10" ry="10" />
-           {/* Room 1 Outline */}
-          <rect x="240" y="80" width="60" height="40" stroke="#000" strokeWidth="2" rx="10" ry="10" />
+          <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="2" rx="5" ry="4" />
+           {/* corridor*/}
+          <rect x="180" y="60" width="120" height="20" stroke="#000" strokeWidth="2" rx="4" ry="3" />
+           {/* Room 2 Outline */}
+          <rect x="180" y="80" width="60" height="60" stroke="#000" strokeWidth="2" rx="3" ry="2" />
+           {/* Room 3 Outline */}
+          <rect x="240" y="80" width="60" height="60" stroke="#000" strokeWidth="2" rx="3" ry="2" />
           
           {/* Pillar 1 in Room 1 */}
           <rect x="50" y="100" width="10" height="10" fill="url(#pillarGradient)" rx="2" ry="2" />
