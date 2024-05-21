@@ -16,8 +16,8 @@ import SVGPlanUpstairs from './SvgPlanUpstairs';
 import SVGPlanSeminar from './SvgPlanSeminar';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-const SVG_WIDTH = "175mm";
-const SVG_HEIGHT = "125mm";
+const SVG_WIDTH = "300mm";
+const SVG_HEIGHT = "180mm";
 
 const ElementStyle = styled.div`
   {
