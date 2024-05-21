@@ -42,13 +42,17 @@ export default function MyBooking(props) {
   const [showAlert, setShowAlert] = useState(null);
   const [todayBookings, setTodayBookings] = useState([]);
 
-  const getSeatName = (seatId) => {
-    if (seatId === 16) return 'Telefonbox';
-    if (seatId === 17) return 'Conference Table';
-    if (seatId >= 1 && seatId <= 12) return 'Research Office';
-    if ((seatId >= 13 && seatId <= 15) || (seatId >= 18 && seatId <= 28)) return 'Upstairs';
-    return 'Unknown Seat';
-  };
+ const getSeatName = (seatId) => {
+  if (seatId === 16) return 'Telefonbox';
+  if (seatId === 17) return 'Conference Table';
+  if (seatId >= 1 && seatId <= 12) return 'Research Office';
+  if ((seatId >= 13 && seatId <= 15) || (seatId >= 18 && seatId <= 28)) return 'Upstairs';
+  if (seatId === 29) return 'Nische';
+  if (seatId === 30) return 'Kitchen 1';
+  if (seatId === 31) return 'Kitchen 2';
+  return 'Unknown Seat';
+};
+
 
   function loadData() {
     console.log('load booking');
