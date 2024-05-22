@@ -63,7 +63,7 @@ function SVGPlanSeminar(props) {
 
           {/* Kitchen area */}
           {/* table */}
-          <rect x="120" y="95" width="25" height="40" fill="#c0c0c0" rx="2" ry="2" />
+          <rect x="120" y="75" width="25" height="40" fill="#c0c0c0" rx="2" ry="2" />
          
           {/* Sink */}
           <rect x="160" y="110" width="20" height="10" fill="#87CEEB" />
