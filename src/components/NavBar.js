@@ -132,7 +132,7 @@ function NavBar() {
         </Tab>
       <Tab eventKey="seminar" title="Seminarraum/Telefonbox">
           <div>
-            <h2>{token.role === 'admin' ? "ADMIN - Manage Seminar Room/Phone Booth" : "Seminar Room/Phone Booth Plan"}</h2>
+            <h2>{token.role === 'admin' ? "ADMIN - Manage Seminar Room/Phone Booth" : "Meeting Raum (OG)/Telefonbox Plan"}</h2>
             {keySeminarDiagram > 0 && (
               <div className='wrapper-dashboard' key={'seminarDiagram_' + keySeminarDiagram}>
                 <Diagram 
