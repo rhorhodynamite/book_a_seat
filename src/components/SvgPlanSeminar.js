@@ -75,6 +75,11 @@ function SVGPlanSeminar(props) {
           <circle cx="175" cy="130" r="2" fill="#000" />
         </g>
       </g>
+           
+          <text x="75" y="10" fontFamily="Verdana" fontSize="5" fill="black"> Meetingraum (OG) </text>
+          <text x="230" y="125" fontFamily="Verdana" fontSize="5" fill="black">Nische Treppe  </text>
+          <text x="230" y="10" fontFamily="Verdana" fontSize="5" fill="black">Telefonbox </text>
+            
     </svg>
   );
 }
