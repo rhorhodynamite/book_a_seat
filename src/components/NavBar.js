@@ -94,7 +94,7 @@ function NavBar() {
             defaultActiveKey={token.role === 'user' ? "booking" : "reservation"}
             className="mb-3">
         {token.role === 'user' && (
-          <Tab eventKey="booking" title="My booking">
+          <Tab eventKey="booking" title="Bookings">
             <div className='wrapper-dashboard'>  
               <MyBooking username={token.user} key={keyBooking} />
             </div>
