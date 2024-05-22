@@ -30,7 +30,7 @@ function SVGPlanSeminar(props) {
       <g transform="translate(0 -14.7)" filter="url(#shadow)">
         <g fill="none" stroke="#000">
           {/* Room 1 Outline */}
-          <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="1" rx="10" ry="10" fill="url(#roomGradient)" />
+          <rect x="10" y="16.7" width="170" height="120" stroke="#000" strokeWidth="1" rx="5" ry="4" fill="url(#roomGradient)" />
 
           {/* Side door at Room 1 */}
           <rect x="177" y="80" width="5" height="20" fill="url(#pillarGradient)" rx="1" ry="1" />
