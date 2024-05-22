@@ -100,7 +100,7 @@ function NavBar() {
             </div>
           </Tab>
         )}
-        <Tab eventKey="reservation" title="New Reservation">
+        <Tab eventKey="reservation" title="First Floor">
           <div>  
             <h2>{token.role === 'admin' ? "ADMIN - Add seats and chairs" : ""}</h2>
             {keyDiagram > 0 && (
