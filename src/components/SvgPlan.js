@@ -54,7 +54,7 @@ function SVGPlan(props) {
       </g>
               {/* Side door at Room 1 */}
           <rect x="177" y="60" width="5" height="20" fill="url(#doorGradient)" rx="1" ry="1" />
-          <text x="75" y="75" fontFamily="Verdana" fontSize="5" fill="black">Research Raum</text>
+          <text x="75" y="50" fontFamily="Verdana" fontSize="5" fill="black">Research Raum</text>
           <text x="200" y="75" fontFamily="Verdana" fontSize="5" fill="black">Küche links </text>
           <text x="260" y="75" fontFamily="Verdana" fontSize="5" fill="black">Küche rechts </text>
     </svg>
