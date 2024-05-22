@@ -44,14 +44,21 @@ export default function MyBooking(props) {
 
  const getSeatName = (seatId) => {
   if (seatId === 16) return 'Telefonbox';
-  if (seatId === 17) return 'Conference Table';
+  if (seatId === 17) return 'Meetingraum (OG)';
+  if (seatId === 18) return 'Meetingraum (OG) Schreibtisch 1';
+  if (seatId === 19) return 'Meetingraum (OG) Schreibtisch 2';
   if (seatId >= 1 && seatId <= 12) return 'Research Office';
-  if ((seatId >= 13 && seatId <= 15) || (seatId >= 18 && seatId <= 28)) return 'Upstairs';
-  if (seatId === 29) return 'Nische';
-  if (seatId === 30) return 'Kitchen 1';
-  if (seatId === 31) return 'Kitchen 2';
+  if (seatId === 13) return 'Camp 1';
+  if (seatId === 25 || seatId === 23 || seatId === 27) return 'Camp 2';
+  if (seatId === 24 || seatId === 28 || seatId === 15) return 'Camp 3';
+  if (seatId === 20 || seatId === 21 || seatId === 22 || seatId === 26) return 'Camp 4';
+  if (seatId >= 14 && seatId <= 28 && ![13, 15, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28].includes(seatId)) return 'Upstairs';
+  if (seatId === 29) return 'Nische Treppe';
+  if (seatId === 30) return 'Küche Rechts';
+  if (seatId === 31) return 'Küche Links';
   return 'Unknown Seat';
 };
+
 
 
   function loadData() {
