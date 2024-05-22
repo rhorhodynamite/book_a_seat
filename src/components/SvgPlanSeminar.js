@@ -36,12 +36,12 @@ function SVGPlanSeminar(props) {
           <rect x="177" y="80" width="5" height="20" fill="url(#pillarGradient)" rx="1" ry="1" />
 
           {/* Corridor coming out of the right door */}
-          <rect x="182" y="80" width="60" height="20" stroke="#000" strokeWidth="1" rx="2" ry="2" fill="url(#corridorGradient)" />
+          <rect x="182" y="80" width="60" height="20" stroke="#000" strokeWidth="1" rx="1" ry="1" fill="url(#corridorGradient)" />
           {/* Corridor turns up */}
-          <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="1" rx="3" ry="3" fill="url(#corridorGradient)" />
+          <rect x="242" y="20" width="60" height="80" stroke="#000" strokeWidth="1" rx="1" ry="1" fill="url(#corridorGradient)" />
 
           {/* Nische */}
-          <rect x="242" y="100" width="60" height="30" stroke="#000" strokeWidth="1" rx="3" ry="3" fill="url(#corridorGradient)" />
+          <rect x="242" y="100" width="60" height="30" stroke="#000" strokeWidth="1" rx="1" ry="1" fill="url(#corridorGradient)" />
 
           {/* Office phone box at the top of the rightmost corridor */}
           <rect x="270" y="22" width="25" height="30" fill="url(#corridorGradient)" rx="4" ry="4" />
