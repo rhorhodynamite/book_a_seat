@@ -52,7 +52,6 @@ export default function MyBooking(props) {
   if (seatId === 25 || seatId === 23 || seatId === 27) return 'Camp 2';
   if (seatId === 24 || seatId === 28 || seatId === 15) return 'Camp 3';
   if (seatId === 20 || seatId === 21 || seatId === 22 || seatId === 26) return 'Camp 4';
-  if (seatId >= 14 && seatId <= 28 && ![13, 15, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28].includes(seatId)) return 'Upstairs';
   if (seatId === 29) return 'Nische Treppe';
   if (seatId === 30) return 'Küche Rechts';
   if (seatId === 31) return 'Küche Links';
