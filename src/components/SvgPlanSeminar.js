@@ -77,8 +77,8 @@ function SVGPlanSeminar(props) {
       </g>
            
           <text x="75" y="10" fontFamily="Verdana" fontSize="5" fill="black"> Meetingraum (OG) </text>
-          <text x="250" y="120" fontFamily="Verdana" fontSize="5" fill="black">Nische Treppe  </text>
-          <text x="250" y="60" fontFamily="Verdana" fontSize="5" fill="black">Telefonbox </text>
+          <text x="260" y="120" fontFamily="Verdana" fontSize="5" fill="black">Nische Treppe  </text>
+          <text x="260" y="50" fontFamily="Verdana" fontSize="5" fill="black">Telefonbox </text>
             
     </svg>
   );
