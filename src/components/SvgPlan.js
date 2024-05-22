@@ -48,12 +48,13 @@ function SVGPlan(props) {
           {/* Door at the bottom of Room 1 */}
           <rect x="125" y="134" width="20" height="5" fill="url(#doorGradient)" rx="1" ry="1" />
           
-          {/* Side door at Room 1 */}
+          
+        </g>
+        {/* Side door at Room 1 */}
           <rect x="177" y="60" width="5" height="20" fill="url(#doorGradient)" rx="1" ry="1" />
           <text x="75" y="75" fontFamily="Verdana" fontSize="5" fill="black">Research Raum</text>
-          <text x="200" y="75" fontFamily="Verdana" fontSize="5" fill="black">Research Raum</text>
-          <text x="260" y="75" fontFamily="Verdana" fontSize="5" fill="black">Research Raum</text>
-        </g>
+          <text x="200" y="75" fontFamily="Verdana" fontSize="5" fill="black">Küche links </text>
+          <text x="260" y="75" fontFamily="Verdana" fontSize="5" fill="black">Küche rechts </text>
       </g>
     </svg>
   );
