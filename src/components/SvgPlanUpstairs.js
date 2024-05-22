@@ -42,10 +42,10 @@ function SVGPlanUpstairs(props) {
       </g>
 
        {/* Adding text labels for rooms */}
-      <text x="5" y="230" fontFamily="Verdana" fontSize="20" fill="black">Camp 1</text>
-      <text x="180" y="230" fontFamily="Verdana" fontSize="20" fill="black">Camp 2</text>
-      <text x="380" y="230" fontFamily="Verdana" fontSize="20" fill="black">Camp 3</text>
-      <text x="590" y="230" fontFamily="Verdana" fontSize="20" fill="black">Camp 4</text>
+      <text x="5" y="230" fontFamily="Verdana" fontSize="12" fill="black">Camp 1</text>
+      <text x="180" y="230" fontFamily="Verdana" fontSize="12" fill="black">Camp 2</text>
+      <text x="380" y="230" fontFamily="Verdana" fontSize="12" fill="black">Camp 3</text>
+      <text x="590" y="230" fontFamily="Verdana" fontSize="12" fill="black">Camp 4</text>
 
       {/* Adding plant illustrations */}
       <g fill="none" stroke="#228B22" strokeWidth="2" strokeLinecap="round">
