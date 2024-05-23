@@ -1,41 +1,43 @@
 import { useState, useEffect } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import {
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle, Button,
+  Typography, Box, Container, Alert
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import moment from 'moment';
 import axios from '../api/axios';
 import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
-const CONTENT_WIDTH = 650;
 
-const StyledTableContainer = styled(TableContainer)`
-  margin-top: 20px;
-`;
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  marginTop: theme.spacing(3),
+}));
 
-const currentDate = moment().startOf('day').toDate();
+const StyledBox = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  padding: theme.spacing(2),
+  marginBottom: theme.spacing(3),
+  '& .today-pointer': {
+    position: 'absolute',
+    top: 0,
+    left: '-20px',
+    background: theme.palette.primary.main,
+    color: '#fff',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    transform: 'rotate(-45deg)',
+    transformOrigin: 'left bottom',
+  },
+}));
 
 const MyBooking = (props) => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
   const [reservationList, setReservationList] = useState([]);
   const [reservationData, setReservation] = useState([]);
   const [idToDel, setIdToDel] = useState(null);
@@ -44,29 +46,19 @@ const MyBooking = (props) => {
 
   const getSeatName = (seatId) => {
     const seatNames = {
-      16: 'Telefonbox',
-      17: 'Meetingraum (OG)',
-      18: 'Meetingraum (OG) Schreibtisch 1',
-      19: 'Meetingraum (OG) Schreibtisch 2',
+      16: 'Telefonbox', 17: 'Meetingraum (OG)', 18: 'Meetingraum (OG) Schreibtisch 1', 19: 'Meetingraum (OG) Schreibtisch 2',
       1: 'Research Office', 2: 'Research Office', 3: 'Research Office', 4: 'Research Office', 5: 'Research Office',
       6: 'Research Office', 7: 'Research Office', 8: 'Research Office', 9: 'Research Office', 10: 'Research Office',
-      11: 'Research Office', 12: 'Research Office',
-      13: 'Camp 1',
-      25: 'Camp 2', 23: 'Camp 2', 27: 'Camp 2',
-      24: 'Camp 3', 28: 'Camp 3', 15: 'Camp 3',
-      20: 'Camp 4', 21: 'Camp 4', 22: 'Camp 4', 26: 'Camp 4',
-      29: 'Nische Treppe',
-      30: 'Küche Rechts',
-      31: 'Küche Links'
+      11: 'Research Office', 12: 'Research Office', 13: 'Camp 1', 25: 'Camp 2', 23: 'Camp 2', 27: 'Camp 2',
+      24: 'Camp 3', 28: 'Camp 3', 15: 'Camp 3', 20: 'Camp 4', 21: 'Camp 4', 22: 'Camp 4', 26: 'Camp 4',
+      29: 'Nische Treppe', 30: 'Küche Rechts', 31: 'Küche Links'
     };
     return seatNames[seatId] || 'Unknown Seat';
   };
 
   const loadData = async () => {
     try {
-      const response = await axios.get(GET_URL, {
-        withCredentials: true,
-      });
+      const response = await axios.get(GET_URL, { withCredentials: true });
       const rslt = response.data?.rslt.map((val) => {
         if (typeof val.startdate === 'string') val.startDate = new Date(val.startdate);
         if (typeof val.enddate === 'string') val.endDate = new Date(val.enddate);
@@ -96,6 +88,7 @@ const MyBooking = (props) => {
             monthYearItem = {
               year: item.startYear, month: item.startMonth, days: [{
                 day: item.startDay,
+                weekday: item.weekday,
                 dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }]
               }]
             };
@@ -107,7 +100,7 @@ const MyBooking = (props) => {
           const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
           if (!dayItem) {
             if (item.startDay === item.endDay) {
-              monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }] });
+              monthYearItem.days.push({ day: item.startDay, weekday: item.weekday, dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }] });
             } else {
               addMultiDays(item, finalMap);
             }
@@ -209,8 +202,10 @@ const MyBooking = (props) => {
           <TableRow key={item.month + '_' + key} {...(isToday ? { className: 'today' } : {})}>
             <TableCell>{val.day} {val.weekday}</TableCell>
             <TableCell>
-              {barEl(val.dayBook, val.day + '_' + item.month)}
-              {isToday && <div className='today'>Today</div>}
+              <StyledBox>
+                {barEl(val.dayBook, val.day + '_' + item.month)}
+                {isToday && <div className='today-pointer'>Today</div>}
+              </StyledBox>
             </TableCell>
             <TableCell>
               <Button variant="text" title={titleText} onClick={(evt) => { delRow(evt, isDisabled, val) }}>
@@ -318,3 +313,4 @@ const MyBooking = (props) => {
 }
 
 export default MyBooking;
+
