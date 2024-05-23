@@ -91,6 +91,8 @@ const CalendarContainer = (props) => {
   const save = () => {
     const dt0 = moment.utc(utils.mergeDateAndtime(dateInterval[0], timeInterval[0])).toISOString();
     const dt1 = moment.utc(utils.mergeDateAndtime(dateInterval[1], timeInterval[1])).toISOString();
+    console.log('Saving start time (UTC):', dt0);
+    console.log('Saving end time (UTC):', dt1);
     if (check(selSeat.id ? 'edit' : 'add', [dt0, dt1])) {
       const params = {
         id: selSeat.id,
