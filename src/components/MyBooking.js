@@ -11,6 +11,7 @@ import axios from '../api/axios';
 import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import '../styles.css'; // Ensure this imports your stylesheet
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
@@ -256,61 +257,64 @@ const MyBooking = (props) => {
   }
 
   return (
-    <Container maxWidth="md">
-      <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
-        <DialogTitle>Success</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{showAlert}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowAlert(null)} color="primary">Close</Button>
-        </DialogActions>
-      </Dialog>
+    <div>
+      <div className="art-nouveau-background"></div>
+      <Container className="my-bookings-container" maxWidth="md">
+        <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
+          <DialogTitle>Success</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{showAlert}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowAlert(null)} color="primary">Close</Button>
+          </DialogActions>
+        </Dialog>
 
-      <Dialog open={!!idToDel} onClose={handleClose}>
-        <DialogTitle>Delete Reservation</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this reservation?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDel} color="primary">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={!!idToDel} onClose={handleClose}>
+          <DialogTitle>Delete Reservation</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this reservation?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDel} color="primary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-      <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell>Start Time</TableCell>
-              <TableCell>End Time</TableCell>
-              <TableCell>Seat Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {todayBookings.map((booking, index) => (
-              <TableRow key={index}>
-                <TableCell>{booking.username}</TableCell>
-                <TableCell>{moment(booking.startDate).format('HH:mm')}</TableCell>
-                <TableCell>{moment(booking.endDate).format('HH:mm')}</TableCell>
-                <TableCell>{booking.seatName}</TableCell>
+        <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Username</TableCell>
+                <TableCell>Start Time</TableCell>
+                <TableCell>End Time</TableCell>
+                <TableCell>Seat Name</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {todayBookings.map((booking, index) => (
+                <TableRow key={index}>
+                  <TableCell>{booking.username}</TableCell>
+                  <TableCell>{moment(booking.startDate).format('HH:mm')}</TableCell>
+                  <TableCell>{moment(booking.endDate).format('HH:mm')}</TableCell>
+                  <TableCell>{booking.seatName}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <Typography variant="h4" gutterBottom>My Bookings</Typography>
-      {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
-    </Container>
+        <Typography variant="h4" gutterBottom>My Bookings</Typography>
+        {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
+      </Container>
+    </div>
   );
 }
 
