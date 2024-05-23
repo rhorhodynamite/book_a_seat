@@ -15,7 +15,7 @@ const ElementStyle = styled.div`
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #f7f9fc;
+    background: #E7EAD4; /* Updated background color */
     text-align: center;
   }
 
@@ -88,6 +88,7 @@ const ElementStyle = styled.div`
     text-decoration: underline;
   }
 `;
+
 
 const Login = () => {
   const { setToken } = useContext(AuthContext);
