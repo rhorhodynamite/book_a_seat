@@ -8,7 +8,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 250px; /* Adjust height as necessary */
+  height: 1000px; /* Adjust height as necessary */
   background: url('../public/art_noveau.png') no-repeat;
   background-position: left bottom, right bottom;
   background-size: auto 100%; /* Ensures the image scales proportionally */
