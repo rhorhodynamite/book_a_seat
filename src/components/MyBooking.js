@@ -292,7 +292,7 @@ const MyBooking = (props) => {
         </Dialog>
 
         <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
-        <TableContainer component={Paper}>
+        <StyledTableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
@@ -313,7 +313,7 @@ const MyBooking = (props) => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </StyledTableContainer>
 
         <Typography variant="h4" gutterBottom>My Bookings</Typography>
         {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
@@ -323,4 +323,3 @@ const MyBooking = (props) => {
 }
 
 export default MyBooking;
-
