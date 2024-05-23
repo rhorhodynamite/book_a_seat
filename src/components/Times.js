@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const ElementStyle = styled.div`
@@ -32,14 +32,21 @@ const MIN = 8; // Starting at 08:00
 const MAX = 20; // Ending at 20:00
 
 function Times(props) {
-  const startValue = props.timeInterval[0];
-  const endValue = props.timeInterval[1];
+  const [startValue, setStartValue] = useState(Math.max(props.timeInterval[0], MIN));
+  const [endValue, setEndValue] = useState(Math.min(props.timeInterval[1], MAX));
+
+  useEffect(() => {
+    setStartValue(Math.max(props.timeInterval[0], MIN));
+    setEndValue(Math.min(props.timeInterval[1], MAX));
+  }, [props.timeInterval]);
 
   const onStartChange = (val) => {
+    setStartValue(parseFloat(val));
     props.setTimeOnChange([parseFloat(val), endValue]);
   };
   
   const onEndChange = (val) => {
+    setEndValue(parseFloat(val));
     props.setTimeOnChange([startValue, parseFloat(val)]);
   };
 
@@ -78,3 +85,4 @@ function Times(props) {
 }
 
 export default Times;
+
