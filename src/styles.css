@@ -9,7 +9,7 @@ body {
   left: 0;
   right: 0;
   height: 200px; /* Adjust height as necessary */
-  background: url('/public/art_nouveau.png') no-repeat;
+  background: url('/art_nouveau.png') no-repeat;
   background-position: left bottom, right bottom;
   background-size: contain;
   pointer-events: none; /* Ensures the image does not interfere with user interaction */
