@@ -13,6 +13,7 @@ body {
   background-size: contain;
   background-position: bottom left;
   pointer-events: none; /* Ensures the image does not interfere with user interaction */
+  z-index: -1; /* Ensure this is below the navbar */
 }
 
 .art-nouveau-right {
@@ -25,6 +26,7 @@ body {
   background-size: contain;
   background-position: bottom right;
   pointer-events: none; /* Ensures the image does not interfere with user interaction */
+  z-index: -1; /* Ensure this is below the navbar */
 }
 
 .my-bookings-container {
