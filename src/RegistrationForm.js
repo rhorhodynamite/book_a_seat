@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Typography, Box, Alert } from '@mui/material';
 import './RegistrationForm.css';
 
 const RegistrationForm = () => {
@@ -7,6 +9,8 @@ const RegistrationForm = () => {
         username: '',
         password: ''
     });
+    const [message, setMessage] = useState(null);
+    const navigate = useNavigate();
 
     const { username, password } = formData;
 
@@ -24,39 +28,71 @@ const RegistrationForm = () => {
             const serverUrl = process.env.REACT_APP_SERVER_URL;
             const response = await axios.post(`${serverUrl}api/register`, body, config);
 
-            console.log(response.data); // Process the response data as needed
+            setMessage({ type: 'success', text: 'Registration successful! Redirecting to login...' });
+            setTimeout(() => {
+                navigate('/login'); // Redirect to login page
+            }, 3000); // Wait for 3 seconds before redirecting
         } catch (err) {
-            console.error(err.response ? err.response.data : err.message); // Improved error handling
+            setMessage({ type: 'error', text: err.response ? err.response.data.error : err.message });
         }
     };
 
     return (
-        <form onSubmit={onSubmit}>
-            <h2>Register</h2>
-            <div>
-                <label>Username</label>
-                <input 
-                    type="text" 
-                    name="username" 
-                    value={username} 
-                    onChange={onChange} 
-                    required 
-                />
-            </div>
-            <div>
-                <label>Password</label>
-                <input 
-                    type="password" 
-                    name="password" 
-                    value={password} 
-                    onChange={onChange} 
-                    required 
-                />
-            </div>
-            <button type="submit">Register</button>
-        </form>
+        <Box
+            component="form"
+            onSubmit={onSubmit}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                mt: 3,
+            }}
+        >
+            <Typography component="h2" variant="h5">
+                Register
+            </Typography>
+            {message && (
+                <Alert severity={message.type} sx={{ mt: 2, mb: 2, width: '100%' }}>
+                    {message.text}
+                </Alert>
+            )}
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={username}
+                onChange={onChange}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={onChange}
+            />
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{ mt: 3, mb: 2 }}
+            >
+                Register
+            </Button>
+        </Box>
     );
 };
 
 export default RegistrationForm;
-
