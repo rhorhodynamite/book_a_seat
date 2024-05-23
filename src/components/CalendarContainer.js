@@ -89,17 +89,37 @@ const CalendarContainer = (props) => {
   };
 
   const save = () => {
-    const dt0 = moment.utc(utils.mergeDateAndtime(dateInterval[0], timeInterval[0])).toISOString();
-    const dt1 = moment.utc(utils.mergeDateAndtime(dateInterval[1], timeInterval[1])).toISOString();
-    console.log('Saving start time (UTC):', dt0);
-    console.log('Saving end time (UTC):', dt1);
-    if (check(selSeat.id ? 'edit' : 'add', [dt0, dt1])) {
+    console.log('Original start time interval:', timeInterval[0]);
+    console.log('Original end time interval:', timeInterval[1]);
+
+    const adjustedStartTime = moment(dateInterval[0])
+      .hour(Math.floor(timeInterval[0]))
+      .minute((timeInterval[0] - Math.floor(timeInterval[0])) * 60)
+      .add(2, 'hours')
+      .second(0)
+      .utc()
+      .format('YYYY-MM-DD HH:mm:ss');
+
+    const adjustedEndTime = moment(dateInterval[1])
+      .hour(Math.floor(timeInterval[1]))
+      .minute((timeInterval[1] - Math.floor(timeInterval[1])) * 60)
+      .add(2, 'hours')
+      .second(0)
+      .utc()
+      .format('YYYY-MM-DD HH:mm:ss');
+
+    console.log('Adjusted start time (UTC):', adjustedStartTime);
+    console.log('Adjusted end time (UTC):', adjustedEndTime);
+
+    if (check(selSeat.id ? 'edit' : 'add', [adjustedStartTime, adjustedEndTime])) {
       const params = {
         id: selSeat.id,
         seatId: selSeat.seatId,
         user: props.user,
-        interval: [dt0, dt1]
+        interval: [adjustedStartTime, adjustedEndTime]
       };
+
+      console.log('Params being sent to backend:', params);
 
       const callback = (resp) => {
         if (resp && !resp.successfull) {
