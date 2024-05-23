@@ -72,11 +72,10 @@ const MyBooking = (props) => {
         val.startYear = parseInt(val.mmtS.format('YYYY'));
         val.weekday = val.mmtS.format('ddd');
         val.mmtE = moment(val.endDate);
-        val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
+        val.endHour = parseFloat(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
         val.endDay = parseInt(val.mmtE.format('D'));
         val.endMonth = parseInt(val.mmtE.format('M'));
         val.endYear = parseInt(val.mmtE.format('YYYY'));
-        val.weekday = val.mmtS.format('ddd');
         val.seatName = getSeatName(val.seatid);
         return val;
       });
@@ -179,8 +178,8 @@ const MyBooking = (props) => {
       const fTDayMonthKey = val.from + '_' + val.to + '_' + dayMonthKey;
       const r = reservationList.find(item2 => val.id === item2.id);
       const fTime = r.mmtE.format('HH:mm');
-      const txtContent = `from  ${r.mmtS.format('HH:mm')} to ${fTime === '00:00' ? '24:00' : fTime}, desk id: ${val.seatId} (${val.seatName})`;
-      const titleContent = `from ${r.mmtS.format('DD.MM.yyyy HH:mm')} to ${r.mmtE.add(-1, 'ss').format('DD.MM.yyyy HH:mm')}, desk id: ${val.seatId} (${val.seatName})`;
+      const txtContent = `from ${r.mmtS.format('HH:mm')} to ${fTime === '00:00' ? '24:00' : fTime}, desk id: ${val.seatId} (${val.seatName})`;
+      const titleContent = `from ${r.mmtS.format('DD.MM.yyyy HH:mm')} to ${r.mmtE.format('DD.MM.yyyy HH:mm')}, desk id: ${val.seatId} (${val.seatName})`;
       return (
         <div key={fTDayMonthKey} className="div_bar" style={style} title={titleContent}  >
           {(widthBar > 250) ? txtContent : ''}
@@ -316,3 +315,4 @@ const MyBooking = (props) => {
 }
 
 export default MyBooking;
+
