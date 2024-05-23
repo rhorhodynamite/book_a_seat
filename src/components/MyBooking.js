@@ -138,7 +138,7 @@ const MyBooking = (props) => {
       const weekday = currDate.format('ddd');
       const month = parseInt(currDate.format('M'));
       const year = parseInt(currDate.format('YYYY'));
-      startHour = startHour === null ? item.startHour : 08;
+      startHour = startHour === null ? item.startHour : 8;
       const endHour = currDate.isSame(lastDate) ? item.endHour : 18;
 
       let monthYearItem = finalMap.find(item2 => item2.year === year && item2.month === month);
