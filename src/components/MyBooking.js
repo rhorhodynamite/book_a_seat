@@ -258,7 +258,8 @@ const MyBooking = (props) => {
 
   return (
     <div>
-      <div className="art-nouveau-background"></div>
+      <div className="art-nouveau-left"></div>
+      <div className="art-nouveau-right"></div>
       <Container className="my-bookings-container" maxWidth="md">
         <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
           <DialogTitle>Success</DialogTitle>
