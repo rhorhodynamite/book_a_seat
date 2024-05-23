@@ -31,9 +31,9 @@ const StyledTableContainer = styled(TableContainer)`
   margin-top: 20px;
 `;
 
-const currentDate = moment(new Date()).startOf('day').toDate();
+const currentDate = moment().startOf('day').toDate();
 
-export default function MyBooking(props) {
+const MyBooking = (props) => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   const [reservationList, setReservationList] = useState([]);
@@ -42,109 +42,98 @@ export default function MyBooking(props) {
   const [showAlert, setShowAlert] = useState(null);
   const [todayBookings, setTodayBookings] = useState([]);
 
- const getSeatName = (seatId) => {
-  if (seatId === 16) return 'Telefonbox';
-  if (seatId === 17) return 'Meetingraum (OG)';
-  if (seatId === 18) return 'Meetingraum (OG) Schreibtisch 1';
-  if (seatId === 19) return 'Meetingraum (OG) Schreibtisch 2';
-  if (seatId >= 1 && seatId <= 12) return 'Research Office';
-  if (seatId === 13) return 'Camp 1';
-  if (seatId === 25 || seatId === 23 || seatId === 27) return 'Camp 2';
-  if (seatId === 24 || seatId === 28 || seatId === 15) return 'Camp 3';
-  if (seatId === 20 || seatId === 21 || seatId === 22 || seatId === 26) return 'Camp 4';
-  if (seatId === 29) return 'Nische Treppe';
-  if (seatId === 30) return 'Küche Rechts';
-  if (seatId === 31) return 'Küche Links';
-  return 'Unknown Seat';
-};
+  const getSeatName = (seatId) => {
+    const seatNames = {
+      16: 'Telefonbox',
+      17: 'Meetingraum (OG)',
+      18: 'Meetingraum (OG) Schreibtisch 1',
+      19: 'Meetingraum (OG) Schreibtisch 2',
+      1: 'Research Office', 2: 'Research Office', 3: 'Research Office', 4: 'Research Office', 5: 'Research Office',
+      6: 'Research Office', 7: 'Research Office', 8: 'Research Office', 9: 'Research Office', 10: 'Research Office',
+      11: 'Research Office', 12: 'Research Office',
+      13: 'Camp 1',
+      25: 'Camp 2', 23: 'Camp 2', 27: 'Camp 2',
+      24: 'Camp 3', 28: 'Camp 3', 15: 'Camp 3',
+      20: 'Camp 4', 21: 'Camp 4', 22: 'Camp 4', 26: 'Camp 4',
+      29: 'Nische Treppe',
+      30: 'Küche Rechts',
+      31: 'Küche Links'
+    };
+    return seatNames[seatId] || 'Unknown Seat';
+  };
 
+  const loadData = async () => {
+    try {
+      const response = await axios.get(GET_URL, {
+        withCredentials: true,
+      });
+      const rslt = response.data?.rslt.map((val) => {
+        if (typeof val.startdate === 'string') val.startDate = new Date(val.startdate);
+        if (typeof val.enddate === 'string') val.endDate = new Date(val.enddate);
+        val.mmtS = moment(val.startDate);
+        val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
+        val.startDay = parseInt(val.mmtS.format('D'));
+        val.startMonth = parseInt(val.mmtS.format('M'));
+        val.startYear = parseInt(val.mmtS.format('YYYY'));
+        val.weekday = val.mmtS.format('ddd');
+        val.mmtE = moment(val.endDate);
+        val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
+        val.endDay = parseInt(val.mmtE.format('D'));
+        val.endMonth = parseInt(val.mmtE.format('M'));
+        val.endYear = parseInt(val.mmtE.format('YYYY'));
+        val.weekday = val.mmtS.format('ddd');
+        val.seatName = getSeatName(val.seatid);
+        return val;
+      });
 
+      const userReservations = rslt.filter(val => val.username === props.username);
 
-  function loadData() {
-    console.log('load booking');
-
-    const loadRequest = async () => {
-      try {
-        const response = await axios.get(GET_URL, {
-          withCredentials: true,
-        });
-        const rslt = response.data?.rslt.map((val, key) => {
-          if (typeof val.startdate === 'string') {
-            val.startDate = new Date(val.startdate);
+      const finalMap = [];
+      userReservations.forEach(item => {
+        let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
+        if (!monthYearItem) {
+          if (item.startDay === item.endDay) {
+            monthYearItem = {
+              year: item.startYear, month: item.startMonth, days: [{
+                day: item.startDay,
+                dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }]
+              }]
+            };
+            finalMap.push(monthYearItem);
+          } else {
+            addMultiDays(item, finalMap);
           }
-          if (typeof val.enddate === 'string') {
-            val.endDate = new Date(val.enddate);
-          }
-          val.mmtS = moment(val.startDate);
-          val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
-          val.startDay = parseInt(val.mmtS.format('D'));
-          val.startMonth = parseInt(val.mmtS.format('M'));
-          val.startYear = parseInt(val.mmtS.format('YYYY'));
-          val.weekday = val.mmtS.format('ddd');
-
-          val.mmtE = moment(val.endDate);
-          val.endHour = parseInt(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
-          val.endDay = parseInt(val.mmtE.format('D'));
-          val.endMonth = parseInt(val.mmtE.format('M'));
-          val.endYear = parseInt(val.mmtE.format('YYYY'));
-          val.weekday = val.mmtS.format('ddd');
-          val.seatName = getSeatName(val.seatid);
-          return val;
-        });
-
-        // Filter the reservations for the current user
-        const userReservations = rslt.filter(val => val.username === props.username);
-
-        const finalMap = [];
-        userReservations.forEach(item => {
-          let monthYearItem = finalMap.find(item2 => item2.year === item.startYear && item2.month === item.startMonth);
-          if (!monthYearItem) {
+        } else {
+          const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
+          if (!dayItem) {
             if (item.startDay === item.endDay) {
-              monthYearItem = {
-                year: item.startYear, month: item.startMonth, days: [{
-                  day: item.startDay,
-                  dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }]
-                }]
-              };
-              finalMap.push(monthYearItem);
+              monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour }] });
             } else {
               addMultiDays(item, finalMap);
             }
           } else {
-            const dayItem = monthYearItem.days.find(item3 => item3.day === item.startDay);
-            if (!dayItem) {
-              if (item.startDay === item.endDay) {
-                monthYearItem.days.push({ day: item.startDay, dayBook: [{ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour }] });
-              } else {
-                addMultiDays(item, finalMap);
-              }
-            } else {
-              dayItem.dayBook.push({ id: item.id, seatId: item.seatid, from: item.startHour, to: item.endHour });
-            }
+            dayItem.dayBook.push({ id: item.id, seatId: item.seatid, seatName: item.seatName, from: item.startHour, to: item.endHour });
           }
-        });
-        console.log('modify rslt', rslt);
-        console.log('finalMap', finalMap);
-        setReservation(finalMap);
-        setReservationList(userReservations);
+        }
+      });
 
-        // Get today's bookings for all users
-        const today = moment().startOf('day');
-        const todayBookings = rslt.filter(val =>
-          moment(val.startDate).isSame(today, 'day') ||
-          moment(val.endDate).isSame(today, 'day') ||
-          (moment(val.startDate).isBefore(today, 'day') && moment(val.endDate).isAfter(today, 'day'))
-        );
-        setTodayBookings(todayBookings);
+      setReservation(finalMap);
+      setReservationList(userReservations);
 
-      } catch (err) {
-        console.log("ERROR loadData", err);
-      }
+      const today = moment().startOf('day');
+      const todayBookings = rslt.filter(val =>
+        moment(val.startDate).isSame(today, 'day') ||
+        moment(val.endDate).isSame(today, 'day') ||
+        (moment(val.startDate).isBefore(today, 'day') && moment(val.endDate).isAfter(today, 'day'))
+      );
+      setTodayBookings(todayBookings);
+
+    } catch (err) {
+      console.log("ERROR loadData", err);
     }
-    loadRequest();
-  }
+  };
 
-  function addMultiDays(item, finalMap) {
+  const addMultiDays = (item, finalMap) => {
     const currDate = item.mmtS.startOf('day');
     const lastDate = item.mmtE.startOf('day');
     let startHour = null;
@@ -161,7 +150,7 @@ export default function MyBooking(props) {
         monthYearItem = {
           year: year, month: month, days: [{
             day, weekday,
-            dayBook: [{ id: item.id, seatId: item.seatid, from: startHour, to: endHour }]
+            dayBook: [{ id: item.id, seatId: item.seatid, seatName: item.seatName, from: startHour, to: endHour }]
           }]
         }
         finalMap.push(monthYearItem);
@@ -170,20 +159,18 @@ export default function MyBooking(props) {
         if (!dayItem) {
           monthYearItem.days.push({
             day, weekday, dayBook: [{
-              id: item.id, seatId: item.seatid, from: startHour, to: endHour
+              id: item.id, seatId: item.seatid, seatName: item.seatName, from: startHour, to: endHour
             }]
           });
         } else {
-          dayItem.dayBook.push({ id: item.id, seatId: item.seatid, from: startHour, to: endHour });
+          dayItem.dayBook.push({ id: item.id, seatId: item.seatid, seatName: item.seatName, from: startHour, to: endHour });
         }
       }
       currDate.add(1, 'days');
     }
-  }
+  };
 
   useEffect(() => {
-    // only in dev mode is called 2 times 
-    console.log('==============> user effect', props.loadBooking);
     loadData();
   }, [props.loadBooking]);
 
@@ -196,8 +183,8 @@ export default function MyBooking(props) {
       const fTDayMonthKey = val.from + '_' + val.to + '_' + dayMonthKey;
       const r = reservationList.find(item2 => val.id === item2.id);
       const fTime = r.mmtE.format('HH:mm');
-      const txtContent = `from  ${r.mmtS.format('HH:mm')} to ${fTime === '00:00' ? '24:00' : fTime}, desk id: ${val.seatId}`;
-      const titleContent = `from ${r.mmtS.format('DD.MM.yyyy HH:mm')} to ${r.mmtE.add(-1, 'ss').format('DD.MM.yyyy HH:mm')}, desk id: ${val.seatId}`;
+      const txtContent = `from  ${r.mmtS.format('HH:mm')} to ${fTime === '00:00' ? '24:00' : fTime}, desk id: ${val.seatId} (${val.seatName})`;
+      const titleContent = `from ${r.mmtS.format('DD.MM.yyyy HH:mm')} to ${r.mmtE.add(-1, 'ss').format('DD.MM.yyyy HH:mm')}, desk id: ${val.seatId} (${val.seatName})`;
       return (
         <div key={fTDayMonthKey} className="div_bar" style={style} title={titleContent}  >
           {(widthBar > 250) ? txtContent : ''}
@@ -250,11 +237,9 @@ export default function MyBooking(props) {
     )
   })
 
-  function delRow(evt, isDisabled, item) {
+  const delRow = (evt, isDisabled, item) => {
     evt.stopPropagation();
-    if (isDisabled)
-      return
-
+    if (isDisabled) return;
     setIdToDel(item.dayBook.at(-1).id);
   }
 
@@ -267,121 +252,69 @@ export default function MyBooking(props) {
     utils.delReservationDb(idToDel, callback);
   }
 
-  function refresh() {
+  const refresh = () => {
     loadData();
     setShowAlert(utils.MSG.del);
     setTimeout(() => { setShowAlert(null); }, 2500);
   }
 
-    return (
-
+  return (
     <Container maxWidth="md">
-
       <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
-
         <DialogTitle>Success</DialogTitle>
-
         <DialogContent>
-
           <DialogContentText>{showAlert}</DialogContentText>
-
         </DialogContent>
-
         <DialogActions>
-
           <Button onClick={() => setShowAlert(null)} color="primary">Close</Button>
-
         </DialogActions>
-
       </Dialog>
-
 
       <Dialog open={!!idToDel} onClose={handleClose}>
-
         <DialogTitle>Delete Reservation</DialogTitle>
-
         <DialogContent>
-
           <DialogContentText>
-
             Are you sure you want to delete this reservation?
-
           </DialogContentText>
-
         </DialogContent>
-
         <DialogActions>
-
           <Button onClick={handleClose} color="primary">
-
             Cancel
-
           </Button>
-
           <Button onClick={handleDel} color="primary">
-
             Delete
-
           </Button>
-
         </DialogActions>
-
       </Dialog>
 
-
       <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
-
       <TableContainer component={Paper}>
-
         <Table>
-
           <TableHead>
-
             <TableRow>
-
               <TableCell>Username</TableCell>
-
               <TableCell>Start Time</TableCell>
-
               <TableCell>End Time</TableCell>
-
               <TableCell>Seat Name</TableCell>
-
             </TableRow>
-
           </TableHead>
-
           <TableBody>
-
             {todayBookings.map((booking, index) => (
-
               <TableRow key={index}>
-
                 <TableCell>{booking.username}</TableCell>
-
                 <TableCell>{moment(booking.startDate).format('HH:mm')}</TableCell>
-
                 <TableCell>{moment(booking.endDate).format('HH:mm')}</TableCell>
-
                 <TableCell>{booking.seatName}</TableCell>
-
               </TableRow>
-
             ))}
-
           </TableBody>
-
         </Table>
-
       </TableContainer>
 
-
       <Typography variant="h4" gutterBottom>My Bookings</Typography>
-
       {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
-
     </Container>
-
-  )
-
+  );
 }
+
+export default MyBooking;
