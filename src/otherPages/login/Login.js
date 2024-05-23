@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import axios from '../../api/axios';
+import '../styles.css'; // Ensure this imports your stylesheet
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const LOGIN_URL = SERVER_URL + 'api/login';
@@ -146,49 +147,52 @@ const Login = () => {
   };
 
   return (
-     <div className="art-nouveau-left"></div>
+    <>
+      <div className="art-nouveau-left"></div>
       <div className="art-nouveau-right"></div>
-    <ElementStyle>
-      <section>
-        {errMsg && (
-          <Alert key="danger" variant="danger" ref={errRef} className={errMsg ? 'alert' : 'offscreen'}>
-            {errMsg}
-          </Alert>
-        )}
-        <h1>Sign In</h1>
-        <form onSubmit={handleSubmit} className="form-group">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
-            required
-            className="form-control"
-          />
+      <ElementStyle>
+        <section>
+          {errMsg && (
+            <Alert key="danger" variant="danger" ref={errRef} className={errMsg ? 'alert' : 'offscreen'}>
+              {errMsg}
+            </Alert>
+          )}
+          <h1>Sign In</h1>
+          <form onSubmit={handleSubmit} className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setUser(e.target.value)}
+              value={user}
+              required
+              className="form-control"
+            />
 
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
-            className="form-control"
-          />
-          <Button type="submit" className="btn">Sign In</Button>
-        </form>
-        <p>
-          Need an Account?
-          <br />
-          <span className="line">
-            <a href="/register">Sign Up</a>
-          </span>
-        </p>
-      </section>
-    </ElementStyle>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              onChange={(e) => setPwd(e.target.value)}
+              value={pwd}
+              className="form-control"
+            />
+            <Button type="submit" className="btn">Sign In</Button>
+          </form>
+          <p>
+            Need an Account?
+            <br />
+            <span className="line">
+              <a href="/register">Sign Up</a>
+            </span>
+          </p>
+        </section>
+      </ElementStyle>
+    </>
   );
 };
 
 export default Login;
+
