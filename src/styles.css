@@ -3,15 +3,25 @@ body {
   position: relative;
 }
 
-.art-nouveau-background {
+.art-nouveau-left {
   position: fixed;
   bottom: 0;
   left: 0;
+  width: 500px; /* Adjust width as necessary */
+  height: 1200px; /* Adjust height as necessary */
+  background: url('../public/art-noveauleft.png') no-repeat;
+  background-size: contain;
+  pointer-events: none; /* Ensures the image does not interfere with user interaction */
+}
+
+.art-nouveau-right {
+  position: fixed;
+  bottom: 0;
   right: 0;
-  height: 1000px; /* Adjust height as necessary */
-  background: url('../public/art_noveau.png') no-repeat;
-  background-position: left bottom, right bottom;
-  background-size: auto 100%; /* Ensures the image scales proportionally */
+  width: 500px; /* Adjust width as necessary */
+  height: 1200px; /* Adjust height as necessary */
+  background: url('../public/art-noveauright.png') no-repeat;
+  background-size: contain;
   pointer-events: none; /* Ensures the image does not interfere with user interaction */
 }
 
