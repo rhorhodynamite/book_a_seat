@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const ElementStyle = styled.div`
   {
     position: relative;
-    background: #E7EAD4; /* Updated background color */
+   
   }
 
   .h2, h2 {
