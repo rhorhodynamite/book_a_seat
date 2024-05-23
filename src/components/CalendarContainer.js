@@ -57,8 +57,8 @@ const CalendarContainer = (props) => {
   const wrappeClassName = `wrapper-date-edit ${!props.isCalendarActive ? 'disabled-all' : ''}`;
   const [dateInterval, setDateInterval] = useState([selSeat.startDate, selSeat.endDate]);
   const [timeInterval, setTimeInterval] = useState([
-    utils.timeToDecimal(moment(selSeat.startDate).format('HH:mm')),
-    utils.timeToDecimal(moment(selSeat.endDate).format('HH:mm'))
+    Math.max(utils.timeToDecimal(moment(selSeat.startDate).format('HH:mm')), 8),
+    Math.min(utils.timeToDecimal(moment(selSeat.endDate).format('HH:mm')), 20)
   ]);
   const [showAlert2, setShowAlert2] = useState(false);
   const [msgAlert2, setMsgAlert2] = useState({});
@@ -89,14 +89,14 @@ const CalendarContainer = (props) => {
   };
 
   const save = () => {
-    const dt0 = utils.mergeDateAndtime(dateInterval[0], timeInterval[0]);
-    const dt1 = utils.mergeDateAndtime(dateInterval[1], timeInterval[1]);
+    const dt0 = moment.utc(utils.mergeDateAndtime(dateInterval[0], timeInterval[0])).toISOString();
+    const dt1 = moment.utc(utils.mergeDateAndtime(dateInterval[1], timeInterval[1])).toISOString();
     if (check(selSeat.id ? 'edit' : 'add', [dt0, dt1])) {
       const params = {
         id: selSeat.id,
         seatId: selSeat.seatId,
         user: props.user,
-        interval: [dt0.toISOString(), dt1.toISOString()]
+        interval: [dt0, dt1]
       };
 
       const callback = (resp) => {
@@ -148,6 +148,5 @@ const CalendarContainer = (props) => {
 };
 
 export default CalendarContainer;
-
 
 
