@@ -1,3 +1,10 @@
+import React, { useContext, useState } from 'react';
+import Diagram from './Diagram';
+import NavBar from './NavBar';
+import ReservationList from './ReservationList';
+import AuthContext from '../context/AuthProvider';
+import styled from 'styled-components';
+
 const ElementStyle = styled.div`
   {
     position: relative;
@@ -21,4 +28,22 @@ const ElementStyle = styled.div`
     }
   }
 `;
+
+export default function Dashboard() {
+  const { token } = useContext(AuthContext);
+  const [selSeat, setSelSeat] = useState(null);
+
+  function setSelSeatHandler(id){
+    setSelSeat(id); 
+  }
+
+  return (
+    <ElementStyle>
+      <NavBar />
+      {/* Add any other components or content here */}
+      <Diagram />
+      <ReservationList />
+    </ElementStyle>
+  );
+}
 
