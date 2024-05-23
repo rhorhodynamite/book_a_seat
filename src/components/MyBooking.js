@@ -19,12 +19,15 @@ const CONTENT_WIDTH = 650;
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginTop: theme.spacing(3),
+  backgroundColor: '#E7EAD4', // Updated background color
 }));
+
 
 const StyledBox = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(2),
   marginBottom: theme.spacing(3),
+  backgroundColor: '#E7EAD4', // Updated background color
   '& .today-pointer': {
     position: 'absolute',
     top: 0,
