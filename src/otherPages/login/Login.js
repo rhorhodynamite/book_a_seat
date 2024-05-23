@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import axios from '../../api/axios';
-import '../styles.css'; // Ensure this imports your stylesheet
+import '../../styles.css'; // Ensure this imports your stylesheet
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const LOGIN_URL = SERVER_URL + 'api/login';
