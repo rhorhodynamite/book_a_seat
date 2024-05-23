@@ -8,7 +8,7 @@ body {
   bottom: 0;
   left: 0;
   width: 110%; /* Adjust width as necessary */
-  height: 110%%; /* Adjust height as necessary */
+  height: 110%; /* Adjust height as necessary */
   background: url('../public/art-noveauleft.png') no-repeat;
   background-size: contain;
   background-position: bottom left;
