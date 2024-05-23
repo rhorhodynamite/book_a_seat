@@ -3,7 +3,7 @@ import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Dialog, DialogActions,
   DialogContent, DialogContentText, DialogTitle, Button,
-  Typography, Box, Container, Alert
+  Typography, Box, Container
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import moment from 'moment';
@@ -14,6 +14,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
+const CONTENT_WIDTH = 650;
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginTop: theme.spacing(3),
@@ -35,6 +36,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
     transformOrigin: 'left bottom',
   },
 }));
+
+const currentDate = moment().startOf('day').toDate();
 
 const MyBooking = (props) => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -313,4 +316,3 @@ const MyBooking = (props) => {
 }
 
 export default MyBooking;
-
