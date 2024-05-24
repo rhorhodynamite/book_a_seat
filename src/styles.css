@@ -40,7 +40,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 200%; /* Adjust width as necessary */
-  height: 110%; /* Adjust height as necessary */
+  height: 150%; /* Adjust height as necessary */
   background: url('../public/art_noveau.png') no-repeat;
   background-size: contain;
   background-position: center;
