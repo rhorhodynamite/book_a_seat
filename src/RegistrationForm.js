@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Alert } from '@mui/material';
-import 'styles.css'; // Import the CSS file
+import './styles.css'; // Import the CSS file
 
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
