@@ -52,7 +52,7 @@ const RegistrationForm = () => {
                     borderRadius: 2,
                     boxShadow: 3,
                     zIndex: 1, // Ensure the form is above the background image
-                    marginLeft: 4, // Add some margin to the left to move it to the right
+                    marginLeft: 15, // Add some margin to the left to move it to the right
                 }}
             >
                 <Typography component="h2" variant="h5">
