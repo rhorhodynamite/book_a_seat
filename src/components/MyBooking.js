@@ -11,7 +11,6 @@ import axios from '../api/axios';
 import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import '../styles.css'; // Ensure this imports your stylesheet
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
@@ -19,15 +18,12 @@ const CONTENT_WIDTH = 650;
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginTop: theme.spacing(3),
-  backgroundColor: '#E7EAD4', // Updated background color
 }));
-
 
 const StyledBox = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(2),
   marginBottom: theme.spacing(3),
-  backgroundColor: '#E7EAD4', // Updated background color
   '& .today-pointer': {
     position: 'absolute',
     top: 0,
@@ -141,8 +137,8 @@ const MyBooking = (props) => {
       const weekday = currDate.format('ddd');
       const month = parseInt(currDate.format('M'));
       const year = parseInt(currDate.format('YYYY'));
-      startHour = startHour === null ? item.startHour : 8;
-      const endHour = currDate.isSame(lastDate) ? item.endHour : 18;
+      startHour = startHour === null ? item.startHour : 0;
+      const endHour = currDate.isSame(lastDate) ? item.endHour : 24;
 
       let monthYearItem = finalMap.find(item2 => item2.year === year && item2.month === month);
       if (!monthYearItem) {
@@ -260,65 +256,61 @@ const MyBooking = (props) => {
   }
 
   return (
-    <div>
-      <div className="art-nouveau-left"></div>
-      <div className="art-nouveau-right"></div>
-      <Container className="my-bookings-container" maxWidth="md">
-        <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
-          <DialogTitle>Success</DialogTitle>
-          <DialogContent>
-            <DialogContentText>{showAlert}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setShowAlert(null)} color="primary">Close</Button>
-          </DialogActions>
-        </Dialog>
+    <Container maxWidth="md">
+      <Dialog open={!!showAlert} onClose={() => setShowAlert(null)}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{showAlert}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowAlert(null)} color="primary">Close</Button>
+        </DialogActions>
+      </Dialog>
 
-        <Dialog open={!!idToDel} onClose={handleClose}>
-          <DialogTitle>Delete Reservation</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure you want to delete this reservation?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleDel} color="primary">
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+      <Dialog open={!!idToDel} onClose={handleClose}>
+        <DialogTitle>Delete Reservation</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this reservation?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDel} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
-        <StyledTableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Username</TableCell>
-                <TableCell>Start Time</TableCell>
-                <TableCell>End Time</TableCell>
-                <TableCell>Seat Name</TableCell>
+      <Typography variant="h4" gutterBottom>Today's Bookings</Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Username</TableCell>
+              <TableCell>Start Time</TableCell>
+              <TableCell>End Time</TableCell>
+              <TableCell>Seat Name</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {todayBookings.map((booking, index) => (
+              <TableRow key={index}>
+                <TableCell>{booking.username}</TableCell>
+                <TableCell>{moment(booking.startDate).format('HH:mm')}</TableCell>
+                <TableCell>{moment(booking.endDate).format('HH:mm')}</TableCell>
+                <TableCell>{booking.seatName}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {todayBookings.map((booking, index) => (
-                <TableRow key={index}>
-                  <TableCell>{booking.username}</TableCell>
-                  <TableCell>{moment(booking.startDate).format('HH:mm')}</TableCell>
-                  <TableCell>{moment(booking.endDate).format('HH:mm')}</TableCell>
-                  <TableCell>{booking.seatName}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-        <Typography variant="h4" gutterBottom>My Bookings</Typography>
-        {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
-      </Container>
-    </div>
+      <Typography variant="h4" gutterBottom>My Bookings</Typography>
+      {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
+    </Container>
   );
 }
 
