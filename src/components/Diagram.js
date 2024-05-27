@@ -62,7 +62,7 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData, bookedSeatsForToday }) {
   const { token } = useContext(AuthContext);
   const [internalData, setInternalData] = useState(null);
   const effectiveData = data || internalData;
@@ -115,7 +115,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     token.role, 
     setSelSeat, 
     tableWidthRef.current, 
-    tableHeightRef.current
+    tableHeightRef.current,
     bookedSeatsForToday 
   );
 }
