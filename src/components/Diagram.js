@@ -113,7 +113,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 }));
 
 
-  function renderData(svg, dataToRender) {
+  function renderData(svg, dataToRender, bookings) {
     const bookings = []; // Get bookings data here
     chairsMng.current = new SeatsAndTablesClass(
       svg,
