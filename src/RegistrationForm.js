@@ -48,7 +48,7 @@ const RegistrationForm = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        padding: { xs: 2, sm: 3, md: 4 }, // Responsive padding
+                        padding: { xs: 3, sm: 3, md: 4 }, // Responsive padding
                         backgroundColor: 'white',
                         borderRadius: 2,
                         boxShadow: 3,
