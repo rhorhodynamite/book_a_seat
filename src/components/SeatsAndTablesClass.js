@@ -4,7 +4,7 @@ const MIN_RECT_WIDTH = 15;
 const MIN_RECT_HEIGHT = 8;
 
 const SeatsAndTablesClass = class {
-  constructor(svg, data, role, setSelSeat, bookings, tableWidth = null, tableHeight = null) {
+  constructor(svg, data, role, setSelSeat, bookings = [], tableWidth = null, tableHeight = null) {
     this.svg = svg;
     this.role = role;
     this.seatData = data.seats;
@@ -15,10 +15,10 @@ const SeatsAndTablesClass = class {
     this.tableWidth = tableWidth;
     this.tableHeight = tableHeight;
 
+    console.log("Bookings in constructor:", this.bookings); // Debug log
+
     this.initSeatsSvg();
     this.initTableSvg();
-
-    console.log("Bookings in constructor:", this.bookings); // Debug log
   }
 
   initSeatsSvg() {
@@ -38,12 +38,22 @@ const SeatsAndTablesClass = class {
       .attr("cy", function (d) { return d.y || 0; }) // Ensure y has a default value of 0
       .attr("r", 10)
       .classed("booked", function (d) {
-        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        const isBooked = self.bookings.some(booking => {
+          const isSameDate = booking.date === today;
+          const isSameSeatId = booking.seatId === d.id;
+          console.log(`Comparing Seat ID: ${d.id} with Booking Seat ID: ${booking.seatId}, isSameSeatId: ${isSameSeatId}, isSameDate: ${isSameDate}`);
+          return isSameSeatId && isSameDate;
+        });
         console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
         return isBooked;
       })
       .attr("fill", function (d) {
-        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        const isBooked = self.bookings.some(booking => {
+          const isSameDate = booking.date === today;
+          const isSameSeatId = booking.seatId === d.id;
+          console.log(`Comparing Seat ID: ${d.id} with Booking Seat ID: ${booking.seatId}, isSameSeatId: ${isSameSeatId}, isSameDate: ${isSameDate}`);
+          return isSameSeatId && isSameDate;
+        });
         console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'red' : 'none'}`); // Debug log
         return isBooked ? 'red' : 'none';
       });
@@ -57,8 +67,6 @@ const SeatsAndTablesClass = class {
     c.on("mouseenter mouseleave", this.rectHover)
      .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
   }
-
-
 
   draggingSeat(event, d) {
     d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
@@ -160,5 +168,3 @@ const SeatsAndTablesClass = class {
 }
 
 export default SeatsAndTablesClass;
-
-
