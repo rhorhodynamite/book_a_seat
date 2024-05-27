@@ -11,7 +11,7 @@ import axios from '../api/axios';
 import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import SeatsAndTablesClass from './SeatsAndTablesClass';  // Ensure this path is correct
+import Diagram from './Diagram';  // Ensure this path is correct
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
@@ -311,9 +311,12 @@ const MyBooking = (props) => {
 
       <Typography variant="h4" gutterBottom>My Bookings</Typography>
       {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
+
+      <div className="wrapper-svg">
+        <svg ref={svgRef} id="svg_draw" width="800" height="600" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
     </Container>
   );
 }
 
 export default MyBooking;
-
