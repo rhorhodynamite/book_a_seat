@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Dialog, DialogActions,
@@ -11,6 +11,7 @@ import axios from '../api/axios';
 import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import SeatsAndTablesClass from './SeatsAndTablesClass';  // Ensure this path is correct
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
@@ -54,7 +55,7 @@ const MyBooking = (props) => {
       6: 'Research Office', 7: 'Research Office', 8: 'Research Office', 9: 'Research Office', 10: 'Research Office',
       11: 'Research Office', 12: 'Research Office', 13: 'Camp 1', 25: 'Camp 2', 23: 'Camp 2', 27: 'Camp 2',
       24: 'Camp 3', 28: 'Camp 3', 15: 'Camp 3', 20: 'Camp 4', 21: 'Camp 4', 22: 'Camp 4', 26: 'Camp 4',
-      29: 'Nische Treppe', 30: 'KÃ¼che Rechts', 31: 'KÃ¼che Links'
+      29: 'Nische Treppe', 30: 'Küche Rechts', 31: 'Küche Links'
     };
     return seatNames[seatId] || 'Unknown Seat';
   };
