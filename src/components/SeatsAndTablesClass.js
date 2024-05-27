@@ -1,17 +1,15 @@
 import * as d3 from 'd3';
-import moment from 'moment';
-
 
 const MIN_RECT_WIDTH = 15;
 const MIN_RECT_HEIGHT = 8;
 
 const SeatsAndTablesClass = class {
-  constructor(svg, data, role, setSelSeat, bookings, tableWidth = null, tableHeight = null) {
+  constructor(svg, data, role, setSelSeat, tableWidth = null, tableHeight = null) {
     this.svg = svg;
     this.role = role;
     this.seatData = data.seats;
     this.tableData = data.tables;
-    this.bookings = bookings; // Add this line
+
     this.selChair = null;
     this.setSelSeat = setSelSeat;
     this.tableWidth = tableWidth;
@@ -27,8 +25,6 @@ const SeatsAndTablesClass = class {
 
   initSeatsSvg(){
     const self = this;
-    let today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
-
     let c = this.svg
       .selectAll("circle.chair")
       .data(this.seatData, function(d) { return d.id; })
@@ -38,10 +34,7 @@ const SeatsAndTablesClass = class {
       .attr("name", function(d){return d.name})
       .attr("cx", function(d){ return d.x; })
       .attr("cy", function(d){ return d.y || 0; }) // Ensure y has a default value of 0
-      .attr("r", 10)
-      .classed("booked", function(d) {
-        return self.bookings.some(booking => booking.seatId === d.id && moment(booking.startDate).isSame(today, 'day'));
-      });
+      .attr("r", 10);
 
     if(this.role === 'admin'){
       c.call(d3.drag()
@@ -163,5 +156,7 @@ const SeatsAndTablesClass = class {
 }
 
 export default SeatsAndTablesClass;
+
+
 
 
