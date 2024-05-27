@@ -39,7 +39,7 @@ const RegistrationForm = () => {
 
     return (
         <Grid container className="centered-container">
-            <div className="art-nouveau-center"></div>
+            <div className="art-nouveau-center2"></div>
             <Grid item xs={12} sm={8} md={6} lg={4}>
                 <Box
                     component="form"
