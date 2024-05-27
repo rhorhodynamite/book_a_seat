@@ -17,6 +17,8 @@ const SeatsAndTablesClass = class {
 
     this.initSeatsSvg();
     this.initTableSvg();
+
+    console.log("Bookings in constructor:", this.bookings); // Debug log
   }
 
   initSeatsSvg() {
