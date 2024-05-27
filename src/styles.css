@@ -55,7 +55,7 @@ body {
   transform: translate(-50%, -50%);
   width: 120%; /* Adjust width as necessary */
   height: 120%; /* Adjust height as necessary */
-  background: url('../public/art_noveau3.png') no-repeat;
+  background: url('../public/art-noveau3.png') no-repeat;
   background-size: contain;
   background-position: center;
   pointer-events: none; /* Ensures the image does not interfere with user interaction */
