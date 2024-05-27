@@ -47,6 +47,20 @@ body {
   pointer-events: none; /* Ensures the image does not interfere with user interaction */
   z-index: -1; /* Ensure this is below the navbar */
 }
+
+.art-nouveau-center2 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%; /* Adjust width as necessary */
+  height: 120%; /* Adjust height as necessary */
+  background: url('../public/art_noveau3.png') no-repeat;
+  background-size: contain;
+  background-position: center;
+  pointer-events: none; /* Ensures the image does not interfere with user interaction */
+  z-index: -1; /* Ensure this is below the navbar */
+}
 .centered-container {
   display: flex;
   justify-content: center;
