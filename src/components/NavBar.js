@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -12,12 +12,11 @@ import Tabs from 'react-bootstrap/Tabs';
 import Diagram from './Diagram';
 import ReservationList from './ReservationList';
 import MyBooking from './MyBooking';
-import RoomList from './RoomList'; // Assuming RoomList is a separate component
-import SVGPlan from './SvgPlan'; // Ensure SVGPlan is imported if used
-import SVGPlanUpstairs from './SvgPlanUpstairs';
-import SVGPlanSeminar from './SvgPlanSeminar'; // Import the new SVG component
+import axios from '../api/axios';
+import moment from 'moment';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const GET_URL = SERVER_URL + 'api/my_reservations';
 
 const ElementStyle = styled.div`
   > div {
@@ -48,11 +47,46 @@ function NavBar() {
   const [selSeat, setSelSeat] = useState(null);
   const [keyUpstairsDiagram, setKeyUpstairsDiagram] = useState(1);
   const [keySeminarDiagram, setKeySeminarDiagram] = useState(1);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [todayBookings, setTodayBookings] = useState([]);
 
-  function setRoomSelectionHandler(room) {
-    setSelectedRoom(room);
-  }
+  const loadData = async () => {
+    try {
+      const response = await axios.get(GET_URL, { withCredentials: true });
+      const rslt = response.data?.rslt.map((val) => {
+        if (typeof val.startdate === 'string') val.startDate = new Date(val.startdate);
+        if (typeof val.enddate === 'string') val.endDate = new Date(val.enddate);
+        val.mmtS = moment(val.startDate);
+        val.startHour = parseFloat(val.mmtS.format('HH')) + parseFloat(val.mmtS.format('mm') / 60);
+        val.startDay = parseInt(val.mmtS.format('D'));
+        val.startMonth = parseInt(val.mmtS.format('M'));
+        val.startYear = parseInt(val.mmtS.format('YYYY'));
+        val.weekday = val.mmtS.format('ddd');
+        val.mmtE = moment(val.endDate);
+        val.endHour = parseFloat(val.mmtE.format('HH')) + parseFloat(val.mmtE.format('mm') / 60);
+        val.endDay = parseInt(val.mmtE.format('D'));
+        val.endMonth = parseInt(val.mmtE.format('M'));
+        val.endYear = parseInt(val.mmtE.format('YYYY'));
+        val.seatName = getSeatName(val.seatid);
+        return val;
+      });
+
+      const today = moment().startOf('day');
+      const todayBookings = rslt.filter(val =>
+        moment(val.startDate).isSame(today, 'day') ||
+        moment(val.endDate).isSame(today, 'day') ||
+        (moment(val.startDate).isBefore(today, 'day') && moment(val.endDate).isAfter(today, 'day'))
+      );
+      setTodayBookings(todayBookings);
+      console.log("Today Bookings:", todayBookings); // Debug log
+
+    } catch (err) {
+      console.log("ERROR loadData", err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   function onSelectChange(tabElName) {
     if (tabElName === 'reservation') {
@@ -93,7 +127,7 @@ function NavBar() {
         {token.role === 'user' && (
           <Tab eventKey="booking" title="Bookings">
             <div className='wrapper-dashboard'>  
-              <MyBooking username={token.user} key={keyBooking} />
+              <MyBooking username={token.user} key={keyBooking} todayBookings={todayBookings} />
             </div>
           </Tab>
         )}
@@ -106,6 +140,10 @@ function NavBar() {
                     apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
                     setSelSeat={setSelSeatHandler} 
                     svgType="main" // Prop to control SVG display
+                    bookings={todayBookings.map(booking => ({
+                      seatId: booking.seatid,
+                      date: moment(booking.startDate).format('YYYY-MM-DD')
+                    }))}
                 />
                 <ReservationList selSeat={selSeat}/>
               </div>
@@ -121,6 +159,10 @@ function NavBar() {
                     apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
                     setSelSeat={setSelSeatHandler} 
                     svgType="upstairs" // Prop to control SVG display
+                    bookings={todayBookings.map(booking => ({
+                      seatId: booking.seatid,
+                      date: moment(booking.startDate).format('YYYY-MM-DD')
+                    }))}
                 />
                 <ReservationList selSeat={selSeat}/>
               </div>
@@ -136,6 +178,10 @@ function NavBar() {
                     apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
                     setSelSeat={setSelSeatHandler} 
                     svgType="seminar" // Prop to control SVG display
+                    bookings={todayBookings.map(booking => ({
+                      seatId: booking.seatid,
+                      date: moment(booking.startDate).format('YYYY-MM-DD')
+                    }))}
                 />
                 <ReservationList selSeat={selSeat}/>
               </div>
@@ -148,4 +194,5 @@ function NavBar() {
 }
 
 export default NavBar;
+
 
