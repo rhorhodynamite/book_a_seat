@@ -19,7 +19,20 @@ const CONTENT_WIDTH = 650;
 
 const ElementStyle = styled.div`
   // your styles here
+
 `;
+
+const getBookedSeatsForToday = () => {
+  const today = moment().startOf('day');
+  return reservationData.filter(reservation => {
+    const startDate = moment(reservation.startDate);
+    const endDate = moment(reservation.endDate);
+    return today.isBetween(startDate, endDate, null, '[]');
+  }).map(reservation => reservation.seatId);
+};
+
+// Pass this data to the Diagram component
+const bookedSeatsForToday = getBookedSeatsForToday();
 
 const currentDate = moment(new Date()).startOf('day').toDate();
 
