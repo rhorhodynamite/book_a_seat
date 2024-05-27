@@ -93,6 +93,14 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }, [chairsMng]);
 
+  useEffect(() => {
+  if (effectiveData) {
+    const svg = d3.select(ref.current);
+    renderData(svg, effectiveData, bookings);
+  }
+}, [effectiveData, bookings]);
+
+
   async function loadData(svg) {
     if (!data) {  // Only fetch if external data isn't provided
       try {
