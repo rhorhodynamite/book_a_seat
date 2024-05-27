@@ -12,6 +12,7 @@ import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Diagram from './Diagram';  // Ensure this path is correct
+const svgRef = useRef(null);  // Define the svgRef
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
