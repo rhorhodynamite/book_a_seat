@@ -1,9 +1,9 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
 import { useD3 } from '../use/useD3';
 import SvgPlan from './SvgPlan';
 import SeatsAndTablesClass from './SeatsAndTablesClass';
 import Popup from './Popup';
 import axios from '../api/axios';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
@@ -14,8 +14,8 @@ import styled from 'styled-components';
 import SVGPlan from './SvgPlan';
 import SVGPlanUpstairs from './SvgPlanUpstairs';
 import SVGPlanSeminar from './SvgPlanSeminar';
-
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 const SVG_WIDTH = "300mm";
 const SVG_HEIGHT = "125mm";
 
@@ -62,15 +62,15 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData, bookedSeatsForToday }) {
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
   const { token } = useContext(AuthContext);
   const [internalData, setInternalData] = useState(null);
   const effectiveData = data || internalData;
   const [showAlert, setShowAlert] = useState(null);
   const chairsMng = useRef(null);
   const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
-  const tableWidthRef = useRef(null);
-  const tableHeightRef = useRef(null);
+  const tableWidthRef = useRef(null);  // Define ref
+  const tableHeightRef = useRef(null);  // Define ref
   const SvgComponent = svgType === "upstairs" 
     ? SVGPlanUpstairs 
     : svgType === "seminar" 
@@ -87,13 +87,13 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 
   useEffect(() => {
     if (chairsMng.current) {
-      chairsMng.current.tableWidth = tableWidthRef.current;
-      chairsMng.current.tableHeight = tableHeightRef.current;
+      chairsMng.current.tableWidth = tableWidthRef.current;  // Assign ref
+      chairsMng.current.tableHeight = tableHeightRef.current;  // Assign ref
     }
   }, [chairsMng]);
 
   async function loadData(svg) {
-    if (!data) {
+    if (!data) {  // Only fetch if external data isn't provided
       try {
         const response = await axios.get(apiUrl, {
           params: { svgType },
@@ -107,22 +107,18 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }
 
-function renderData(svg, dataToRender) {
-  const bookings = todayBookings.map(booking => ({
-    seatId: booking.seatid,
-    date: moment(booking.startDate).format('YYYY-MM-DD')
-  }));
-  
-  chairsMng.current = new SeatsAndTablesClass(
-    svg, 
-    dataToRender, 
-    token.role, 
-    setSelSeat, 
-    bookings, // Pass bookings data here
-    tableWidthRef.current, 
-    tableHeightRef.current
-  );
-}
+  function renderData(svg, dataToRender) {
+    const bookings = []; // Get bookings data here
+    chairsMng.current = new SeatsAndTablesClass(
+      svg,
+      dataToRender,
+      token.role,
+      setSelSeat,
+      bookings, // Pass bookings data here
+      tableWidthRef.current,
+      tableHeightRef.current
+    );
+  }
 
   async function save() {
     try {
@@ -147,7 +143,7 @@ function renderData(svg, dataToRender) {
           <Button className='save' onClick={() => chairsMng.current.addTable()}>Add a table <FontAwesomeIcon icon={faSave} /></Button>
           <div className="form-group">
             <Form.Label htmlFor="table-width">width:</Form.Label>
-            <Form.Control type="input" id="table-width" ref={tableWidthRef}/>  {/* Use ref */}
+            <Form.Control type="input" id="table-width" ref={tableWidthRef}/>  // Use ref
           </div>
           <div className="form-group">
             <Form.Label htmlFor="table-height">height:</Form.Label>
@@ -176,3 +172,4 @@ function renderData(svg, dataToRender) {
 }
 
 export default Diagram;
+
