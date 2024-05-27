@@ -25,6 +25,8 @@ const SeatsAndTablesClass = class {
     const self = this;
     const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
 
+    console.log("Today's date:", today); // Debug log
+
     let c = this.svg
       .selectAll("circle.chair")
       .data(this.seatData, function (d) { return d.id; })
@@ -36,10 +38,14 @@ const SeatsAndTablesClass = class {
       .attr("cy", function (d) { return d.y || 0; }) // Ensure y has a default value of 0
       .attr("r", 10)
       .classed("booked", function (d) {
-        return self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
+        return isBooked;
       })
       .attr("fill", function (d) {
-        return self.bookings.some(booking => booking.seatId === d.id && booking.date === today) ? 'red' : 'none';
+        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'red' : 'none'}`); // Debug log
+        return isBooked ? 'red' : 'none';
       });
 
     if (this.role === 'admin') {
@@ -51,6 +57,8 @@ const SeatsAndTablesClass = class {
     c.on("mouseenter mouseleave", this.rectHover)
      .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
   }
+
+
 
   draggingSeat(event, d) {
     d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
