@@ -107,17 +107,22 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }
 
-  function renderData(svg, dataToRender) {
-    chairsMng.current = new SeatsAndTablesClass(
-      svg, 
-      dataToRender, 
-      token.role, 
-      setSelSeat, 
-      tableWidthRef.current, 
-      tableHeightRef.current,
-      bookedSeatsForToday // Pass the bookedSeatsForToday prop
-    );
-  }
+function renderData(svg, dataToRender) {
+  const bookings = todayBookings.map(booking => ({
+    seatId: booking.seatid,
+    date: moment(booking.startDate).format('YYYY-MM-DD')
+  }));
+  
+  chairsMng.current = new SeatsAndTablesClass(
+    svg, 
+    dataToRender, 
+    token.role, 
+    setSelSeat, 
+    bookings, // Pass bookings data here
+    tableWidthRef.current, 
+    tableHeightRef.current
+  );
+}
 
   async function save() {
     try {
