@@ -4,21 +4,21 @@ const MIN_RECT_WIDTH = 15;
 const MIN_RECT_HEIGHT = 8;
 
 const SeatsAndTablesClass = class {
-  constructor(svg, data, role, setSelSeat, tableWidth = null, tableHeight = null) {
+  constructor(svg, data, role, setSelSeat, tableWidth = null, tableHeight = null, bookedSeatsForToday = []) {
     this.svg = svg;
     this.role = role;
     this.seatData = data.seats;
     this.tableData = data.tables;
+    this.bookedSeatsForToday = bookedSeatsForToday; // Store booked seats data
 
     this.selChair = null;
     this.setSelSeat = setSelSeat;
     this.tableWidth = tableWidth;
     this.tableHeight = tableHeight;
 
-    // finds max id
     this.maxSeatId = this.seatData.length === 0 ? 0 : Math.max(...this.seatData.map(o => o.id));
     this.maxTableId = this.tableData.length === 0 ? 0 : Math.max(...this.tableData.map(o => o.id));
-    
+
     this.initSeatsSvg();
     this.initTableSvg();
   }
@@ -34,7 +34,10 @@ const SeatsAndTablesClass = class {
       .attr("name", function(d){return d.name})
       .attr("cx", function(d){ return d.x; })
       .attr("cy", function(d){ return d.y || 0; }) // Ensure y has a default value of 0
-      .attr("r", 10);
+      .attr("r", 10)
+      .attr("fill", function(d) {
+        return self.bookedSeatsForToday.includes(d.id) ? 'red' : 'black';
+      }); // Fill with red if booked for today
 
     if(this.role === 'admin'){
       c.call(d3.drag()
