@@ -38,7 +38,7 @@ const SeatsAndTablesClass = class {
       .attr("cy", function(d){ return d.y || 0; }) // Ensure y has a default value of 0
       .attr("r", 10)
       .classed("booked", function(d) {
-        return self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        return self.bookings.some(booking => booking.seatId === d.id && moment(booking.startDate).isSame(today, 'day'));
       });
 
     if(this.role === 'admin'){
