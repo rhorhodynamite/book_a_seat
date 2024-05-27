@@ -149,8 +149,8 @@ const Login = () => {
 
   return (
     <>
-      <div className="art-nouveau-left"></div>
-      <div className="art-nouveau-right"></div>
+      <div className="art-nouveau-center2"></div>
+   
       <ElementStyle>
         <section>
           {errMsg && (
