@@ -315,4 +315,3 @@ const MyBooking = (props) => {
 }
 
 export default MyBooking;
-
