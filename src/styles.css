@@ -53,3 +53,7 @@ body {
   align-items: center;
   min-height: 100vh; /* Ensure it covers the full height */
 }
+
+.chair.booked {
+  fill: green; /* Or any color you prefer for booked seats */
+}
