@@ -83,7 +83,17 @@ function NavBar() {
       console.log("ERROR loadData", err);
     }
   };
-
+   const getSeatName = (seatId) => {
+    const seatNames = {
+      16: 'Telefonbox', 17: 'Meetingraum (OG)', 18: 'Meetingraum (OG) Schreibtisch 1', 19: 'Meetingraum (OG) Schreibtisch 2',
+      1: 'Research Office', 2: 'Research Office', 3: 'Research Office', 4: 'Research Office', 5: 'Research Office',
+      6: 'Research Office', 7: 'Research Office', 8: 'Research Office', 9: 'Research Office', 10: 'Research Office',
+      11: 'Research Office', 12: 'Research Office', 13: 'Camp 1', 25: 'Camp 2', 23: 'Camp 2', 27: 'Camp 2',
+      24: 'Camp 3', 28: 'Camp 3', 15: 'Camp 3', 20: 'Camp 4', 21: 'Camp 4', 22: 'Camp 4', 26: 'Camp 4',
+      29: 'Nische Treppe', 30: 'KÃÂ¼che Rechts', 31: 'KÃÂ¼che Links'
+    };
+    return seatNames[seatId] || 'Unknown Seat';
+  };
   useEffect(() => {
     loadData();
   }, []);
