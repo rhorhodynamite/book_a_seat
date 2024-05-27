@@ -38,7 +38,7 @@ function NavBar() {
   const { token, setToken } = useContext(AuthContext);
   const user = <span>{token.user}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser} transform="grow-5" /></span>;
 
-  const logout = function(){
+  const logout = function() {
     console.log('logout');
     setToken(null);
   };
@@ -55,13 +55,13 @@ function NavBar() {
   }
 
   function onSelectChange(tabElName) {
-    if(tabElName === 'reservation') {
+    if (tabElName === 'reservation') {
       setSelSeat(null);
       setKeyDiagram(keyDiagram + 1);
-    } else if(tabElName === 'upstairs') {
+    } else if (tabElName === 'upstairs') {
       setSelSeat(null);
       setKeyUpstairsDiagram(keyUpstairsDiagram + 1);
-    } else if(tabElName === 'seminar') {
+    } else if (tabElName === 'seminar') {
       setSelSeat(null);
       setKeySeminarDiagram(keySeminarDiagram + 1);
     } else {
@@ -70,7 +70,7 @@ function NavBar() {
   }
 
   function setSelSeatHandler(id) {
-    setSelSeat(id); 
+    setSelSeat(id);
   }
 
   return (
@@ -78,18 +78,15 @@ function NavBar() {
       <Navbar className='navbar navbar-light'>
         <Container fluid>
           <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
-          
           <Navbar.Collapse id="navbarScroll">
             <Nav>
               <NavDropdown title={user} id="navbarScrollingDropdown" align="end" menuVariant='#e3f2fd'>
-                <NavDropdown.Item href="#" onClick={()=>{logout();}}>Logout</NavDropdown.Item>
+                <NavDropdown.Item href="#" onClick={() => { logout(); }}>Logout</NavDropdown.Item>
               </NavDropdown>
-              
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      
       <Tabs onSelect={(tabElName) => onSelectChange(tabElName)}
             defaultActiveKey={token.role === 'user' ? "booking" : "reservation"}
             className="mb-3">
