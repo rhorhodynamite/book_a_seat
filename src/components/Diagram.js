@@ -63,7 +63,7 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData, bookings = [] }) {
   const { token } = useContext(AuthContext);
   const [internalData, setInternalData] = useState(null);
   const effectiveData = data || internalData;
@@ -82,9 +82,9 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     if (!effectiveData) {
       loadData(svg);
     } else {
-      renderData(svg, effectiveData);
+      renderData(svg, effectiveData, bookings); // Pass bookings here
     }
-  }, [effectiveData]);
+  }, [effectiveData, bookings]);
 
   useEffect(() => {
     if (chairsMng.current) {
@@ -119,7 +119,6 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
       tableHeightRef.current
     );
   }
-
 
   async function save() {
     try {
@@ -173,4 +172,3 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 }
 
 export default Diagram;
-
