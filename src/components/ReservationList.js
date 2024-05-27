@@ -38,6 +38,12 @@ function ReservationList(props) {
     if (props.selSeat) loadData(props.selSeat);
   }, [props.selSeat]);
 
+   useEffect(() => {
+    // Update booked seats for today whenever reservationData changes
+    const bookedSeats = getBookedSeatsForToday();
+    props.setBookedSeatsForToday(bookedSeats);
+  }, [reservationData]);
+
   function loadData(selSeat) {
     console.log('loadData reservation list', selSeat);
     const params = {
@@ -57,6 +63,15 @@ function ReservationList(props) {
       setReservation(rslt);
     };
     utils.getReservationDb(params, callback);
+  }
+
+    function getBookedSeatsForToday() {
+    const today = moment().startOf('day');
+    return reservationData.filter(reservation => {
+      const startDate = moment(reservation.startDate);
+      const endDate = moment(reservation.endDate);
+      return today.isBetween(startDate, endDate, null, '[]');
+    }).map(reservation => reservation.seatId);
   }
 
   function onClickRow(_id) {
