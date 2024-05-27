@@ -94,12 +94,14 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }, [chairsMng]);
 
+  // This useEffect ensures re-rendering when bookings or effectiveData change
   useEffect(() => {
-  if (effectiveData) {
-    const svg = d3.select(ref.current);
-    renderData(svg, effectiveData, bookings);
-  }
-}, [effectiveData, bookings]);
+    if (effectiveData && bookings.length > 0) {
+      const svg = d3.select(ref.current);
+      renderData(svg, effectiveData, bookings);
+    }
+  }, [effectiveData, bookings]);
+
 
 
   async function loadData(svg) {
