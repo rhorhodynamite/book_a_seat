@@ -15,7 +15,7 @@ const SeatsAndTablesClass = class {
     this.tableWidth = tableWidth;
     this.tableHeight = tableHeight;
 
-    console.log("Bookings in constructor:", this.bookings); // Debug log
+    console.log("Bookings in constructor:", this.bookings);
 
     this.initSeatsSvg();
     this.initTableSvg();
@@ -25,7 +25,7 @@ const SeatsAndTablesClass = class {
     const self = this;
     const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
 
-    console.log("Today's date:", today); // Debug log
+    console.log("Today's date:", today);
 
     let c = this.svg
       .selectAll("circle.chair")
@@ -36,26 +36,21 @@ const SeatsAndTablesClass = class {
       .attr("name", function (d) { return d.name; })
       .attr("cx", function (d) { return d.x; })
       .attr("cy", function (d) { return d.y || 0; }) // Ensure y has a default value of 0
-      .attr("r", 10)
-      .classed("booked", function (d) {
-        const isBooked = self.bookings.some(booking => {
-          const isSameDate = booking.date === today;
-          const isSameSeatId = booking.seatId === d.id;
-          console.log(`Comparing Seat ID: ${d.id} with Booking Seat ID: ${booking.seatId}, isSameSeatId: ${isSameSeatId}, isSameDate: ${isSameDate}`);
-          return isSameSeatId && isSameDate;
-        });
-        console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
-        return isBooked;
-      })
+      .attr("r", 10);
+
+    // Update fill and class for existing and new elements
+    this.svg
+      .selectAll("circle.chair")
+      .data(this.seatData)
       .attr("fill", function (d) {
-        const isBooked = self.bookings.some(booking => {
-          const isSameDate = booking.date === today;
-          const isSameSeatId = booking.seatId === d.id;
-          console.log(`Comparing Seat ID: ${d.id} with Booking Seat ID: ${booking.seatId}, isSameSeatId: ${isSameSeatId}, isSameDate: ${isSameDate}`);
-          return isSameSeatId && isSameDate;
-        });
+        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
         console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'red' : 'none'}`); // Debug log
         return isBooked ? 'red' : 'none';
+      })
+      .classed("booked", function (d) {
+        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+        console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
+        return isBooked;
       });
 
     if (this.role === 'admin') {
@@ -168,3 +163,4 @@ const SeatsAndTablesClass = class {
 }
 
 export default SeatsAndTablesClass;
+
