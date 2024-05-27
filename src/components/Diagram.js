@@ -116,6 +116,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     setSelSeat, 
     tableWidthRef.current, 
     tableHeightRef.current
+    bookedSeatsForToday 
   );
 }
 
