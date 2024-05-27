@@ -62,7 +62,7 @@ const ElementStyle = styled.div`
   }
 `;
 
-function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData }) {
+function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svgType = "main", data, setData, todayBookings }) {
   const { token } = useContext(AuthContext);
   const [internalData, setInternalData] = useState(null);
   const effectiveData = data || internalData;
@@ -83,7 +83,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     } else {
       renderData(svg, effectiveData);
     }
-  }, [effectiveData]);
+  }, [effectiveData, todayBookings]);
 
   useEffect(() => {
     if (chairsMng.current) {
@@ -93,48 +93,46 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   }, [chairsMng]);
 
   async function loadData(svg) {
-  if (!data) {  // Only fetch if external data isn't provided
-    try {
-      const response = await axios.get(apiUrl, {
-        params: { svgType },
-        withCredentials: true,
-      });
-      const newData = response.data;
-      setData ? setData(newData, svgType) : setInternalData(newData);
-    } catch (err) {
-      console.error("ERROR loadData", err);
+    if (!data) {  // Only fetch if external data isn't provided
+      try {
+        const response = await axios.get(apiUrl, {
+          params: { svgType },
+          withCredentials: true,
+        });
+        const newData = response.data;
+        setData ? setData(newData, svgType) : setInternalData(newData);
+      } catch (err) {
+        console.error("ERROR loadData", err);
+      }
     }
   }
-}
-
 
   function renderData(svg, dataToRender) {
-  chairsMng.current = new SeatsAndTablesClass(
-    svg, 
-    dataToRender, 
-    token.role, 
-    setSelSeat, 
-    tableWidthRef.current, 
-    tableHeightRef.current
-  );
-}
-
+    chairsMng.current = new SeatsAndTablesClass(
+      svg, 
+      dataToRender, 
+      token.role, 
+      setSelSeat, 
+      tableWidthRef.current, 
+      tableHeightRef.current,
+      todayBookings // Pass todayBookings here
+    );
+  }
 
   async function save() {
-  try {
-    const params = { seats: chairsMng.current.seatData, tables: chairsMng.current.tableData };
-    const response = await axios.post(apiUrl, params, {
-      params: { svgType },
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    });
-    setShowAlert('Row has been successfully saved!');
-    setTimeout(() => setShowAlert(null), 2500);
-  } catch (err) {
-    console.error("ERROR save diagram", err);
+    try {
+      const params = { seats: chairsMng.current.seatData, tables: chairsMng.current.tableData };
+      const response = await axios.post(apiUrl, params, {
+        params: { svgType },
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      });
+      setShowAlert('Row has been successfully saved!');
+      setTimeout(() => setShowAlert(null), 2500);
+    } catch (err) {
+      console.error("ERROR save diagram", err);
+    }
   }
-}
-
 
   return (
     <ElementStyle>
@@ -173,3 +171,4 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 }
 
 export default Diagram;
+
