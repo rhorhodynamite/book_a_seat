@@ -4,62 +4,57 @@ const MIN_RECT_WIDTH = 15;
 const MIN_RECT_HEIGHT = 8;
 
 const SeatsAndTablesClass = class {
-  constructor(svg, data, role, setSelSeat, tableWidth = null, tableHeight = null, bookedSeatsForToday = []) {
+  constructor(svg, data, role, setSelSeat, bookings, tableWidth = null, tableHeight = null) {
     this.svg = svg;
     this.role = role;
     this.seatData = data.seats;
     this.tableData = data.tables;
-    this.bookedSeatsForToday = bookedSeatsForToday; // Store booked seats data
-
+    this.bookings = bookings;
     this.selChair = null;
     this.setSelSeat = setSelSeat;
     this.tableWidth = tableWidth;
     this.tableHeight = tableHeight;
 
-    this.maxSeatId = this.seatData.length === 0 ? 0 : Math.max(...this.seatData.map(o => o.id));
-    this.maxTableId = this.tableData.length === 0 ? 0 : Math.max(...this.tableData.map(o => o.id));
-
     this.initSeatsSvg();
     this.initTableSvg();
   }
 
-  initSeatsSvg(){
+  initSeatsSvg() {
     const self = this;
+    const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
+
     let c = this.svg
       .selectAll("circle.chair")
-      .data(this.seatData, function(d) { return d.id; })
+      .data(this.seatData, function (d) { return d.id; })
       .enter()
       .append("circle")
       .classed("chair", true)
-      .attr("name", function(d){return d.name})
-      .attr("cx", function(d){ return d.x; })
-      .attr("cy", function(d){ return d.y || 0; }) // Ensure y has a default value of 0
+      .attr("name", function (d) { return d.name; })
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function (d) { return d.y || 0; }) // Ensure y has a default value of 0
       .attr("r", 10)
-      .attr("fill", function(d) {
-        return self.bookedSeatsForToday.includes(d.id) ? 'red' : 'black';
-      }); // Fill with red if booked for today
+      .classed("booked", function (d) {
+        return self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
+      })
+      .attr("fill", function (d) {
+        return self.bookings.some(booking => booking.seatId === d.id && booking.date === today) ? 'red' : 'none';
+      });
 
-    if(this.role === 'admin'){
+    if (this.role === 'admin') {
       c.call(d3.drag()
         .on("start", this.dragStarted)
         .on("drag", this.draggingSeat));
     }
 
     c.on("mouseenter mouseleave", this.rectHover)
-     .on("click", function(event, d){self.clickSeat(event, d, d3.select(this))});
-  }
-
-  addSeat() {
-    this.maxSeatId += 1;
-    this.seatData.push({ id: this.maxSeatId, "name": `chair ${this.maxSeatId}`, x: 5, y: 5 });
-    this.initSeatsSvg();
+     .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
   }
 
   draggingSeat(event, d) {
-    d3.select(this).attr("cx", d.x = event.x ).attr("cy", d.y = event.y);
+    d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
   }
 
-  clickSeat(event, d, item){
+  clickSeat(event, d, item) {
     d3.selectAll("circle.chair").classed('selected', false);
     this.selChair = d.id;
     item.classed('selected', true);
@@ -71,7 +66,7 @@ const SeatsAndTablesClass = class {
     el.classed("hovering", isEntering);
   }
 
-  initTableSvg(){
+  initTableSvg() {
     const self = this;
     let gTable = this.svg
       .selectAll("g.rectangle")
@@ -84,21 +79,21 @@ const SeatsAndTablesClass = class {
       });
 
     gTable.append("rect")
-          .attr("width", function (d) { return d.width })
-          .attr("height", function (d) { return d.height });
+      .attr("width", function (d) { return d.width; })
+      .attr("height", function (d) { return d.height; });
 
-    if(this.role === 'admin'){
-      gTable.call(d3.drag() 
-        .on("drag", function(event, d){ 
+    if (this.role === 'admin') {
+      gTable.call(d3.drag()
+        .on("drag", function (event, d) {
           if (self.tableWidth && self.tableHeight) {
-            self.tableWidth.value = ""; 
+            self.tableWidth.value = "";
             self.tableHeight.value = "";
           }
-          self.draggedTable.call(this, event, d)
+          self.draggedTable.call(this, event, d);
         }));
     }
 
-    if(this.role === 'admin'){
+    if (this.role === 'admin') {
       let smallcircle = gTable
         .append("circle")
         .classed("bottomright", true)
@@ -113,16 +108,12 @@ const SeatsAndTablesClass = class {
       smallcircle.on("mouseenter mouseleave", this.resizerHover)
         .call(d3.drag()
           .on("start", this.rectResizeStart)
-          .on("drag", function(event, d){self.rectResizing.apply(this, [event, d, 
-            (val)=>{if(self.tableWidth) self.tableWidth.value = val;}, 
-            (val)=>{if(self.tableHeight) self.tableHeight.value = val;}])}));
+          .on("drag", function (event, d) {
+            self.rectResizing.apply(this, [event, d,
+              (val) => { if (self.tableWidth) self.tableWidth.value = val; },
+              (val) => { if (self.tableHeight) self.tableHeight.value = val; }])
+          }));
     }
-  }
-
-  addTable() {
-    this.maxTableId += 1;
-    this.tableData.push({ id: this.maxTableId, "name": `table ${this.maxTableId}`, x: 2, y: 2, width: 100, height: 60 });
-    this.initTableSvg();
   }
 
   draggedTable(event, d) {
@@ -141,7 +132,7 @@ const SeatsAndTablesClass = class {
   rectResizing(event, d, setWidthVal, setHeightVal) {
     d.width = Math.max(event.x - d.x + d.initWidth, MIN_RECT_WIDTH);
     d.height = Math.max(event.y - d.y + d.initHeight, MIN_RECT_HEIGHT);
-    
+
     setWidthVal(d.width);
     setHeightVal(d.height);
 
@@ -159,7 +150,5 @@ const SeatsAndTablesClass = class {
 }
 
 export default SeatsAndTablesClass;
-
-
 
 
