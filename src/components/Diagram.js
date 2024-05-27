@@ -107,6 +107,12 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }
 
+  const bookings = todayBookings.map(booking => ({
+  seatId: booking.seatid,
+  date: moment(booking.startDate).format('YYYY-MM-DD')
+}));
+
+
   function renderData(svg, dataToRender) {
     const bookings = []; // Get bookings data here
     chairsMng.current = new SeatsAndTablesClass(
