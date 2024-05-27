@@ -27,21 +27,27 @@ const SeatsAndTablesClass = class {
 
     console.log("Today's date:", today);
 
-    let c = this.svg
-      .selectAll("circle.chair")
-      .data(this.seatData, function (d) { return d.id; })
-      .enter()
+    // Update selection
+    let updateSelection = this.svg.selectAll("circle.chair")
+      .data(this.seatData, d => d.id);
+
+    // Enter selection
+    let enterSelection = updateSelection.enter()
       .append("circle")
       .classed("chair", true)
-      .attr("name", function (d) { return d.name; })
-      .attr("cx", function (d) { return d.x; })
-      .attr("cy", function (d) { return d.y || 0; }) // Ensure y has a default value of 0
+      .attr("name", d => d.name)
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y || 0) // Ensure y has a default value of 0
       .attr("r", 10);
 
-    // Update fill and class for existing and new elements
-    this.svg
-      .selectAll("circle.chair")
-      .data(this.seatData)
+    // Exit selection
+    updateSelection.exit().remove();
+
+    // Merge enter and update selections
+    updateSelection = enterSelection.merge(updateSelection);
+
+    // Update attributes and classes
+    updateSelection
       .attr("fill", function (d) {
         const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
         console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'red' : 'none'}`); // Debug log
@@ -54,13 +60,13 @@ const SeatsAndTablesClass = class {
       });
 
     if (this.role === 'admin') {
-      c.call(d3.drag()
+      updateSelection.call(d3.drag()
         .on("start", this.dragStarted)
         .on("drag", this.draggingSeat));
     }
 
-    c.on("mouseenter mouseleave", this.rectHover)
-     .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
+    updateSelection.on("mouseenter mouseleave", this.rectHover)
+      .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
   }
 
   draggingSeat(event, d) {
@@ -163,4 +169,3 @@ const SeatsAndTablesClass = class {
 }
 
 export default SeatsAndTablesClass;
-
