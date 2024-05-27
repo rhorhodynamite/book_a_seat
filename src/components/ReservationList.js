@@ -10,8 +10,8 @@ import utils from '../api/utils.ts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, faPlus } from '@fortawesome/free-solid-svg-icons';
 import AuthContext from '../context/AuthProvider';
-import CalendarContainer from './CalendarContainer'; // Ensure this is correctly imported
-import Alert from './Alert'; // Ensure this is correctly imported
+import CalendarContainer from './CalendarContainer';
+import Alert from './Alert';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const GET_URL = SERVER_URL + 'api/my_reservations';
@@ -19,20 +19,7 @@ const CONTENT_WIDTH = 650;
 
 const ElementStyle = styled.div`
   // your styles here
-
 `;
-
-const getBookedSeatsForToday = () => {
-  const today = moment().startOf('day');
-  return reservationData.filter(reservation => {
-    const startDate = moment(reservation.startDate);
-    const endDate = moment(reservation.endDate);
-    return today.isBetween(startDate, endDate, null, '[]');
-  }).map(reservation => reservation.seatId);
-};
-
-// Pass this data to the Diagram component
-const bookedSeatsForToday = getBookedSeatsForToday();
 
 const currentDate = moment(new Date()).startOf('day').toDate();
 
@@ -48,8 +35,7 @@ function ReservationList(props) {
   const [reservationData, setReservation] = useState([]);
 
   useEffect(() => {
-    if (props.selSeat)
-      loadData(props.selSeat);
+    if (props.selSeat) loadData(props.selSeat);
   }, [props.selSeat]);
 
   function loadData(selSeat) {
@@ -60,29 +46,26 @@ function ReservationList(props) {
     const callback = function (r) {
       const rslt = r.map((val, key) => {
         if (typeof val.startdate === 'string') {
-          val.startDate = new Date(val.startdate)
+          val.startDate = new Date(val.startdate);
         }
         if (typeof val.enddate === 'string') {
-          val.endDate = new Date(val.enddate)
+          val.endDate = new Date(val.enddate);
         }
         val.name = val.seatName;
         return val;
       });
-      // console.log('rslt', rslt);
       setReservation(rslt);
-    }
-    utils.getReservationDb(params, callback)
+    };
+    utils.getReservationDb(params, callback);
   }
 
   function onClickRow(_id) {
-    // console.log('onClickRow', _id);
     setChildKey(_id);
     setCalendarActive(false);
     setSelRow(reservationData.find(item => item.id === _id));
   }
 
   function editRow(evt, _id) {
-    // console.log('editRow', _id);
     evt.stopPropagation();
     setChildKey(_id);
     setCalendarActive(true);
@@ -90,17 +73,15 @@ function ReservationList(props) {
   }
 
   function delRow(evt, _id, _startDate) {
-    // console.log('delRow', _id);
     evt.stopPropagation();
     if (_startDate < currentDate) {
-      setShowAlert2('Not possibile to delete a book, which has been already started');
+      setShowAlert2('Not possible to delete a booking, which has already started');
     } else {
       setIdToDel(_id);
     }
   }
 
   function addRow() {
-    // console.log('addRow');
     const tomorrowAfternoon = moment(new Date()).startOf('date').add(42, 'hours').toDate();
     const newRow = {
       id: null, seatId: props.selSeat, user: token.user,
@@ -116,7 +97,7 @@ function ReservationList(props) {
     if (item.username !== token.user || item.endDate < currentDate) {
       isDisabled = true;
     }
-    return isDisabled
+    return isDisabled;
   }
 
   const handleClose = () => setIdToDel(false);
@@ -124,12 +105,12 @@ function ReservationList(props) {
     const callback = () => {
       refresh(utils.MSG.del);
       setIdToDel(null);
-    }
+    };
 
     setChildKey(null);
     setReservation(reservationData.filter(item => item.id !== idToDel));
-    utils.delReservationDb(idToDel, callback)
-  }
+    utils.delReservationDb(idToDel, callback);
+  };
 
   function refresh(msg) {
     loadData(props.selSeat);
@@ -140,21 +121,19 @@ function ReservationList(props) {
   }
 
   function check(dateInterval, id) {
-    // console.log('check in ReservationList', dateInterval, id);
-    const errorData = reservationData
-      .filter(
-        function (item) {
-          return (item.id !== id && ((dateInterval[0] > item.startDate && dateInterval[0] < item.endDate)  // start inside existing dates
-            || (dateInterval[1] > item.startDate && dateInterval[1] < item.endDate) // end inside existing dates
-            || (dateInterval[0] <= item.startDate && dateInterval[1] >= item.endDate)))
-        })
+    const errorData = reservationData.filter(
+      function (item) {
+        return (item.id !== id && ((dateInterval[0] > item.startDate && dateInterval[0] < item.endDate)  // start inside existing dates
+          || (dateInterval[1] > item.startDate && dateInterval[1] < item.endDate) // end inside existing dates
+          || (dateInterval[0] <= item.startDate && dateInterval[1] >= item.endDate)));
+      });
     if (errorData.length === 0)
       return null;
     const htmlData = errorData.map((item, key) => {
       const id = item.id ? "(id " + item.id + ")" : "";
       const errorMsg1 = `ERROR: not possible to save selected reservation (${dateInterval[0].toLocaleDateString()} - ${dateInterval[1].toLocaleDateString()})`;
       const errorMsg2 = `overlaps the existing one with ${id} (${item.startDate.toLocaleDateString()} - ${item.endDate.toLocaleDateString()})`;
-      return (<p key={key}>{errorMsg1}<br />{errorMsg2}</p>)
+      return (<p key={key}>{errorMsg1}<br />{errorMsg2}</p>);
     });
     return <div>{htmlData}</div>;
   }
@@ -196,8 +175,9 @@ function ReservationList(props) {
           </td>
         }
       </tr>
-    )
-  })
+    );
+  });
+
   return (
     <ElementStyle>
       <Alert show={showAlert ? true : false} msg={showAlert} variant="success" setShow={setShowAlert} />
@@ -224,3 +204,4 @@ function ReservationList(props) {
 }
 
 export default ReservationList;
+
