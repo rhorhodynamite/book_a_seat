@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Box, Alert } from '@mui/material';
+import { TextField, Button, Typography, Box, Alert, Grid } from '@mui/material';
 import './styles.css'; // Import the CSS file
 
 const RegistrationForm = () => {
@@ -38,69 +38,72 @@ const RegistrationForm = () => {
     };
 
     return (
-        <div className="centered-container">
+        <Grid container className="centered-container">
             <div className="art-nouveau-center"></div>
-            <Box
-                component="form"
-                onSubmit={onSubmit}
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    padding: 4,
-                    backgroundColor: 'white',
-                    borderRadius: 2,
-                    boxShadow: 3,
-                    zIndex: 1, // Ensure the form is above the background image
-                    marginLeft: 115, // Add some margin to the left to move it to the right
-                }}
-            >
-                <Typography component="h2" variant="h5">
-                    Register
-                </Typography>
-                {message && (
-                    <Alert severity={message.type} sx={{ mt: 2, mb: 2, width: '100%' }}>
-                        {message.text}
-                    </Alert>
-                )}
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
-                    autoFocus
-                    value={username}
-                    onChange={onChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={onChange}
-                />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 3, mb: 2 }}
+            <Grid item xs={12} sm={8} md={6} lg={4}>
+                <Box
+                    component="form"
+                    onSubmit={onSubmit}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        padding: { xs: 2, sm: 3, md: 4 }, // Responsive padding
+                        backgroundColor: 'white',
+                        borderRadius: 2,
+                        boxShadow: 3,
+                        zIndex: 1, // Ensure the form is above the background image
+                        marginLeft: { xs: 1, sm: 2, md: 3 }, // Responsive margin
+                    }}
                 >
-                    Register
-                </Button>
-            </Box>
-        </div>
+                    <Typography component="h2" variant="h5">
+                        Register
+                    </Typography>
+                    {message && (
+                        <Alert severity={message.type} sx={{ mt: 2, mb: 2, width: '100%' }}>
+                            {message.text}
+                        </Alert>
+                    )}
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
+                        value={username}
+                        onChange={onChange}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={onChange}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Register
+                    </Button>
+                </Box>
+            </Grid>
+        </Grid>
     );
 };
 
 export default RegistrationForm;
+
