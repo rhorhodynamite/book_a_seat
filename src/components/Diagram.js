@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { useD3 } from '../use/useD3';
+import * as d3 from 'd3';  // Add this import statement
 import SvgPlan from './SvgPlan';
 import SeatsAndTablesClass from './SeatsAndTablesClass';
 import Popup from './Popup';
