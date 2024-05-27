@@ -6,6 +6,7 @@ import {
   Typography, Box, Container
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import Diagram from './Diagram';
 import moment from 'moment';
 import axios from '../api/axios';
 import utils from '../api/utils.ts';
@@ -310,6 +311,14 @@ const MyBooking = (props) => {
 
       <Typography variant="h4" gutterBottom>My Bookings</Typography>
       {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
+
+        <Diagram 
+        bookings={todayBookings.map(booking => ({
+          seatId: booking.seatid,
+          date: moment(booking.startDate).format('YYYY-MM-DD')
+        }))}
+      
+      />
     </Container>
   );
 }
