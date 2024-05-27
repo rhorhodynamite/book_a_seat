@@ -108,9 +108,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }
 
-
-
-  function renderData(svg, dataToRender) {
+  function renderData(svg, dataToRender, bookings) {
     chairsMng.current = new SeatsAndTablesClass(
       svg,
       dataToRender,
@@ -121,6 +119,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
       tableHeightRef.current
     );
   }
+
 
   async function save() {
     try {
