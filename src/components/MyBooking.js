@@ -6,7 +6,6 @@ import {
   Typography, Box, Container
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Diagram from './Diagram';
 import moment from 'moment';
 import axios from '../api/axios';
 import utils from '../api/utils.ts';
@@ -40,13 +39,12 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
 const currentDate = moment().startOf('day').toDate();
 
-const MyBooking = (props) => {
+const MyBooking = ({ username, todayBookings }) => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
   const [reservationList, setReservationList] = useState([]);
   const [reservationData, setReservation] = useState([]);
   const [idToDel, setIdToDel] = useState(null);
   const [showAlert, setShowAlert] = useState(null);
-  const [todayBookings, setTodayBookings] = useState([]);
 
   const getSeatName = (seatId) => {
     const seatNames = {
@@ -81,7 +79,7 @@ const MyBooking = (props) => {
         return val;
       });
 
-      const userReservations = rslt.filter(val => val.username === props.username);
+      const userReservations = rslt.filter(val => val.username === username);
 
       const finalMap = [];
       userReservations.forEach(item => {
@@ -115,14 +113,6 @@ const MyBooking = (props) => {
 
       setReservation(finalMap);
       setReservationList(userReservations);
-
-      const today = moment().startOf('day');
-      const todayBookings = rslt.filter(val =>
-        moment(val.startDate).isSame(today, 'day') ||
-        moment(val.endDate).isSame(today, 'day') ||
-        (moment(val.startDate).isBefore(today, 'day') && moment(val.endDate).isAfter(today, 'day'))
-      );
-      setTodayBookings(todayBookings);
 
     } catch (err) {
       console.log("ERROR loadData", err);
@@ -168,7 +158,7 @@ const MyBooking = (props) => {
 
   useEffect(() => {
     loadData();
-  }, [props.loadBooking]);
+  }, []);
 
   const barEl = (dayBook, dayMonthKey) => {
     return dayBook.map((val, key) => {
@@ -311,16 +301,9 @@ const MyBooking = (props) => {
 
       <Typography variant="h4" gutterBottom>My Bookings</Typography>
       {reservationData.length > 0 ? tableContent : <Typography variant="h6">No reservations until now!</Typography>}
-
-        <Diagram 
-        bookings={todayBookings.map(booking => ({
-          seatId: booking.seatid,
-          date: moment(booking.startDate).format('YYYY-MM-DD')
-        }))}
-      
-      />
     </Container>
   );
 }
 
 export default MyBooking;
+
