@@ -127,7 +127,7 @@ function NavBar() {
 
   return (
     <ElementStyle>
-      <GradientBackground>
+      
         <Navbar className='navbar navbar-light'>
           <Container fluid>
             <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
@@ -208,7 +208,7 @@ function NavBar() {
             </div>
           </Tab>
         </Tabs>
-      </GradientBackground>
+      
     </ElementStyle>
   );
 }
