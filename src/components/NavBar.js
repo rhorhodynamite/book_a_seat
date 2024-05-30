@@ -33,6 +33,14 @@ const ElementStyle = styled.div`
   }
 `;
 
+const GradientBackground = styled.div`
+  background: linear-gradient(to right, #ffecd2, #fcb69f); /* pastel peach to light coral */
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+`;
+
+
 function NavBar() {
   const { token, setToken } = useContext(AuthContext);
   const user = <span>{token.user}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FontAwesomeIcon icon={faUser} transform="grow-5" /></span>;
@@ -119,90 +127,91 @@ function NavBar() {
 
   return (
     <ElementStyle>
-      <Navbar className='navbar navbar-light'>
-        <Container fluid>
-          <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
-          <Navbar.Collapse id="navbarScroll">
-            <Nav>
-              <NavDropdown title={user} id="navbarScrollingDropdown" align="end" menuVariant='#e3f2fd'>
-                <NavDropdown.Item href="#" onClick={() => { logout(); }}>Logout</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Tabs onSelect={(tabElName) => onSelectChange(tabElName)}
-            defaultActiveKey={token.role === 'user' ? "booking" : "reservation"}
-            className="mb-3">
-        {token.role === 'user' && (
-          <Tab eventKey="booking" title="Bookings">
-            <div className='wrapper-dashboard'>  
-              <MyBooking username={token.user} key={keyBooking} todayBookings={todayBookings} />
+      <GradientBackground>
+        <Navbar className='navbar navbar-light'>
+          <Container fluid>
+            <Navbar.Brand href="#home">Book a desk!</Navbar.Brand>
+            <Navbar.Collapse id="navbarScroll">
+              <Nav>
+                <NavDropdown title={user} id="navbarScrollingDropdown" align="end" menuVariant='#e3f2fd'>
+                  <NavDropdown.Item href="#" onClick={() => { logout(); }}>Logout</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+        <Tabs onSelect={(tabElName) => onSelectChange(tabElName)}
+              defaultActiveKey={token.role === 'user' ? "booking" : "reservation"}
+              className="mb-3">
+          {token.role === 'user' && (
+            <Tab eventKey="booking" title="Bookings">
+              <div className='wrapper-dashboard'>  
+                <MyBooking username={token.user} key={keyBooking} todayBookings={todayBookings} />
+              </div>
+            </Tab>
+          )}
+          <Tab eventKey="reservation" title="First Floor">
+            <div>  
+             <h2>{token.role === 'admin' ? "ADMIN - Manage First Floor" : "First Floor Plan"}</h2>
+              {keyDiagram > 0 && (
+                <div className='wrapper-dashboard' key={'diagram_' + keyDiagram}>
+                  <Diagram 
+                      apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
+                      setSelSeat={setSelSeatHandler} 
+                      svgType="main" // Prop to control SVG display
+                      bookings={todayBookings.map(booking => ({
+                        seatId: booking.seatid,
+                        date: moment(booking.startDate).format('YYYY-MM-DD')
+                      }))}
+                  />
+                  <ReservationList selSeat={selSeat}/>
+                </div>
+              )}
             </div>
           </Tab>
-        )}
-        <Tab eventKey="reservation" title="First Floor">
-          <div>  
-           <h2>{token.role === 'admin' ? "ADMIN - Manage First Floor" : "First Floor Plan"}</h2>
-            {keyDiagram > 0 && (
-              <div className='wrapper-dashboard' key={'diagram_' + keyDiagram}>
-                <Diagram 
-                    apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
-                    setSelSeat={setSelSeatHandler} 
-                    svgType="main" // Prop to control SVG display
-                    bookings={todayBookings.map(booking => ({
-                      seatId: booking.seatid,
-                      date: moment(booking.startDate).format('YYYY-MM-DD')
-                    }))}
-                />
-                <ReservationList selSeat={selSeat}/>
-              </div>
-            )}
-          </div>
-        </Tab>
-        <Tab eventKey="upstairs" title="Upstairs">
-          <div>
-            <h2>{token.role === 'admin' ? "ADMIN - Manage Upstairs Area" : "Upstairs Office Plan"}</h2>
-            {keyUpstairsDiagram > 0 && (
-              <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
-                <Diagram 
-                    apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
-                    setSelSeat={setSelSeatHandler} 
-                    svgType="upstairs" // Prop to control SVG display
-                    bookings={todayBookings.map(booking => ({
-                      seatId: booking.seatid,
-                      date: moment(booking.startDate).format('YYYY-MM-DD')
-                    }))}
-                />
-                <ReservationList selSeat={selSeat}/>
-              </div>
-            )}
-          </div>
-        </Tab>
-      <Tab eventKey="seminar" title="Meeting Raum (OG)/Telefonbox">
-          <div>
-            <h2>{token.role === 'admin' ? "ADMIN - Manage Seminar Room/Phone Booth" : "Meeting Raum (OG)/Telefonbox Plan"}</h2>
-            {keySeminarDiagram > 0 && (
-              <div className='wrapper-dashboard' key={'seminarDiagram_' + keySeminarDiagram}>
-                <Diagram 
-                    apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
-                    setSelSeat={setSelSeatHandler} 
-                    svgType="seminar" // Prop to control SVG display
-                    bookings={todayBookings.map(booking => ({
-                      seatId: booking.seatid,
-                      date: moment(booking.startDate).format('YYYY-MM-DD')
-                    }))}
-                />
-                <ReservationList selSeat={selSeat}/>
-              </div>
-            )}
-          </div>
-        </Tab>
-      </Tabs>
+          <Tab eventKey="upstairs" title="Upstairs">
+            <div>
+              <h2>{token.role === 'admin' ? "ADMIN - Manage Upstairs Area" : "Upstairs Office Plan"}</h2>
+              {keyUpstairsDiagram > 0 && (
+                <div className='wrapper-dashboard' key={'upstairsDiagram_' + keyUpstairsDiagram}>
+                  <Diagram 
+                      apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
+                      setSelSeat={setSelSeatHandler} 
+                      svgType="upstairs" // Prop to control SVG display
+                      bookings={todayBookings.map(booking => ({
+                        seatId: booking.seatid,
+                        date: moment(booking.startDate).format('YYYY-MM-DD')
+                      }))}
+                  />
+                  <ReservationList selSeat={selSeat}/>
+                </div>
+              )}
+            </div>
+          </Tab>
+        <Tab eventKey="seminar" title="Meeting Raum (OG)/Telefonbox">
+            <div>
+              <h2>{token.role === 'admin' ? "ADMIN - Manage Seminar Room/Phone Booth" : "Meeting Raum (OG)/Telefonbox Plan"}</h2>
+              {keySeminarDiagram > 0 && (
+                <div className='wrapper-dashboard' key={'seminarDiagram_' + keySeminarDiagram}>
+                  <Diagram 
+                      apiUrl={SERVER_URL + 'api/seats'} // Same endpoint for data
+                      setSelSeat={setSelSeatHandler} 
+                      svgType="seminar" // Prop to control SVG display
+                      bookings={todayBookings.map(booking => ({
+                        seatId: booking.seatid,
+                        date: moment(booking.startDate).format('YYYY-MM-DD')
+                      }))}
+                  />
+                  <ReservationList selSeat={selSeat}/>
+                </div>
+              )}
+            </div>
+          </Tab>
+        </Tabs>
+      </GradientBackground>
     </ElementStyle>
   );
 }
 
 export default NavBar;
-
 
