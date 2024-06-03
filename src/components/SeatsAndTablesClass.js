@@ -89,9 +89,13 @@ const SeatsAndTablesClass = class {
   }
 
   rectHover(event, d) {
-    var el = d3.select(this), isEntering = event.type === "mouseenter";
-    el.classed("hovering", isEntering);
-  }
+  var el = d3.select(this);
+  var isEntering = event.type === "mouseenter";
+  console.log(`Hover event: ${event.type}, Seat ID: ${d.id}`);
+  el.classed("hovering", isEntering);
+}
+
+
 
   initTableSvg() {
     const self = this;
