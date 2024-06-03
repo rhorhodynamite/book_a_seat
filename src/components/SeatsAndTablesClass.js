@@ -46,18 +46,25 @@ const SeatsAndTablesClass = class {
     // Merge enter and update selections
     updateSelection = enterSelection.merge(updateSelection);
 
-    // Update attributes and classes
-    updateSelection
-      .attr("fill", function (d) {
-        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
-        console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'black' : 'none'}`); // Debug log
-        return isBooked ? 'black' : 'none';
-      })
-      .classed("booked", function (d) {
-        const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
-        console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
-        return isBooked;
-      });
+    updateSelection.attr("fill", function (d) {
+  const isBooked = self.bookings.some(booking => 
+    booking.seatId === d.id && 
+    moment(booking.startDate).isSameOrBefore(today, 'day') && 
+    moment(booking.endDate).isSameOrAfter(today, 'day')
+  );
+  console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'black' : 'none'}`); // Debug log
+  return isBooked ? 'black' : 'none';
+})
+.classed("booked", function (d) {
+  const isBooked = self.bookings.some(booking => 
+    booking.seatId === d.id && 
+    moment(booking.startDate).isSameOrBefore(today, 'day') && 
+    moment(booking.endDate).isSameOrAfter(today, 'day')
+  );
+  console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
+  return isBooked;
+});
+
 
     if (this.role === 'admin') {
       updateSelection.call(d3.drag()
