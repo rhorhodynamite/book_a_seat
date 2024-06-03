@@ -86,19 +86,23 @@ class SeatsAndTablesClass {
 
   draggingSeat(event, d) {
     d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+    console.log(`Dragging seat ID: ${d.id}, New position - cx: ${d.x}, cy: ${d.y}`);
   }
 
   clickSeat(event, d, item) {
+    console.log(`Click event: Seat ID: ${d.id}, Before click - selected: ${item.classed('selected')}`);
     d3.selectAll("circle.chair").classed('selected', false);
     this.selChair = d.id;
     item.classed('selected', true);
     this.setSelSeat(d.id);
+    console.log(`Click event: Seat ID: ${d.id}, After click - selected: ${item.classed('selected')}`);
   }
 
   rectHover(event, d, item) {
     const isEntering = event.type === "mouseenter";
-    console.log(`Hover event: ${event.type}, Seat ID: ${d.id}`);
+    console.log(`Hover event: ${event.type}, Seat ID: ${d.id}, Before hover - hovering: ${item.classed('hovering')}`);
     item.classed("hovering", isEntering);
+    console.log(`Hover event: ${event.type}, Seat ID: ${d.id}, After hover - hovering: ${item.classed('hovering')}`);
   }
 
   initTableSvg() {
@@ -159,12 +163,14 @@ class SeatsAndTablesClass {
       d.y = event.y;
       return "translate(" + d.x + "," + d.y + ")";
     });
+    console.log(`Dragging table ID: ${d.id}, New position - x: ${d.x}, y: ${d.y}`);
   }
 
   resizerHover(event, d, item) {
     const isEntering = event.type === "mouseenter";
-    console.log(`Hover event: ${event.type}, Table ID: ${d.id}`);
+    console.log(`Hover event: ${event.type}, Table ID: ${d.id}, Before hover - hovering: ${item.classed('hovering')}`);
     item.classed("hovering", isEntering);
+    console.log(`Hover event: ${event.type}, Table ID: ${d.id}, After hover - hovering: ${item.classed('hovering')}`);
   }
 
   rectResizing(event, d, setWidthVal, setHeightVal) {
@@ -179,13 +185,15 @@ class SeatsAndTablesClass {
 
     d3.select(this.parentNode).select("circle").attr("cx", d.width);
     d3.select(this.parentNode).select("circle").attr("cy", d.height);
+
+    console.log(`Resizing table ID: ${d.id}, New size - width: ${d.width}, height: ${d.height}`);
   }
 
   rectResizeStart(event, d) {
     d.initWidth = d.width;
     d.initHeight = d.height;
+    console.log(`Start resizing table ID: ${d.id}, Initial size - width: ${d.initWidth}, height: ${d.initHeight}`);
   }
 }
 
 export default SeatsAndTablesClass;
-
