@@ -75,9 +75,13 @@ class SeatsAndTablesClass {
         .on("drag", this.draggingSeat));
     }
 
-    updateSelection.on("mouseenter", this.rectHover)
-      .on("mouseleave", this.rectHover)
-      .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
+    updateSelection.on("mouseenter", function(event, d) {
+      self.rectHover(event, d, d3.select(this));
+    })
+    .on("mouseleave", function(event, d) {
+      self.rectHover(event, d, d3.select(this));
+    })
+    .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
   }
 
   draggingSeat(event, d) {
@@ -91,11 +95,10 @@ class SeatsAndTablesClass {
     this.setSelSeat(d.id);
   }
 
-  rectHover(event, d) {
-    var el = d3.select(this);
-    var isEntering = event.type === "mouseenter";
+  rectHover(event, d, item) {
+    const isEntering = event.type === "mouseenter";
     console.log(`Hover event: ${event.type}, Seat ID: ${d.id}`);
-    el.classed("hovering", isEntering);
+    item.classed("hovering", isEntering);
   }
 
   initTableSvg() {
@@ -137,14 +140,16 @@ class SeatsAndTablesClass {
           return d.height;
         });
 
-      smallcircle.on("mouseenter mouseleave", this.resizerHover)
-        .call(d3.drag()
-          .on("start", this.rectResizeStart)
-          .on("drag", function (event, d) {
-            self.rectResizing.apply(this, [event, d,
-              (val) => { if (self.tableWidth) self.tableWidth.value = val; },
-              (val) => { if (self.tableHeight) self.tableHeight.value = val; }])
-          }));
+      smallcircle.on("mouseenter mouseleave", function(event, d) {
+        self.resizerHover(event, d, d3.select(this));
+      })
+      .call(d3.drag()
+        .on("start", this.rectResizeStart)
+        .on("drag", function (event, d) {
+          self.rectResizing.apply(this, [event, d,
+            (val) => { if (self.tableWidth) self.tableWidth.value = val; },
+            (val) => { if (self.tableHeight) self.tableHeight.value = val; }])
+        }));
     }
   }
 
@@ -156,9 +161,10 @@ class SeatsAndTablesClass {
     });
   }
 
-  resizerHover(event, d) {
-    var el = d3.select(this), isEntering = event.type === "mouseenter";
-    el.classed("hovering", isEntering);
+  resizerHover(event, d, item) {
+    const isEntering = event.type === "mouseenter";
+    console.log(`Hover event: ${event.type}, Table ID: ${d.id}`);
+    item.classed("hovering", isEntering);
   }
 
   rectResizing(event, d, setWidthVal, setHeightVal) {
@@ -182,3 +188,4 @@ class SeatsAndTablesClass {
 }
 
 export default SeatsAndTablesClass;
+
