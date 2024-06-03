@@ -1,11 +1,11 @@
 import moment from 'moment';
 import { useD3 } from '../use/useD3';
-import * as d3 from 'd3';  // Add this import statement
+import * as d3 from 'd3';
 import SvgPlan from './SvgPlan';
 import SeatsAndTablesClass from './SeatsAndTablesClass';
 import Popup from './Popup';
 import axios from '../api/axios';
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
@@ -13,11 +13,10 @@ import AuthContext from '../context/AuthProvider';
 import Form from 'react-bootstrap/Form';
 import BModal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
-import SVGPlan from './SvgPlan';
 import SVGPlanUpstairs from './SvgPlanUpstairs';
 import SVGPlanSeminar from './SvgPlanSeminar';
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const SVG_WIDTH = "300mm";
 const SVG_HEIGHT = "125mm";
 
@@ -79,13 +78,28 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     ? SVGPlanSeminar 
     : SvgPlan;
 
+  const renderData = useCallback((svg, dataToRender, bookings) => {
+    if (chairsMng.current) {
+      chairsMng.current.svg.selectAll("*").remove();
+    }
+    chairsMng.current = new SeatsAndTablesClass(
+      svg,
+      dataToRender,
+      token.role,
+      setSelSeat,
+      bookings,
+      tableWidthRef.current,
+      tableHeightRef.current
+    );
+  }, [token.role, setSelSeat]);
+
   const ref = useD3((svg) => {
     if (!effectiveData) {
       loadData(svg);
     } else {
-      renderData(svg, effectiveData, bookings); // Pass bookings here
+      renderData(svg, effectiveData, bookings);
     }
-  }, [effectiveData, bookings]);
+  }, [effectiveData, bookings, renderData]);
 
   useEffect(() => {
     if (chairsMng.current) {
@@ -99,9 +113,9 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
       const svg = d3.select(ref.current);
       renderData(svg, effectiveData, bookings);
     }
-  }, [effectiveData, bookings]);
+  }, [effectiveData, bookings, renderData, ref]);
 
-  async function loadData(svg) {
+  const loadData = useCallback(async (svg) => {
     if (!data) {
       try {
         const response = await axios.get(apiUrl, {
@@ -114,27 +128,19 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
         console.error("ERROR loadData", err);
       }
     }
-  }
+  }, [apiUrl, data, setData, svgType]);
 
-  function renderData(svg, dataToRender, bookings) {
-    if (chairsMng.current) {
-      chairsMng.current.svg.selectAll("*").remove();
+  useEffect(() => {
+    if (!effectiveData) {
+      const svg = d3.select(ref.current);
+      loadData(svg);
     }
-    chairsMng.current = new SeatsAndTablesClass(
-      svg,
-      dataToRender,
-      token.role,
-      setSelSeat,
-      bookings,
-      tableWidthRef.current,
-      tableHeightRef.current
-    );
-  }
+  }, [effectiveData, loadData, ref]);
 
   async function save() {
     try {
       const params = { seats: chairsMng.current.seatData, tables: chairsMng.current.tableData };
-      const response = await axios.post(apiUrl, params, {
+      await axios.post(apiUrl, params, {
         params: { svgType },
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
