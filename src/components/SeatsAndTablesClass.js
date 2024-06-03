@@ -22,63 +22,60 @@ const SeatsAndTablesClass = class {
     this.initTableSvg();
   }
 
-initSeatsSvg() {
-  const self = this;
-  const today = moment().startOf('day');
+  initSeatsSvg() {
+    const self = this;
+    const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
 
-  console.log("Today's date:", today.format('YYYY-MM-DD'));
+    console.log("Today's date:", today);
 
-  // Update selection
-  let updateSelection = this.svg.selectAll("circle.chair")
-    .data(this.seatData, d => d.id);
+    // Update selection
+    let updateSelection = this.svg.selectAll("circle.chair")
+      .data(this.seatData, d => d.id);
 
-  // Exit selection
-  updateSelection.exit().remove();
+    // Enter selection
+    let enterSelection = updateSelection.enter()
+      .append("circle")
+      .classed("chair", true)
+      .attr("name", d => d.name)
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y || 0) // Ensure y has a default value of 0
+      .attr("r", 10);
 
-  // Enter selection
-  let enterSelection = updateSelection.enter()
-    .append("circle")
-    .classed("chair", true)
-    .attr("name", d => d.name)
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y || 0) // Ensure y has a default value of 0
-    .attr("r", 10);
+    // Exit selection
+    updateSelection.exit().remove();
 
-  // Merge enter and update selections
-  updateSelection = enterSelection.merge(updateSelection);
+    // Merge enter and update selections
+    updateSelection = enterSelection.merge(updateSelection);
 
-  updateSelection
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y || 0) // Ensure y has a default value of 0
-    .attr("fill", function (d) {
-      const isBooked = self.bookings.some(booking => 
-        booking.seatId === d.id && 
-        moment(booking.startDate).isSameOrBefore(today, 'day') && 
-        moment(booking.endDate).isSameOrAfter(today, 'day')
-      );
-      console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'black' : 'none'}`); // Debug log
-      return isBooked ? 'black' : 'none';
-    })
-    .classed("booked", function (d) {
-      const isBooked = self.bookings.some(booking => 
-        booking.seatId === d.id && 
-        moment(booking.startDate).isSameOrBefore(today, 'day') && 
-        moment(booking.endDate).isSameOrAfter(today, 'day')
-      );
-      console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
-      return isBooked;
-    });
+    updateSelection.attr("fill", function (d) {
+  const isBooked = self.bookings.some(booking => 
+    booking.seatId === d.id && 
+    moment(booking.startDate).isSameOrBefore(today, 'day') && 
+    moment(booking.endDate).isSameOrAfter(today, 'day')
+  );
+  console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'black' : 'none'}`); // Debug log
+  return isBooked ? 'black' : 'none';
+})
+.classed("booked", function (d) {
+  const isBooked = self.bookings.some(booking => 
+    booking.seatId === d.id && 
+    moment(booking.startDate).isSameOrBefore(today, 'day') && 
+    moment(booking.endDate).isSameOrAfter(today, 'day')
+  );
+  console.log(`Seat ID: ${d.id}, Is Booked: ${isBooked}`); // Debug log
+  return isBooked;
+});
 
-  if (this.role === 'admin') {
-    updateSelection.call(d3.drag()
-      .on("start", this.dragStarted)
-      .on("drag", this.draggingSeat));
+
+    if (this.role === 'admin') {
+      updateSelection.call(d3.drag()
+        .on("start", this.dragStarted)
+        .on("drag", this.draggingSeat));
+    }
+
+    updateSelection.on("mouseenter mouseleave", this.rectHover)
+      .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
   }
-
-  updateSelection.on("mouseenter mouseleave", this.rectHover)
-    .on("click", function (event, d) { self.clickSeat(event, d, d3.select(this)) });
-}
-
 
   draggingSeat(event, d) {
     d3.select(this).attr("cx", d.x = event.x).attr("cy", d.y = event.y);
