@@ -47,22 +47,6 @@ function SVGPlanUpstairs(props) {
       <text x="380" y="225" fontFamily="Verdana" fontSize="10" fill="black">Camp 3</text>
       <text x="590" y="225" fontFamily="Verdana" fontSize="10" fill="black">Camp 4</text>
 
-      {/* Adding plant illustrations */}
-      <g fill="none" stroke="#228B22" strokeWidth="2" strokeLinecap="round">
-        {/* Plant near Room 4 */}
-        <path d="M105,105 Q107,100 104,95" />
-        <path d="M108,107 Q110,102 108,97" />
-        <path d="M102,109 Q104,104 102,99" />
-
-        {/* Plant near Room 2 */}
-        <path d="M317,127 Q319,122 316,117" />
-        <path d="M320,129 Q322,124 320,119" />
-        <path d="M314,131 Q316,126 314,121" />
-
-        {/* Plant near Room 3 */}
-        <path d="M523,15 Q525,10 522,5" />
-        <path d="M526,17 Q528,12 526,7" />
-        <path d="M520,19 Q522,14 520,9" />
       </g>
     </svg>
   );
