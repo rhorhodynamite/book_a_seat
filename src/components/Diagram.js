@@ -93,13 +93,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     );
   }, [token.role, setSelSeat]);
 
-  const ref = useD3((svg) => {
-    if (!effectiveData) {
-      loadData(svg);
-    } else {
-      renderData(svg, effectiveData, bookings);
-    }
-  }, [effectiveData, bookings, renderData]);
+  const ref = useD3(renderData, [effectiveData, bookings]);
 
   useEffect(() => {
     if (chairsMng.current) {
@@ -189,3 +183,4 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 }
 
 export default Diagram;
+
