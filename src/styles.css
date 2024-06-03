@@ -69,5 +69,5 @@ body {
 }
 
 .chair.booked {
-  fill: green; /* Or any color you prefer for booked seats */
+  fill: black; /* Or any color you prefer for booked seats */
 }
