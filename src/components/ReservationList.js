@@ -40,26 +40,27 @@ function ReservationList(props) {
   }, [props.selSeat]);
 
   function loadData(selSeat) {
-    console.log('loadData reservation list', selSeat);
-    const params = {
-      selSeat: selSeat,
-    };
-    const callback = function (r) {
-      const rslt = r.map((val, key) => {
-        if (typeof val.startdate === 'string') {
-          val.startDate = new Date(val.startdate)
-        }
-        if (typeof val.enddate === 'string') {
-          val.endDate = new Date(val.enddate)
-        }
-        val.name = val.seatName;
-        return val;
-      });
-      // console.log('rslt', rslt);
-      setReservation(rslt);
-    }
-    utils.getReservationDb(params, callback)
+  console.log('loadData reservation list', selSeat);
+  const params = {
+    selSeat: selSeat,
+  };
+  const callback = function (r) {
+    const rslt = r.map((val, key) => {
+      if (typeof val.startdate === 'string') {
+        val.startDate = new Date(val.startdate);
+      }
+      if (typeof val.enddate === 'string') {
+        val.endDate = new Date(val.enddate);
+      }
+      val.name = val.seatName;
+      return val;
+    }).filter(val => moment(val.endDate).isSameOrAfter(currentDate, 'day')); // Filter out past reservations
+
+    setReservation(rslt);
   }
+  utils.getReservationDb(params, callback);
+}
+
 
   function onClickRow(_id) {
     // console.log('onClickRow', _id);
