@@ -50,8 +50,8 @@ const SeatsAndTablesClass = class {
     updateSelection
       .attr("fill", function (d) {
         const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
-        console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'red' : 'none'}`); // Debug log
-        return isBooked ? 'red' : 'none';
+        console.log(`Seat ID: ${d.id}, Fill Color: ${isBooked ? 'black' : 'none'}`); // Debug log
+        return isBooked ? 'black' : 'none';
       })
       .classed("booked", function (d) {
         const isBooked = self.bookings.some(booking => booking.seatId === d.id && booking.date === today);
