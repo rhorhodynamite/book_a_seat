@@ -47,7 +47,7 @@ function SVGPlanUpstairs(props) {
       <text x="380" y="225" fontFamily="Verdana" fontSize="10" fill="black">Camp 3</text>
       <text x="590" y="225" fontFamily="Verdana" fontSize="10" fill="black">Camp 4</text>
 
-      </g>
+    
     </svg>
   );
 }
