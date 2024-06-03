@@ -71,13 +71,13 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   const [showAlert, setShowAlert] = useState(null);
   const chairsMng = useRef(null);
   const divStyle = { width: SVG_WIDTH, height: SVG_HEIGHT };
-  const tableWidthRef = useRef(null);  // Define ref
-  const tableHeightRef = useRef(null);  // Define ref
+  const tableWidthRef = useRef(null);
+  const tableHeightRef = useRef(null);
   const SvgComponent = svgType === "upstairs" 
     ? SVGPlanUpstairs 
     : svgType === "seminar" 
     ? SVGPlanSeminar 
-    : SVGPlan;
+    : SvgPlan;
 
   const ref = useD3((svg) => {
     if (!effectiveData) {
@@ -89,12 +89,11 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
 
   useEffect(() => {
     if (chairsMng.current) {
-      chairsMng.current.tableWidth = tableWidthRef.current;  // Assign ref
-      chairsMng.current.tableHeight = tableHeightRef.current;  // Assign ref
+      chairsMng.current.tableWidth = tableWidthRef.current;
+      chairsMng.current.tableHeight = tableHeightRef.current;
     }
   }, [chairsMng]);
 
-  // This useEffect ensures re-rendering when bookings or effectiveData change
   useEffect(() => {
     if (effectiveData && bookings.length > 0) {
       const svg = d3.select(ref.current);
@@ -102,10 +101,8 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
     }
   }, [effectiveData, bookings]);
 
-
-
   async function loadData(svg) {
-    if (!data) {  // Only fetch if external data isn't provided
+    if (!data) {
       try {
         const response = await axios.get(apiUrl, {
           params: { svgType },
@@ -120,12 +117,15 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
   }
 
   function renderData(svg, dataToRender, bookings) {
+    if (chairsMng.current) {
+      chairsMng.current.svg.selectAll("*").remove();
+    }
     chairsMng.current = new SeatsAndTablesClass(
       svg,
       dataToRender,
       token.role,
       setSelSeat,
-      bookings, // Pass bookings data here
+      bookings,
       tableWidthRef.current,
       tableHeightRef.current
     );
@@ -154,7 +154,7 @@ function Diagram({ apiUrl = `${SERVER_URL}api/seats`, setSelSeat = () => {}, svg
           <Button className='save' onClick={() => chairsMng.current.addTable()}>Add a table <FontAwesomeIcon icon={faSave} /></Button>
           <div className="form-group">
             <Form.Label htmlFor="table-width">width:</Form.Label>
-            <Form.Control type="input" id="table-width" ref={tableWidthRef}/>  // Use ref
+            <Form.Control type="input" id="table-width" ref={tableWidthRef}/>
           </div>
           <div className="form-group">
             <Form.Label htmlFor="table-height">height:</Form.Label>
