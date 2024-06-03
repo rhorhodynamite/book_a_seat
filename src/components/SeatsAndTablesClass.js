@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as d3 from 'd3';
 
 const MIN_RECT_WIDTH = 15;
