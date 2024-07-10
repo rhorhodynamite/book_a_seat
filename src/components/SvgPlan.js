@@ -35,9 +35,9 @@ function SVGPlan(props) {
         {/* Doors */}
         <g fill="#90A4AE" stroke="#78909C" strokeWidth="0.5">
           <rect x="110" y="134" width="20" height="3" rx="1" ry="1" />
-          <rect x="177" y="45" width="3" height="20" rx="1" ry="1" />
-          <rect x="220" y="63" width="15" height="3" rx="1" ry="1" />
-          <rect x="270" y="63" width="15" height="3" rx="1" ry="1" />
+          <rect x="177" y="55" width="3" height="20" rx="1" ry="1" />
+          <rect x="220" y="80" width="15" height="3" rx="1" ry="1" />
+          <rect x="270" y="80" width="15" height="3" rx="1" ry="1" />
         </g>
       </g>
       
