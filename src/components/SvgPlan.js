@@ -20,7 +20,7 @@ function SVGPlan(props) {
         <g fill="url(#roomGradient)" stroke="#ccc" strokeWidth="1">
           {/* Room outlines */}
           <rect x="10" y="16.7" width="170" height="120" rx="10" ry="10">
-            <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite" />
           </rect>
           <rect x="180" y="60" width="120" height="20" rx="5" ry="5" />
           <rect x="180" y="80" width="60" height="57" rx="5" ry="5" />
