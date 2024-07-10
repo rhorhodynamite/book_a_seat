@@ -38,15 +38,14 @@ function SVGPlan(props) {
           <rect x="50" y="100" width="10" height="10" fill="url(#pillarGradient)" rx="2" ry="2" />
           
           {/* Pillar 2 in Room 1 */}
-          <rect x="150" y="100" width="10" height="10" fill="url(#pillarGradient)" rx="2" ry="2" />
+          <rect x="130" y="100" width="10" height="10" fill="url(#pillarGradient)" rx="2" ry="2" />
           
           {/* Plants below Pillar 2 */}
-          <rect x="153" y="113" width="5" height="4" fill="url(#plantGradient)" rx="1" ry="1" />
-          <rect x="152" y="122" width="6" height="4" fill="url(#plantGradient)" rx="1" ry="1" />
-          <rect x="154" y="129" width="4" height="3" fill="url(#plantGradient)" rx="1" ry="1" />
+          <rect x="133" y="113" width="5" height="4" fill="url(#plantGradient)" rx="1" ry="1" />
+  
           
           {/* Door at the bottom of Room 1 */}
-          <rect x="125" y="134" width="20" height="5" fill="url(#doorGradient)" rx="1" ry="1" />
+          <rect x="105" y="134" width="20" height="5" fill="url(#doorGradient)" rx="1" ry="1" />
           
           
         </g>
