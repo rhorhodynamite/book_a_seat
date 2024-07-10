@@ -45,7 +45,7 @@ function SVGPlan(props) {
   
           
           {/* Door at the bottom of Room 1 */}
-          <rect x="105" y="134" width="20" height="5" fill="url(#doorGradient)" rx="1" ry="1" />
+          <rect x="110" y="134" width="20" height="5" fill="url(#doorGradient)" rx="1" ry="1" />
           
           
         </g>
