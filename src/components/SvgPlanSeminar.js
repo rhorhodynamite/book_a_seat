@@ -22,17 +22,17 @@ function SVGPlanSeminar(props) {
       
       <g transform="translate(0 -14.7)" filter="url(#shadow)">
         {/* Main room */}
-        <rect x="10" y="16.7" width="170" height="120" stroke="#ccc" strokeWidth="0.5" rx="10" ry="10" fill="url(#roomGradient)">
+        <rect x="10" y="16.7" width="170" height="120" stroke="#ccc" strokeWidth="0.5" rx="5" ry="5" fill="url(#roomGradient)">
           <animate attributeName="opacity" values="0.9;1;0.9" dur="4s" repeatCount="indefinite" />
         </rect>
         
         {/* Side door */}
-        <rect x="177" y="80" width="3" height="20" fill="#90A4AE" rx="1" ry="1" />
+        <rect x="180" y="80" width="3" height="20" fill="#90A4AE" rx="1" ry="1" />
         
         {/* Corridors */}
-        <rect x="182" y="80" width="60" height="20" stroke="#ccc" strokeWidth="0.5" rx="5" ry="5" fill="url(#corridorGradient)" />
-        <rect x="242" y="20" width="60" height="80" stroke="#ccc" strokeWidth="0.5" rx="5" ry="5" fill="url(#corridorGradient)" />
-        <rect x="242" y="100" width="60" height="30" stroke="#ccc" strokeWidth="0.5" rx="5" ry="5" fill="url(#corridorGradient)" />
+        <rect x="182" y="80" width="60" height="20" stroke="#ccc" strokeWidth="0.5" rx="3" ry="3" fill="url(#corridorGradient)" />
+        <rect x="242" y="20" width="60" height="80" stroke="#ccc" strokeWidth="0.5" rx="3" ry="3" fill="url(#corridorGradient)" />
+        <rect x="242" y="100" width="60" height="30" stroke="#ccc" strokeWidth="0.5" rx="3" ry="3" fill="url(#corridorGradient)" />
         
         {/* Office phone box */}
         <rect x="270" y="22" width="25" height="30" fill="#BBDEFB" rx="4" ry="4" stroke="#90CAF9" strokeWidth="0.5" />
